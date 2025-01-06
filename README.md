@@ -1,4 +1,4 @@
-# 2025-ONSEASON
+# 2025-onseason
 This is FRC-5026's robot code for the 2025 onseason ("REEFSCAPE").
 
 ## Set-up
