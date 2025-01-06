@@ -19,6 +19,7 @@ import frc.robot.subsystems.swerve.GyroIO;
 import frc.robot.subsystems.swerve.GyroIOPigeon2;
 import frc.robot.subsystems.swerve.ModuleIO;
 import frc.robot.subsystems.swerve.ModuleIOTalonFX;
+import frc.robot.subsystems.vision.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -33,6 +34,7 @@ public class RobotContainer {
   private final CommandXboxController driverB = new CommandXboxController(1);
 
   private Drive swerve; // FIXME make final, implement other robot types
+  private Vision vision;
   private Rollers rollers;
   private Flywheels flywheels;
 
@@ -49,6 +51,7 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
+          vision = new Vision();
           intake = new Intake(new IntakeIOTalonFX());
           flywheels = new Flywheels(new FlywheelsIOTalonFX());
         }
