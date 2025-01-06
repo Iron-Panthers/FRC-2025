@@ -82,13 +82,6 @@ public class DriveConstants {
             21.428571428571427,
             3.125);
       };
-  /*
-  *
-           new Gains(0.25, 2.62, 0, 100, 0, 0), // revisit kP
-           new MotionProfileGains(4, 64, 640), // revisit all
-           new Gains(0.3, 0.63, 0, 2, 0, 0), // FIXME placeholder, to do
-  *
-  * */
 
   public static final TrajectoryFollowerConstants TRAJECTORY_CONFIG =
       new TrajectoryFollowerConstants(0, 0, 0, 0); // FIXME
