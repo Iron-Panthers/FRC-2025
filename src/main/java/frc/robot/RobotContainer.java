@@ -25,6 +25,7 @@ import frc.robot.subsystems.swerve.GyroIO;
 import frc.robot.subsystems.swerve.GyroIOPigeon2;
 import frc.robot.subsystems.swerve.ModuleIO;
 import frc.robot.subsystems.swerve.ModuleIOTalonFX;
+import frc.robot.subsystems.vision.Vision;
 import java.util.function.BooleanSupplier;
 
 /**
@@ -40,6 +41,7 @@ public class RobotContainer {
   private final CommandXboxController driverB = new CommandXboxController(1);
 
   private Drive swerve; // FIXME make final, implement other robot types
+  private Vision vision;
 
   private SendableChooser<Command> autoChooser;
 
@@ -59,6 +61,7 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
+          vision = new Vision();
           elevator = new Elevator(new ElevatorIOTalonFX());
         }
         case ALPHA -> {
