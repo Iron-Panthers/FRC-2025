@@ -23,12 +23,12 @@ import edu.wpi.first.wpilibj.RobotBase;
 public final class Constants {
   public static final double PERIODIC_LOOP_SEC = 0.02;
 
-  public static RobotType ROBOT_TYPE = RobotType.PROGRAMMING; // FIXME
+  public static RobotType ROBOT_TYPE = RobotType.PROG; // FIXME
 
   /* running mode of robot */
   public static Mode getRobotMode() {
     return switch (ROBOT_TYPE) {
-      case COMP, DEV, PROGRAMMING -> RobotBase.isReal() ? Mode.REAL : Mode.REPLAY;
+      case COMP, DEV, PROG -> RobotBase.isReal() ? Mode.REAL : Mode.REPLAY;
       case SIM -> Mode.SIM;
     };
   }
@@ -52,7 +52,7 @@ public final class Constants {
   /* */
   public enum RobotType {
     COMP,
-    PROGRAMMING,
+    PROG,
     DEV,
     SIM;
   }

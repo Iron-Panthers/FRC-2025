@@ -55,7 +55,7 @@ public class RobotContainer {
           intake = new Intake(new IntakeIOTalonFX());
           flywheels = new Flywheels(new FlywheelsIOTalonFX());
         }
-        case PROGRAMMING -> new ModuleConstants(
+        case PROG -> new ModuleConstants(
             new Gains(0.4, 0.6, 0, 11, 0, 0),
             new MotionProfileGains(4, 64, 640),
             new Gains(0.3, 0.11, 0, 1.5, 0, 0),
