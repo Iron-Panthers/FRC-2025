@@ -106,6 +106,12 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("Swerve/ModuleStates/Optimized", optimizedTargetStates);
     Logger.recordOutput("Swerve/TargetSpeeds", targetSpeeds);
     Logger.recordOutput("Swerve/DriveMode", driveMode);
+    for (int i = 0; i < modules.length; i++) {
+      Logger.recordOutput("Swerve/Module" + i + "/TargetState", moduleTargetStates[i]);
+    }
+    for (int i = 0; i < modules.length; i++) {
+      Logger.recordOutput("Swerve/Module" + i + "/OptimizedTargetState", optimizedTargetStates[i]);
+    }
   }
 
   public void driveTeleopController(double xAxis, double yAxis, double omega) {
