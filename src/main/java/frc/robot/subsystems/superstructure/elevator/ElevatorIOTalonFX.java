@@ -5,15 +5,18 @@ import frc.robot.subsystems.superstructure.GenericSuperstructureIOTalonFX;
 import java.util.Optional;
 
 public class ElevatorIOTalonFX extends GenericSuperstructureIOTalonFX implements ElevatorIO {
-  public static final double REDUCTION = 1.892 / 1; // rotations to inches
-  public static final boolean INVERTED = false; // FIXME
+  // gear ratio is 9:1
+  // gear diameter 1.273 inches
+  public static final double REDUCTION = (1/9)*1.273*Math.PI; // rotations to inches
+
+  public static final boolean INVERTED = false;
 
   public static final double SUPPLY_CURRENT_LIMIT = 30; // FIXME
   public static final int ZEROING_CURRENT_LIMIT = 20; // FIXME
 
   public static final int ZEROING_VOLTS = -2; // FIXME
 
-  public static final int ID = 18;
+  public static final int ID = 18; // FIXME 
 
   public static final double P = 3;
   public static final double I = 0;
