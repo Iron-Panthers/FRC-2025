@@ -22,25 +22,19 @@ public class Module {
   }
 
   public void runToSetpoint(SwerveModuleState targetState) {
+    targetState.optimize(getSteerHeading());
+    targetState.cosineScale(getSteerHeading());
     moduleIO.runSteerPositionSetpoint(targetState.angle.getRadians());
-
-    // reduce "skew" when changing directions ; from Phoenix6
-    double steerError = targetState.angle.getRadians() - getSteerHeading().getRadians();
-    double cosineScalar = Math.cos(steerError);
-    if (cosineScalar < 0) {
-      cosineScalar = 0;
-    }
 
     /* Back out the expected shimmy the drive motor will see */
     /* Find the angular rate to determine what to back out */
     double azimuthTurnRps = inputs.steerVelocityRadsPerSec;
     /* Azimuth turn rate multiplied by coupling ratio provides back-out rps */
-    double driveRateBackOut =
-        azimuthTurnRps * DriveConstants.MODULE_CONSTANTS.couplingGearReduction();
+    double driveRateBackOut = 0;
+    //        azimuthTurnRps * DriveConstants.MODULE_CONSTANTS.couplingGearReduction();
 
     double driveVelocityRads =
-        ((targetState.speedMetersPerSecond * cosineScalar)
-                / DriveConstants.DRIVE_CONFIG.wheelRadius())
+        ((targetState.speedMetersPerSecond) / DriveConstants.DRIVE_CONFIG.wheelRadius())
             + driveRateBackOut;
 
     moduleIO.runDriveVelocitySetpoint(driveVelocityRads);
