@@ -56,12 +56,12 @@ public class RobotContainer {
           flywheels = new Flywheels(new FlywheelsIOTalonFX());
         }
         case PROGRAMMING -> new ModuleConstants(
-          new Gains(0.4, 0.6, 0, 11, 0, 0),
-          new MotionProfileGains(4, 64, 640),
-          new Gains(0.3, 0.11, 0, 1.5, 0, 0),
-          5.357142857142857,
-          21.428571428571427,
-          3.125);
+            new Gains(0.4, 0.6, 0, 11, 0, 0),
+            new MotionProfileGains(4, 64, 640),
+            new Gains(0.3, 0.11, 0, 1.5, 0, 0),
+            5.357142857142857,
+            21.428571428571427,
+            3.125);
         case DEV -> {
           swerve =
               new Drive(
