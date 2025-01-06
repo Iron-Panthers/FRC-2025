@@ -96,42 +96,102 @@ public class DriveConstants {
             3.125);
       };
 
+  /**
+   * Configuration for the drivebase.
+   *
+   * @param wheelRadius The radius of the wheels.
+   * @param trackWidth The width of the track.
+   * @param bumperWidthX The width of the bumper in the X direction.
+   * @param bumperWidthY The width of the bumper in the Y direction.
+   * @param maxLinearVelocity The maximum linear velocity.
+   * @param maxAngularVelocity The maximum angular velocity.
+   */
   public record DrivebaseConfig(
-      double wheelRadius,
-      double trackWidth,
-      double bumperWidthX,
-      double bumperWidthY,
-      double maxLinearVelocity,
-      double maxAngularVelocity) {}
-
+        double wheelRadius,
+        double trackWidth,
+        double bumperWidthX,
+        double bumperWidthY,
+        double maxLinearVelocity,
+        double maxAngularVelocity) {}
+  
+  /**
+   * Configuration for a module.
+   *
+   * @param driveID The ID of the drive motor.
+   * @param steerID The ID of the steer motor.
+   * @param encoderID The ID of the encoder.
+   * @param absoluteEncoderOffset The offset for the absolute encoder.
+   * @param steerInverted Whether the steering is inverted.
+   * @param driveInverted Whether the drive is inverted.
+   */
   public record ModuleConfig(
-      int driveID,
-      int steerID,
-      int encoderID,
-      Rotation2d absoluteEncoderOffset,
-      boolean steerInverted,
-      boolean driveInverted) {}
-
+        int driveID,
+        int steerID,
+        int encoderID,
+        Rotation2d absoluteEncoderOffset,
+        boolean steerInverted,
+        boolean driveInverted) {}
+  
+  /**
+   * Constants for a module.
+   *
+   * @param steerGains The gains for steering.
+   * @param steerMotionGains The motion profile gains for steering.
+   * @param driveGains The gains for driving.
+   * @param driveReduction The reduction ratio for driving.
+   * @param steerReduction The reduction ratio for steering.
+   * @param couplingGearReduction The reduction ratio for the coupling gear.
+   */
   public record ModuleConstants(
-      Gains steerGains,
-      MotionProfileGains steerMotionGains,
-      Gains driveGains,
-      double driveReduction,
-      double steerReduction,
-      double couplingGearReduction) {}
+        Gains steerGains,
+        MotionProfileGains steerMotionGains,
+        Gains driveGains,
+        double driveReduction,
+        double steerReduction,
+        double couplingGearReduction) {}
 
+  /**
+   * Constants for the trajectory follower.
+   */
   public record TrajectoryFollowerConstants() {}
-
+  
+  /**
+   * PID gains for a controller.
+   *
+   * @param kS The static gain.
+   * @param kV The velocity gain.
+   * @param kA The acceleration gain.
+   * @param kP The proportional gain.
+   * @param kI The integral gain.
+   * @param kD The derivative gain.
+   */
   public record Gains(double kS, double kV, double kA, double kP, double kI, double kD) {}
-
+  
+  /**
+   * Motion profile gains for a controller.
+   *
+   * @param cruiseVelocity The cruise velocity.
+   * @param acceleration The acceleration.
+   * @param jerk The jerk.
+   */
   public record MotionProfileGains(double cruiseVelocity, double acceleration, double jerk) {}
-
+  
+  /**
+   * Enum representing the gear reductions for the Mk4i module.
+   */
   private enum Mk4iReductions {
+    /**
+     * Gear reduction for the Mk4i L3 configuration.
+     */
     MK4I_L3((50 / 14) * (16 / 28) * (45 / 15)),
+    
+    /**
+     * Gear reduction for the steering.
+     */
     STEER(150 / 7);
-
+  
     double reduction;
-
+  
     Mk4iReductions(double reduction) {
       this.reduction = reduction;
     }
