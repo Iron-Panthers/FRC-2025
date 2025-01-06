@@ -97,19 +97,17 @@ public class Drive extends SubsystemBase {
     /* ChassisSpeeds discretizedSpeeds = targetSpeeds; // FIXME
     discretizedSpeeds.discretize(Constants.PERIODIC_LOOP_SEC); */
 
+    // SwerveModuleState[] moduleTargetStates =
+    KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(1, 0, 0));
     SwerveModuleState[] moduleTargetStates = KINEMATICS.toSwerveModuleStates(discretizedSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         moduleTargetStates, DRIVE_CONFIG.maxLinearVelocity());
 
-    SwerveModuleState[] optimizedTargetStates = new SwerveModuleState[4];
-
     for (int i = 0; i < modules.length; i++) {
-      optimizedTargetStates[i] = moduleTargetStates[i];
-      optimizedTargetStates[i].optimize(modules[i].getSteerHeading());
-      modules[i].runToSetpoint(optimizedTargetStates[i]);
+      modules[i].runToSetpoint(moduleTargetStates[i]);
     }
 
-    Logger.recordOutput("Swerve/ModuleStates/Optimized", optimizedTargetStates);
+    Logger.recordOutput("Swerve/ModuleStates", moduleTargetStates);
     Logger.recordOutput("Swerve/TargetSpeeds", targetSpeeds);
     Logger.recordOutput("Swerve/DriveMode", driveMode);
   }

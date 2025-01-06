@@ -46,10 +46,10 @@ public class DriveConstants {
   public static final ModuleConfig[] MODULE_CONFIGS =
       switch (getRobotType()) {
         case COMP -> new ModuleConfig[] {
-          new ModuleConfig(5, 6, 1, new Rotation2d(1.1397), true, false),
-          new ModuleConfig(7, 8, 2, new Rotation2d(0.8038), true, true),
-          new ModuleConfig(11, 12, 3, new Rotation2d(1.4327), true, false),
-          new ModuleConfig(9, 10, 4, new Rotation2d(-1.8208), true, true)
+          new ModuleConfig(5, 6, 1, new Rotation2d(-1.608), false, false),
+          new ModuleConfig(7, 8, 2, new Rotation2d(-0.175), false, true),
+          new ModuleConfig(11, 12, 3, new Rotation2d(2.901), false, false),
+          new ModuleConfig(9, 10, 4, new Rotation2d(1.505), false, true)
         };
         case DEV -> new ModuleConfig[] {
           new ModuleConfig(2, 1, 27, new Rotation2d(0), true, false),
@@ -68,11 +68,11 @@ public class DriveConstants {
   public static final ModuleConstants MODULE_CONSTANTS =
       switch (getRobotType()) {
         case COMP, SIM -> new ModuleConstants(
-            new Gains(0.25, 2.62, 0, 100, 0, 0), // revisit kP
+            new Gains(0, 0, 0, 50, 0, 0), // revisit kP
             new MotionProfileGains(4, 64, 640), // revisit all
-            new Gains(0.3, 0.63, 0, 2, 0, 0), // FIXME placeholder, to do
-            5.357142857142857,
-            21.428571428571427,
+            new Gains(0, 0, 0, 1.5, 0, 0), // FIXME placeholder, to do
+            12.8,
+            6.75,
             3.125);
         case DEV -> new ModuleConstants(
             new Gains(0, 0, 0, 11, 0, 0),
@@ -82,6 +82,13 @@ public class DriveConstants {
             21.428571428571427,
             3.125);
       };
+  /*
+  *
+           new Gains(0.25, 2.62, 0, 100, 0, 0), // revisit kP
+           new MotionProfileGains(4, 64, 640), // revisit all
+           new Gains(0.3, 0.63, 0, 2, 0, 0), // FIXME placeholder, to do
+  *
+  * */
 
   public static final TrajectoryFollowerConstants TRAJECTORY_CONFIG =
       new TrajectoryFollowerConstants(0, 0, 0, 0); // FIXME
