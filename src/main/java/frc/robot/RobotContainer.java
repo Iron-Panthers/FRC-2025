@@ -15,6 +15,9 @@ import frc.robot.subsystems.rollers.intake.IntakeIO;
 import frc.robot.subsystems.rollers.intake.IntakeIOTalonFX;
 import frc.robot.subsystems.swerve.Drive;
 import frc.robot.subsystems.swerve.DriveConstants;
+import frc.robot.subsystems.swerve.DriveConstants.Gains;
+import frc.robot.subsystems.swerve.DriveConstants.ModuleConstants;
+import frc.robot.subsystems.swerve.DriveConstants.MotionProfileGains;
 import frc.robot.subsystems.swerve.GyroIO;
 import frc.robot.subsystems.swerve.GyroIOPigeon2;
 import frc.robot.subsystems.swerve.ModuleIO;
@@ -52,6 +55,13 @@ public class RobotContainer {
           intake = new Intake(new IntakeIOTalonFX());
           flywheels = new Flywheels(new FlywheelsIOTalonFX());
         }
+        case PROGRAMMING -> new ModuleConstants(
+          new Gains(0.4, 0.6, 0, 11, 0, 0),
+          new MotionProfileGains(4, 64, 640),
+          new Gains(0.3, 0.11, 0, 1.5, 0, 0),
+          5.357142857142857,
+          21.428571428571427,
+          3.125);
         case DEV -> {
           swerve =
               new Drive(

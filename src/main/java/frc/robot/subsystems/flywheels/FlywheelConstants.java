@@ -6,6 +6,7 @@ public class FlywheelConstants {
   public static final FlywheelConfig FLYWHEEL_CONFIG =
       switch (Constants.getRobotType()) {
         case COMP -> new FlywheelConfig(15, 16, 0.75); // FIXME
+        case PROGRAMMING -> new FlywheelConfig(15, 16, 0.75); // FIXME
         case DEV -> new FlywheelConfig(0, 0, 1);
         case SIM -> new FlywheelConfig(0, 0, 1);
       };
@@ -13,6 +14,7 @@ public class FlywheelConstants {
   public static final PIDGains GAINS =
       switch (Constants.getRobotType()) {
         case COMP -> new PIDGains(0, 0, 0, 0, 0.09, 0); // FIXME
+        case PROGRAMMING -> new PIDGains(0, 0, 0, 0, 0, 0); // FIXME
         case DEV -> new PIDGains(0, 0, 0, 0, 0, 0);
         case SIM -> new PIDGains(0, 0, 0, 0, 0, 0);
       };
