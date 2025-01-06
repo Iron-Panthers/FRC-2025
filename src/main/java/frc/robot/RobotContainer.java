@@ -4,8 +4,14 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
+import frc.robot.autonomous.PathCommand;
 import frc.robot.subsystems.flywheels.Flywheels;
 import frc.robot.subsystems.flywheels.FlywheelsIO;
 import frc.robot.subsystems.flywheels.FlywheelsIOTalonFX;
@@ -19,6 +25,7 @@ import frc.robot.subsystems.swerve.GyroIO;
 import frc.robot.subsystems.swerve.GyroIOPigeon2;
 import frc.robot.subsystems.swerve.ModuleIO;
 import frc.robot.subsystems.swerve.ModuleIOTalonFX;
+import java.util.function.BooleanSupplier;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -35,6 +42,8 @@ public class RobotContainer {
   private Drive swerve; // FIXME make final, implement other robot types
   private Rollers rollers;
   private Flywheels flywheels;
+
+  private SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
     Intake intake = null;
@@ -120,5 +129,32 @@ public class RobotContainer {
 
   }
 
-  private void configureAutos() {}
+  private void configureAutos() {
+    BooleanSupplier flipAlliance =
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        };
+
+    AutoBuilder.configureCustom(
+        (path) -> new PathCommand(path, flipAlliance, swerve),
+        () -> RobotState.getInstance().getOdometryPose(),
+        (pose) -> RobotState.getInstance().resetPose(pose),
+        flipAlliance,
+        true);
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+  }
+
+  public Command getAutoCommand() {
+    return autoChooser.getSelected();
+  }
 }

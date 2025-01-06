@@ -2,7 +2,6 @@ package frc.robot.subsystems.swerve;
 
 import static frc.robot.Constants.*;
 
-import com.pathplanner.lib.config.RobotConfig;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -83,9 +82,6 @@ public class DriveConstants {
             21.428571428571427,
             3.125);
       };
-
-  // FIXME for ideal trajectory
-  public static final RobotConfig PATHPLANNER_CONFIG = null;
 
   public static final TrajectoryFollowerConstants TRAJECTORY_CONFIG =
       new TrajectoryFollowerConstants(0, 0, 0, 0); // FIXME
