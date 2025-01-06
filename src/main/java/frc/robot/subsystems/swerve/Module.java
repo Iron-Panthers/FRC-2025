@@ -59,4 +59,8 @@ public class Module {
   public SwerveModulePosition getModulePosition() {
     return new SwerveModulePosition(inputs.drivePositionMeters, inputs.steerAbsolutePostion);
   }
+
+  public SwerveModuleState getModuleState() {
+    return new SwerveModuleState(inputs.driveVelocityMetersPerSec, inputs.steerAbsolutePostion);
+  }
 }
