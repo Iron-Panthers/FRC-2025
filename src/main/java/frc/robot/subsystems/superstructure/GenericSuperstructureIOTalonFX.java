@@ -23,7 +23,7 @@ import edu.wpi.first.units.measure.Voltage;
 import java.util.Optional;
 
 public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
-  private final TalonFX talon;
+  protected final TalonFX talon;
 
   private final StatusSignal<Angle> positionRotations;
   private final StatusSignal<AngularVelocity> velocityRPS;
@@ -31,7 +31,7 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
   private final StatusSignal<Current> supplyCurrent;
   private final StatusSignal<Temperature> temp;
 
-  private final VoltageOut voltageOutput = new VoltageOut(0).withUpdateFreqHz(0);
+  protected final VoltageOut voltageOutput = new VoltageOut(0).withUpdateFreqHz(0);
   private final NeutralOut neutralOutput = new NeutralOut();
   private final PositionVoltage positionControl = new PositionVoltage(0).withUpdateFreqHz(0);
 

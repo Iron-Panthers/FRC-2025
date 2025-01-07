@@ -42,4 +42,21 @@ public class PivotIOTalonFX extends GenericSuperstructureIOTalonFX implements Pi
         LOWER_VOLT_LIMIT);
     setSlot0(P, I, D, S, 0, 0, GRAVITY_TYPE);
   }
+
+  /**
+   * Runs the characterization of the pivot subsystem with a positivie voltage output so that it zeros at the hardstop above it (set at 90 degrees)
+   */
+  @Override
+  public void runCharacterization() {
+    talon.setControl(voltageOutput.withOutput(1));
+  }
+
+  /**
+   * Sets the offset of the pivot to 90 degrees instead of 0 degrees 
+   * this is because the hardstop is at 90 degrees above where we want the zero to be
+   */
+  @Override
+  public void setOffset() {
+    talon.getConfigurator().setPosition(90);
+  }
 }
