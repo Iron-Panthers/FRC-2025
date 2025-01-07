@@ -5,7 +5,9 @@ import frc.robot.subsystems.superstructure.GenericSuperstructureIOTalonFX;
 import java.util.Optional;
 
 public class PivotIOTalonFX extends GenericSuperstructureIOTalonFX implements PivotIO {
-  public static final double REDUCTION = 1 / 360.0; // rotations to degrees
+  //gear ratio 21.6 : 1
+
+  public static final double REDUCTION = 360 / 21.6; // rotations to degrees
   public static final boolean INVERTED = true; // FIXME
 
   public static final double SUPPLY_CURRENT_LIMIT = 30; // FIXME
