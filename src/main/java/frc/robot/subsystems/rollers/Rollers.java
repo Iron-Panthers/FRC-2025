@@ -3,13 +3,13 @@ package frc.robot.subsystems.rollers;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.rollers.intake.Intake;
-import frc.robot.subsystems.rollers.intake.Intake.Target;
 import org.littletonrobotics.junction.Logger;
 
 public class Rollers extends SubsystemBase {
   public enum RollerState {
     IDLE,
-    INTAKE
+    INTAKE, 
+    EJECT
   }
 
   private final Intake intake;
@@ -22,12 +22,17 @@ public class Rollers extends SubsystemBase {
 
   @Override
   public void periodic() {
-    intake.setVoltageTarget(Target.IDLE);
+    intake.setVoltageTarget(Intake.Target.IDLE);
 
     switch (targetState) {
-      case IDLE -> {}
+      case IDLE -> {
+        intake.setVoltageTarget(Intake.Target.IDLE);
+      }
       case INTAKE -> {
-        intake.setVoltageTarget(Target.INTAKE);
+        intake.setVoltageTarget(Intake.Target.INTAKE);
+      }
+      case EJECT -> {
+        intake.setVoltageTarget(Intake.Target.EJECT); 
       }
     }
 

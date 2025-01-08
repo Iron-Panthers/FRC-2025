@@ -35,9 +35,10 @@ public class RobotContainer {
   private Drive swerve; // FIXME make final, implement other robot types
   private Rollers rollers;
   private Flywheels flywheels;
+  private Intake intake;
 
   public RobotContainer() {
-    Intake intake = null;
+    intake = null;
 
     if (Constants.getRobotMode() != Mode.REPLAY) {
       switch (Constants.getRobotType()) {
@@ -115,6 +116,10 @@ public class RobotContainer {
     driverA.start().onTrue(swerve.zeroGyroCommand());
 
     // -----Intake Controls-----
+
+    driverA.b().onTrue(rollers.setTargetCommand(Rollers.RollerState.INTAKE) );
+    driverA.a().onTrue(rollers.setTargetCommand(Rollers.RollerState.IDLE) );
+    driverA.x().onTrue(rollers.setTargetCommand(Rollers.RollerState.EJECT) );
 
     // -----Flywheel Controls-----
 
