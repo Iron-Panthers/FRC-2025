@@ -58,7 +58,7 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
     config.Voltage.withPeakReverseVoltage(lowerVoltLimit);
     config.Feedback.withSensorToMechanismRatio(reduction);
 
-  // CANCODER CONFIG
+    // CANCODER CONFIG
     if (canCoderID.isPresent()) {
       CANcoder canCoder = new CANcoder(canCoderID.get());
       canCoder
@@ -107,9 +107,7 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
     talon.setControl(positionControl.withPosition(rotations));
   }
 
-  /**
-   * 
-   */
+  /** */
   @Override
   public void runCharacterization() {
     talon.setControl(voltageOutput.withOutput(-1));

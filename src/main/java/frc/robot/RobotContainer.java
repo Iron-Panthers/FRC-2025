@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
 import frc.robot.subsystems.flywheels.Flywheels;
@@ -13,6 +14,10 @@ import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.intake.Intake;
 import frc.robot.subsystems.rollers.intake.IntakeIO;
 import frc.robot.subsystems.rollers.intake.IntakeIOTalonFX;
+import frc.robot.subsystems.superstructure.Superstructure;
+import frc.robot.subsystems.superstructure.elevator.Elevator;
+import frc.robot.subsystems.superstructure.elevator.ElevatorIO;
+import frc.robot.subsystems.superstructure.elevator.ElevatorIOTalonFX;
 import frc.robot.subsystems.swerve.Drive;
 import frc.robot.subsystems.swerve.DriveConstants;
 import frc.robot.subsystems.swerve.GyroIO;
@@ -36,6 +41,10 @@ public class RobotContainer {
   private Rollers rollers;
   private Flywheels flywheels;
 
+  // superstructure
+  private Elevator elevator;
+  private Superstructure superstructure;
+
   public RobotContainer() {
     Intake intake = null;
 
@@ -51,6 +60,7 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
           intake = new Intake(new IntakeIOTalonFX());
           flywheels = new Flywheels(new FlywheelsIOTalonFX());
+          elevator = new Elevator(new ElevatorIOTalonFX());
         }
         case DEV -> {
           swerve =
@@ -89,11 +99,18 @@ public class RobotContainer {
     if (flywheels == null) {
       flywheels = new Flywheels(new FlywheelsIO() {});
     }
+    // rollers
     if (intake == null) {
       intake = new Intake(new IntakeIO() {});
     }
-
     rollers = new Rollers(intake);
+
+    // superstructure
+    if (elevator == null) {
+      elevator = new Elevator(new ElevatorIO() {});
+    }
+    // TODO: add pivot
+    superstructure = new Superstructure(elevator);
 
     configureBindings();
     configureAutos();
@@ -101,23 +118,35 @@ public class RobotContainer {
 
   private void configureBindings() {
     // -----Driver Controls-----
-    swerve.setDefaultCommand(
-        swerve
-            .run(
-                () -> {
-                  swerve.driveTeleopController(
-                      -driverA.getLeftY(),
-                      -driverA.getLeftX(),
-                      driverA.getLeftTriggerAxis() - driverA.getRightTriggerAxis());
-                })
-            .withName("Drive Teleop"));
+    // swerve.setDefaultCommand(
+    //     swerve
+    //         .run(
+    //             () -> {
+    //               swerve.driveTeleopController(
+    //                   -driverA.getLeftY(),
+    //                   -driverA.getLeftX(),
+    //                   driverA.getLeftTriggerAxis() - driverA.getRightTriggerAxis());
+    //             })
+    //         .withName("Drive Teleop"));
 
-    driverA.start().onTrue(swerve.zeroGyroCommand());
+    // driverA.start().onTrue(swerve.zeroGyroCommand());
 
     // -----Intake Controls-----
 
     // -----Flywheel Controls-----
 
+    // -----Superstructure Controls-----
+    driverA
+        .a()
+        .onTrue(
+            new InstantCommand(
+                () -> superstructure.setTargetState(Superstructure.SuperstructureState.MIDDLE)));
+
+    driverA
+        .b()
+        .onTrue(
+            new InstantCommand(
+                () -> superstructure.setTargetState(Superstructure.SuperstructureState.BOTTOM)));
   }
 
   private void configureAutos() {}

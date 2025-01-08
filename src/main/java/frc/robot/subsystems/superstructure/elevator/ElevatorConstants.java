@@ -1,13 +1,12 @@
 package frc.robot.subsystems.superstructure.elevator;
 
 import com.ctre.phoenix6.signals.GravityTypeValue;
-
 import frc.robot.Constants;
 
 public class ElevatorConstants {
   public static final ElevatorConfig ELEVATOR_CONFIG =
       switch (Constants.getRobotType()) {
-        case COMP -> new ElevatorConfig(37, (1/9)*1.273*Math.PI);
+        case COMP -> new ElevatorConfig(37, (1 / 9) * 1.273 * Math.PI);
         case DEV -> new ElevatorConfig(0, 1); // FIXME
         case SIM -> new ElevatorConfig(0, 1); // FIXME
       };
@@ -37,5 +36,4 @@ public class ElevatorConstants {
   public static final double LOWER_VOLT_LIMIT = -7;
   public static final double SUPPLY_CURRENT_LIMIT = 30;
   public static final int ZEROING_CURRENT_LIMIT = 20; // FIXME currently doesn't exist lmao
-
 }

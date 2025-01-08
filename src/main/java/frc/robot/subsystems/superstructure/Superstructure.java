@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
 import frc.robot.subsystems.superstructure.elevator.Elevator.ElevatorTarget;
 import frc.robot.subsystems.superstructure.pivot.Pivot;
-import frc.robot.subsystems.superstructure.pivot.Pivot.PivotTarget;
 import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
@@ -15,14 +14,12 @@ public class Superstructure extends SubsystemBase {
     BOTTOM,
   }
 
-  private SuperstructureState targetState = SuperstructureState.STOP;
+  private SuperstructureState targetState = SuperstructureState.ZERO;
 
   private final Elevator elevator;
-  private final Pivot pivot;
 
-  public Superstructure(Elevator elevator, Pivot pivot) {
+  public Superstructure(Elevator elevator) {
     this.elevator = elevator;
-    this.pivot = pivot;
   }
 
   @Override
@@ -36,11 +33,9 @@ public class Superstructure extends SubsystemBase {
       }
       case ZERO -> {
         elevator.runCharacterization();
-        pivot.runCharacterization();
       }
       case STOP -> {
         elevator.stop();
-        pivot.stop();
       }
     }
     elevator.periodic();
@@ -60,9 +55,9 @@ public class Superstructure extends SubsystemBase {
     return elevator.supplyCurrentAmps();
   }
 
-  public double getPivotSupplyCurrentAmps() {
-    return pivot.supplyCurrentAmps();
-  }
+  // public double getPivotSupplyCurrentAmps() {
+  //   return pivot.supplyCurrentAmps();
+  // }
 
   public SuperstructureState getTargetState() {
     return targetState;
