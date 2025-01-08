@@ -27,6 +27,7 @@ public class TrajectoryController {
         new PIDController(TRAJECTORY_CONFIG.rotationKP(), 0, TRAJECTORY_CONFIG.rotationKD());
     rotationController.enableContinuousInput(-Math.PI, Math.PI);
 
+    timer.reset();
     timer.start();
   }
 

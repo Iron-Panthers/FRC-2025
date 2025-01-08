@@ -3,6 +3,7 @@ package frc.robot.autonomous;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotState;
 import frc.robot.subsystems.swerve.Drive;
@@ -17,6 +18,7 @@ public class PathCommand extends Command {
   private PathPlannerPath path;
   private PathPlannerTrajectory trajectory;
 
+  private Timer timer = new Timer();
 
   public PathCommand(
       PathPlannerPath path, BooleanSupplier flipAlliance, Drive drive, RobotConfig robotConfig) {
@@ -41,6 +43,9 @@ public class PathCommand extends Command {
             robotConfig);
 
     drive.setTrajectory(trajectory);
+
+    timer.reset();
+    timer.start();
   }
 
   @Override
@@ -54,5 +59,6 @@ public class PathCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     drive.clearTrajectory();
+    timer.stop();
   }
 }
