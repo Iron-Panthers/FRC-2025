@@ -1,6 +1,7 @@
 package frc.robot.autonomous;
 
 import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.events.EventScheduler;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.Timer;
@@ -13,7 +14,8 @@ public class PathCommand extends Command {
   private final Drive drive;
   private final BooleanSupplier flipAlliance;
   private final PathPlannerPath originalPath;
-  private RobotConfig robotConfig;
+  private final RobotConfig robotConfig;
+  private final EventScheduler eventScheduler;
 
   private PathPlannerPath path;
   private PathPlannerTrajectory trajectory;
@@ -26,8 +28,16 @@ public class PathCommand extends Command {
     this.robotConfig = robotConfig;
     this.flipAlliance = flipAlliance;
     this.originalPath = path;
+    eventScheduler = new EventScheduler();
 
     addRequirements(drive);
+
+    var eventRequirements = EventScheduler.getSchedulerRequirements(path);
+    if (eventRequirements.contains(drive)) {
+      throw new IllegalArgumentException(
+          "Events that are triggered during path following cannot require the drive subsystem");
+    }
+    addRequirements(eventRequirements);
   }
 
   @Override
@@ -42,6 +52,9 @@ public class PathCommand extends Command {
             RobotState.getInstance().getOdometryPose().getRotation(),
             robotConfig);
 
+
+    eventScheduler.initialize(trajectory);
+
     drive.setTrajectory(trajectory);
 
     timer.reset();
@@ -49,7 +62,9 @@ public class PathCommand extends Command {
   }
 
   @Override
-  public void execute() {}
+  public void execute() {
+    eventScheduler.execute(timer.get());
+  }
 
   @Override
   public boolean isFinished() {
@@ -58,7 +73,10 @@ public class PathCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    drive.clearTrajectory();
     timer.stop();
+
+    drive.clearTrajectory();
+
+    eventScheduler.end();
   }
 }
