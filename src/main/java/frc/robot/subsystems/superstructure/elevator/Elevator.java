@@ -9,7 +9,7 @@ public class Elevator extends GenericSuperstructure<Elevator.ElevatorTarget> {
     L3(15),
     L4(29),
     SOURCE(5);
-    private double position;
+    private double position = 0;
 
     private ElevatorTarget(double position) {
       this.position = position;

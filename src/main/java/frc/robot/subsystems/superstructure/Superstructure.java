@@ -3,7 +3,6 @@ package frc.robot.subsystems.superstructure;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
 import frc.robot.subsystems.superstructure.elevator.Elevator.ElevatorTarget;
-import frc.robot.subsystems.superstructure.pivot.Pivot;
 import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
@@ -20,6 +19,7 @@ public class Superstructure extends SubsystemBase {
 
   public Superstructure(Elevator elevator) {
     this.elevator = elevator;
+    elevator.setPositionTarget(ElevatorTarget.BOTTOM);
   }
 
   @Override
