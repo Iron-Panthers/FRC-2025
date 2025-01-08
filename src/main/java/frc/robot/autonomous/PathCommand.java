@@ -1,5 +1,6 @@
 package frc.robot.autonomous;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.events.EventScheduler;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -52,6 +53,8 @@ public class PathCommand extends Command {
             RobotState.getInstance().getOdometryPose().getRotation(),
             robotConfig);
 
+    PathPlannerAuto.setCurrentTrajectory(trajectory);
+    PathPlannerAuto.currentPathName = originalPath.name;
 
     eventScheduler.initialize(trajectory);
 
@@ -74,6 +77,8 @@ public class PathCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     timer.stop();
+    PathPlannerAuto.currentPathName = "";
+    PathPlannerAuto.setCurrentTrajectory(null);
 
     drive.clearTrajectory();
 
