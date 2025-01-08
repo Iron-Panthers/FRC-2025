@@ -4,9 +4,10 @@ import frc.robot.subsystems.superstructure.GenericSuperstructure;
 
 public class Pivot extends GenericSuperstructure<Pivot.PivotTarget> {
   public enum PivotTarget implements GenericSuperstructure.PositionTarget {
-    STOW(0),
-    ZERO(0),
-    SUBWOOF_SHOT(70),
+    L4(0),    //TODO: fix these modes
+    L3(0),
+    L2(0),
+    L1(53),
     SHUTTLE(45);
     private double position;
 

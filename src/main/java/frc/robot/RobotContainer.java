@@ -13,6 +13,8 @@ import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.intake.Intake;
 import frc.robot.subsystems.rollers.intake.IntakeIO;
 import frc.robot.subsystems.rollers.intake.IntakeIOTalonFX;
+import frc.robot.subsystems.superstructure.pivot.Pivot;
+import frc.robot.subsystems.superstructure.pivot.PivotIOTalonFX;
 import frc.robot.subsystems.swerve.Drive;
 import frc.robot.subsystems.swerve.DriveConstants;
 import frc.robot.subsystems.swerve.GyroIO;
@@ -35,6 +37,7 @@ public class RobotContainer {
   private Drive swerve; // FIXME make final, implement other robot types
   private Rollers rollers;
   private Flywheels flywheels;
+  private Pivot pivot;
 
   public RobotContainer() {
     Intake intake = null;
@@ -51,6 +54,7 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
           intake = new Intake(new IntakeIOTalonFX());
           flywheels = new Flywheels(new FlywheelsIOTalonFX());
+          pivot = new Pivot(new PivotIOTalonFX());
         }
         case DEV -> {
           swerve =
@@ -62,6 +66,7 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
           intake = new Intake(new IntakeIOTalonFX()); // FIXME
           flywheels = new Flywheels(new FlywheelsIOTalonFX());
+          pivot = new Pivot(new PivotIOTalonFX());
         }
         case SIM -> {
           swerve =
@@ -73,6 +78,7 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
           intake = new Intake(new IntakeIOTalonFX()); // FIXME
           flywheels = new Flywheels(new FlywheelsIOTalonFX());
+          pivot = new Pivot(new PivotIOTalonFX());
         }
       }
     }
@@ -117,6 +123,8 @@ public class RobotContainer {
     // -----Intake Controls-----
 
     // -----Flywheel Controls-----
+
+    //------Pivot Controls------
 
   }
 
