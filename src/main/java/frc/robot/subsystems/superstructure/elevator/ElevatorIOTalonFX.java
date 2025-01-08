@@ -1,47 +1,19 @@
 package frc.robot.subsystems.superstructure.elevator;
-
-import com.ctre.phoenix6.signals.GravityTypeValue;
 import frc.robot.subsystems.superstructure.GenericSuperstructureIOTalonFX;
 import java.util.Optional;
 
 public class ElevatorIOTalonFX extends GenericSuperstructureIOTalonFX implements ElevatorIO {
-  // gear ratio is 9:1
-  // gear diameter 1.273 inches
-  public static final double REDUCTION = (1/9)*1.273*Math.PI; // rotations to inches
-
-  public static final boolean INVERTED = false;
-
-  public static final double SUPPLY_CURRENT_LIMIT = 30; // FIXME
-  public static final int ZEROING_CURRENT_LIMIT = 20; // FIXME
-
-  public static final int ZEROING_VOLTS = -2; // FIXME
-
-  public static final int ID = 18; // FIXME 
-
-  public static final double P = 3;
-  public static final double I = 0;
-  public static final double D = 0;
-
-  public static final double S = 0.25;
-  public static final double G = 0.15;
-
-  public static final double UPPER_LIMIT = 33;
-
-  public static final double UPPER_VOLT_LIMIT = 10;
-  public static final double LOWER_VOLT_LIMIT = -7;
-
-  public static final GravityTypeValue GRAVITY_TYPE = GravityTypeValue.Elevator_Static;
 
   public ElevatorIOTalonFX() {
     super(
-        ID,
-        INVERTED,
-        SUPPLY_CURRENT_LIMIT,
+        ElevatorConstants.ELEVATOR_CONFIG.motorID(),
+        ElevatorConstants.INVERT_MOTOR,
+        ElevatorConstants.SUPPLY_CURRENT_LIMIT,
         Optional.empty(),
-        REDUCTION,
-        UPPER_LIMIT,
-        UPPER_VOLT_LIMIT,
-        LOWER_VOLT_LIMIT);
-    setSlot0(P, I, D, S, 0, 0, GRAVITY_TYPE);
+        ElevatorConstants.ELEVATOR_CONFIG.reduction(),
+        ElevatorConstants.UPPER_EXTENSION_LIMIT,
+        ElevatorConstants.UPPER_VOLT_LIMIT,
+        ElevatorConstants.LOWER_VOLT_LIMIT);
+    setSlot0(ElevatorConstants.GAINS.kP(), ElevatorConstants.GAINS.kI(), ElevatorConstants.GAINS.kD(), ElevatorConstants.GAINS.kS(), ElevatorConstants.GAINS.kV(), ElevatorConstants.GAINS.kA(), ElevatorConstants.GRAVITY_TYPE);
   }
 }
