@@ -17,15 +17,13 @@ public class PathCommand extends Command {
   private PathPlannerPath path;
   private PathPlannerTrajectory trajectory;
 
-  public PathCommand(PathPlannerPath path, BooleanSupplier flipAlliance, Drive drive) {
+
+  public PathCommand(
+      PathPlannerPath path, BooleanSupplier flipAlliance, Drive drive, RobotConfig robotConfig) {
     this.drive = drive;
+    this.robotConfig = robotConfig;
     this.flipAlliance = flipAlliance;
     this.originalPath = path;
-    try {
-      robotConfig = RobotConfig.fromGUISettings();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
 
     addRequirements(drive);
   }

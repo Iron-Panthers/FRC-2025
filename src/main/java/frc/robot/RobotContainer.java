@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.RobotConfig;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -100,6 +101,16 @@ public class RobotContainer {
   }
 
   private void configureAutos() {
+    RobotConfig robotConfig;
+    try {
+      robotConfig = RobotConfig.fromGUISettings();
+    } catch (Exception e) {
+      e.printStackTrace();
+      robotConfig = null;
+    }
+
+    var passRobotConfig = robotConfig; // workaround
+
     BooleanSupplier flipAlliance =
         () -> {
           // Boolean supplier that controls when the path will be mirrored for the red alliance
@@ -114,7 +125,7 @@ public class RobotContainer {
         };
 
     AutoBuilder.configureCustom(
-        (path) -> new PathCommand(path, flipAlliance, swerve),
+        (path) -> new PathCommand(path, flipAlliance, swerve, passRobotConfig),
         () -> RobotState.getInstance().getOdometryPose(),
         (pose) -> RobotState.getInstance().resetPose(pose),
         flipAlliance,
