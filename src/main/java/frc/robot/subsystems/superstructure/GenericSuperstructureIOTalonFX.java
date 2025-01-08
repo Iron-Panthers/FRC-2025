@@ -107,6 +107,9 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
     talon.setControl(positionControl.withPosition(rotations));
   }
 
+  /**
+   * 
+   */
   @Override
   public void runCharacterization() {
     talon.setControl(voltageOutput.withOutput(-1));

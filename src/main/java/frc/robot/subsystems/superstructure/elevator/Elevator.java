@@ -4,8 +4,8 @@ import frc.robot.subsystems.superstructure.GenericSuperstructure;
 
 public class Elevator extends GenericSuperstructure<Elevator.ElevatorTarget> {
   public enum ElevatorTarget implements GenericSuperstructure.PositionTarget {
-    ZERO(0),
-    L2(10),
+    BOTTOM(0),
+    L2(20),
     L3(15),
     L4(29),
     SOURCE(5);
