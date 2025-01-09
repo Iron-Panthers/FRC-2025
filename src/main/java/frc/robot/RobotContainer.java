@@ -39,6 +39,15 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
         }
+        case ALPHA -> {
+          swerve =
+              new Drive(
+                  new GyroIOPigeon2(),
+                  new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[0]),
+                  new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
+                  new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
+                  new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
+        }
         case DEV -> {
           swerve =
               new Drive(

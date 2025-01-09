@@ -11,7 +11,7 @@ public class DriveConstants {
   // measures in meters (per sec) and radians (per sec)
   public static final DrivebaseConfig DRIVE_CONFIG =
       switch (getRobotType()) {
-        case COMP, SIM -> new DrivebaseConfig(
+        case COMP, ALPHA, SIM -> new DrivebaseConfig(
             Units.inchesToMeters(2),
             Units.inchesToMeters(22.5),
             Units.inchesToMeters(38.5),
