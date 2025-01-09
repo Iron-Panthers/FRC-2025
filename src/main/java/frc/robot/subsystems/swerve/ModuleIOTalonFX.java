@@ -11,6 +11,7 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -77,8 +78,10 @@ public class ModuleIOTalonFX implements ModuleIO {
             : InvertedValue.CounterClockwise_Positive;
 
     driveConfig.Feedback.SensorToMechanismRatio = MODULE_CONSTANTS.driveReduction();
-    steerConfig.Feedback.SensorToMechanismRatio = MODULE_CONSTANTS.steerReduction();
+    // steerConfig.Feedback.SensorToMechanismRatio = MODULE_CONSTANTS.steerReduction();
     steerConfig.ClosedLoopGeneral.ContinuousWrap = true;
+    steerConfig.Feedback.FeedbackRemoteSensorID = config.encoderID();
+    steerConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
 
     setDriveGains(MODULE_CONSTANTS.driveGains());
     setSteerGains(MODULE_CONSTANTS.steerGains(), MODULE_CONSTANTS.steerMotionGains());
