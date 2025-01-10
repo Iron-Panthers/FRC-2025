@@ -7,8 +7,8 @@ public class Elevator extends GenericSuperstructure<Elevator.ElevatorTarget> {
     BOTTOM(0),
     L1(0),
     L2(25),
-    L3(110),
-    L4(120),
+    L3(50),
+    L4(54),
     SOURCE(20);
     private double position = 0;
 
