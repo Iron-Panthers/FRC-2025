@@ -14,8 +14,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotState;
+import frc.robot.subsystems.swerve.controllers.HeadingController;
 import frc.robot.subsystems.swerve.controllers.TeleopController;
 import java.util.Arrays;
+import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -40,6 +42,7 @@ public class Drive extends SubsystemBase {
   private ChassisSpeeds targetSpeeds = new ChassisSpeeds();
 
   private final TeleopController teleopController;
+  private HeadingController headingController = null;
 
   public Drive(GyroIO gyroIO, ModuleIO fl, ModuleIO fr, ModuleIO bl, ModuleIO br) {
     this.gyroIO = gyroIO;
@@ -79,6 +82,9 @@ public class Drive extends SubsystemBase {
     switch (driveMode) {
       case TELEOP -> {
         targetSpeeds = teleopController.update(arbitraryYaw);
+        if (headingController != null) {
+          targetSpeeds.omegaRadiansPerSecond = headingController.update();
+        }
       }
       case TRAJECTORY -> {}
     }
@@ -124,5 +130,13 @@ public class Drive extends SubsystemBase {
 
   public Command zeroGyroCommand() {
     return this.runOnce(() -> zeroGyro());
+  }
+
+  public void setHeading(Supplier<Rotation2d> headingSupplier) {
+    headingController = new HeadingController(headingSupplier);
+  }
+
+  public void clearHeadingControl() {
+    headingController = null;
   }
 }

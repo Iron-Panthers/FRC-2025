@@ -83,6 +83,9 @@ public class DriveConstants {
             3.125);
       };
 
+  public static final HeadingControllerConstants HEADING_CONTROLLER_CONSTANTS =
+      new HeadingControllerConstants(5, 0, 9, 12.5, 2);
+
   public record DrivebaseConfig(
       double wheelRadius,
       double trackWidth,
@@ -112,6 +115,10 @@ public class DriveConstants {
   public record Gains(double kS, double kV, double kA, double kP, double kI, double kD) {}
 
   public record MotionProfileGains(double cruiseVelocity, double acceleration, double jerk) {}
+
+  /* tolerance in degrees */
+  public record HeadingControllerConstants(
+      double kP, double kD, double maxVelocity, double maxAcceleration, double tolerance) {}
 
   private enum Mk4iReductions {
     MK4I_L3((50 / 14) * (16 / 28) * (45 / 15)),

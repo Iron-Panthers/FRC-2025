@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
 import frc.robot.subsystems.swerve.Drive;
@@ -24,6 +25,8 @@ public class RobotContainer {
 
   private final CommandXboxController driverA = new CommandXboxController(0);
   private final CommandXboxController driverB = new CommandXboxController(1);
+
+  private Rotation2d targetHeading = new Rotation2d();
 
   private Drive swerve; // FIXME make final, implement other robot types
 
@@ -75,15 +78,19 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+
     // -----Driver Controls-----
     swerve.setDefaultCommand(
         swerve
             .run(
                 () -> {
-                  swerve.driveTeleopController(
-                      -driverA.getLeftY(),
-                      -driverA.getLeftX(),
-                      driverA.getLeftTriggerAxis() - driverA.getRightTriggerAxis());
+                  targetHeading =
+                      targetHeading.plus(
+                          new Rotation2d(
+                              driverA.getLeftTriggerAxis() - driverA.getRightTriggerAxis()));
+
+                  swerve.setHeading(() -> targetHeading);
+                  swerve.driveTeleopController(-driverA.getLeftY(), -driverA.getLeftX(), 0);
                 })
             .withName("Drive Teleop"));
 
