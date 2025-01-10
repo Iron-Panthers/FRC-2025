@@ -15,6 +15,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
 import frc.robot.autonomous.PathCommand;
+import frc.robot.subsystems.superstructure.Superstructure;
+import frc.robot.subsystems.superstructure.elevator.Elevator;
+import frc.robot.subsystems.superstructure.elevator.ElevatorIO;
+import frc.robot.subsystems.superstructure.elevator.ElevatorIOTalonFX;
 import frc.robot.subsystems.swerve.Drive;
 import frc.robot.subsystems.swerve.DriveConstants;
 import frc.robot.subsystems.swerve.GyroIO;
@@ -39,7 +43,12 @@ public class RobotContainer {
 
   private SendableChooser<Command> autoChooser;
 
+  // superstructure
+  private Elevator elevator;
+  private Superstructure superstructure;
+
   public RobotContainer() {
+
     if (Constants.getRobotMode() != Mode.REPLAY) {
       switch (Constants.getRobotType()) {
         case COMP -> {
@@ -50,6 +59,7 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
+          elevator = new Elevator(new ElevatorIOTalonFX());
         }
         case DEV -> {
           swerve =
@@ -82,6 +92,13 @@ public class RobotContainer {
               new ModuleIO() {});
     }
 
+    // superstructure
+    if (elevator == null) {
+      elevator = new Elevator(new ElevatorIO() {});
+    }
+    // TODO: add pivot
+    superstructure = new Superstructure(elevator);
+
     configureBindings();
     configureAutos();
   }
@@ -100,13 +117,50 @@ public class RobotContainer {
             .withName("Drive Teleop"));
 
     driverA.start().onTrue(swerve.zeroGyroCommand());
+
+    // -----Intake Controls-----
+
+    // -----Flywheel Controls-----
+
+    // -----Superstructure Controls-----
+    driverA // GO TO BOTTOM
+        .b()
+        .onTrue(
+            new InstantCommand(
+                () -> superstructure.setTargetState(Superstructure.SuperstructureState.STOW),
+                superstructure));
+    driverA // GO TO L3
+        .a()
+        .onTrue(
+            new InstantCommand(
+                () -> superstructure.setTargetState(Superstructure.SuperstructureState.SCORE_L3),
+                superstructure));
+
+    driverA // GO TO L4
+        .y()
+        .onTrue(
+            new InstantCommand(
+                () -> superstructure.setTargetState(Superstructure.SuperstructureState.SCORE_L4),
+                superstructure));
+
+    driverA // ZERO
+        .x()
+        .onTrue(
+            new InstantCommand(
+                () -> superstructure.setTargetState(Superstructure.SuperstructureState.ZERO),
+                superstructure));
   }
 
   private void configureAutos() {
     NamedCommands.registerCommand(
         "TestPrintCommand",
         new InstantCommand(
-            () -> System.out.println("\nWe'd do something if we had the subsystems to do it :( \n"))); //FIXME Only for testing event markers
+            () ->
+                System.out.println(
+                    "\nWe'd do something if we had the subsystems to do it :( \n"))); // FIXME Only
+    // for testing
+    // event
+    // markers
     RobotConfig robotConfig;
     try {
       robotConfig = RobotConfig.fromGUISettings();
