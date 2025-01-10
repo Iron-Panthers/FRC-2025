@@ -46,6 +46,7 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
       double lowerVoltLimit) {
     talon = new TalonFX(id);
 
+    // VOLTAGE, LIMITS AND RATIO CONFIG
     TalonFXConfiguration config = new TalonFXConfiguration();
     config.MotorOutput.Inverted =
         inverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
@@ -57,6 +58,7 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
     config.Voltage.withPeakReverseVoltage(lowerVoltLimit);
     config.Feedback.withSensorToMechanismRatio(reduction);
 
+    // CANCODER CONFIG
     if (canCoderID.isPresent()) {
       CANcoder canCoder = new CANcoder(canCoderID.get());
       canCoder
@@ -76,6 +78,7 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
     setOffset();
     talon.setNeutralMode(NeutralModeValue.Brake);
 
+    // STATUS SIGNALS
     velocityRPS = talon.getVelocity();
     appliedVolts = talon.getMotorVoltage();
     supplyCurrent = talon.getSupplyCurrent();
@@ -104,6 +107,7 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
     talon.setControl(positionControl.withPosition(rotations));
   }
 
+  /** */
   @Override
   public void runCharacterization() {
     talon.setControl(voltageOutput.withOutput(-1));

@@ -1,79 +1,104 @@
 package frc.robot.subsystems.superstructure;
 
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.superstructure.pivot.Pivot;
-import frc.robot.subsystems.superstructure.pivot.Pivot.PivotTarget;
+import frc.robot.subsystems.superstructure.GenericSuperstructure.ControlMode;
+import frc.robot.subsystems.superstructure.elevator.Elevator;
+import frc.robot.subsystems.superstructure.elevator.Elevator.ElevatorTarget;
 import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public enum SuperstructureState {
-    STOW,
-    INTAKE,
-    SUBWOOF_SHOT,
-    SHUTTLE,
-    AMP,
-    ZERO,
-    STOP,
-    SCORE;
+    ZERO, // Zero the superstructure
+    STOP, // Stop the superstructure
+    SCORE_L4, // Scoring in L4
+    SCORE_L3, // Scoring in L3
+    SCORE_L2, // Scoring in L2
+    SCORE_L1, // Scoring in the trough
+    STOW, // Going to the lowest position
   }
 
-  private SuperstructureState targetState = SuperstructureState.STOW;
+  private SuperstructureState targetState = SuperstructureState.STOP; // current target state
 
-  private final Pivot pivot;
+  private final Elevator elevator;
 
-  public Superstructure(Pivot pivot) {
-    this.pivot = pivot;
+  // linear filter for elevator
+  private final LinearFilter elevatorSupplyCurrentFilter;
+  private double elevatorFilteredSupplyCurrentAmps = 0;
+
+  public Superstructure(Elevator elevator) {
+    this.elevator = elevator;
+    elevator.setPositionTarget(ElevatorTarget.BOTTOM);
+
+    // setup the linear filter
+    elevatorSupplyCurrentFilter = LinearFilter.movingAverage(10);
   }
 
   @Override
   public void periodic() {
-    switch (targetState) {
-      case STOW -> { // basically just the default value
-        pivot.setPositionTarget(PivotTarget.STOW);
-        // elevator.setPositionTarget(ElevatorTarget.STOW);
+    switch (targetState) { // switch on the target state
+      case SCORE_L1 -> {
+        elevator.setPositionTarget(ElevatorTarget.L1);
       }
-      case SCORE -> {
-        pivot.setPositionTarget(PivotTarget.L1);
-        // elevator.setPositionTarget(ElevatorTarget.STOW); //FIXME: FIX ALL OF THESE MODES SO THEY
-        // CORRESPOND WITH REEFSCAPES
+      case SCORE_L2 -> {
+        elevator.setPositionTarget(ElevatorTarget.L2);
       }
-      case INTAKE -> {
-        pivot.setPositionTarget(PivotTarget.STOW);
-        // elevator.setPositionTarget(ElevatorTarget.STOW);
+      case SCORE_L3 -> {
+        elevator.setPositionTarget(ElevatorTarget.L3);
       }
-      case SUBWOOF_SHOT -> {
-        // pivot.setPositionTarget(PivotTarget.SUBWOOF_SHOT);
-        // elevator.setPositionTarget(ElevatorTarget.STOW);
+      case SCORE_L4 -> {
+        elevator.setPositionTarget(ElevatorTarget.L4);
       }
-      case SHUTTLE -> {
-        // pivot.setPositionTarget(PivotTarget.SHUTTLE);
-        // elevator.setPositionTarget(ElevatorTarget.STOW);
-      }
-      case AMP -> {
-        pivot.setPositionTarget(PivotTarget.STOW);
-        // elevator.setPositionTarget(ElevatorTarget.AMP);
+      case STOW -> {
+        elevator.setPositionTarget(ElevatorTarget.BOTTOM);
       }
       case ZERO -> {
-        pivot.runCharacterization();
+        elevator.setControlMode(ControlMode.ZERO);
+        if (elevatorFilteredSupplyCurrentAmps > 4) { // then stop it when it hits the bottom
+          elevator.setOffset(); // set the offset
+          targetState = SuperstructureState.STOW; // then go to the stow position
+        }
       }
       case STOP -> {
-        pivot.stop();
-        setTargetState(SuperstructureState.STOW);
+        elevator.setControlMode(ControlMode.STOP);
+        ;
       }
     }
-    pivot.periodic();
-    Logger.recordOutput("Rollers/TargetState", targetState);
+    elevator.periodic();
+
+    // calculate our new filtered supply current for the elevator
+    elevatorFilteredSupplyCurrentAmps =
+        elevatorSupplyCurrentFilter.calculate(elevator.getSupplyCurrentAmps());
+
+    Logger.recordOutput("Superstructure/TargetState", targetState);
+    Logger.recordOutput(
+        "Superstructure/Filtered Supply Current", elevatorFilteredSupplyCurrentAmps);
   }
 
+  // Target state getter and setter
   public void setTargetState(SuperstructureState superstructureState) {
     targetState = superstructureState;
   }
 
-  public double getPivotSupplyCurrentAmps() {
-    return pivot.supplyCurrentAmps();
-  }
-
   public SuperstructureState getTargetState() {
     return targetState;
+  }
+
+  /**
+   * Get the position of the elevator
+   *
+   * @return the position of the elevator
+   */
+  public double getElevatorPosition() {
+    return elevator.position();
+  }
+
+  /**
+   * Get the supply current of the elevator
+   *
+   * @return the supply current of the elevator
+   */
+  public double getElevatorSupplyCurrentAmps() {
+    return elevator.getSupplyCurrentAmps();
   }
 }
