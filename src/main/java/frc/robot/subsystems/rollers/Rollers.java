@@ -1,15 +1,12 @@
 package frc.robot.subsystems.rollers;
 
-import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.rollers.intake.Intake;
 import org.littletonrobotics.junction.Logger;
 
 public class Rollers extends SubsystemBase {
-
-  private LinearFilter filter;
-  private double filteredCurrent;
 
   public enum RollerState {
     IDLE,
@@ -24,7 +21,6 @@ public class Rollers extends SubsystemBase {
 
   public Rollers(Intake intake) {
     this.intake = intake;
-    this.filter = LinearFilter.movingAverage(35);
   }
 
   @Override
@@ -37,7 +33,7 @@ public class Rollers extends SubsystemBase {
       }
       case INTAKE -> {
         intake.setVoltageTarget(Intake.Target.INTAKE);
-        if (filteredCurrent > 35) {
+        if (intake.getFilteredCurrent() < -0.5) {
           this.targetState = RollerState.HOLD;
         }
       }
@@ -50,7 +46,7 @@ public class Rollers extends SubsystemBase {
     }
 
     intake.periodic();
-    this.filteredCurrent = this.filter.calculate(intake.getSupplyCurrentAmps());
+
     Logger.recordOutput("Rollers/TargetState", targetState);
   }
 
@@ -63,12 +59,9 @@ public class Rollers extends SubsystemBase {
   }
 
   public Command setTargetCommand(RollerState target) {
-    return startEnd(
+    return new InstantCommand(
         () -> {
           this.targetState = target;
-        },
-        () -> {
-          this.targetState = RollerState.IDLE;
         });
   }
 }

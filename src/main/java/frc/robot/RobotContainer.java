@@ -6,6 +6,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
+import frc.robot.subsystems.rollers.Rollers;
+import frc.robot.subsystems.rollers.intake.Intake;
+import frc.robot.subsystems.rollers.intake.IntakeIOTalonFX;
 import frc.robot.subsystems.swerve.Drive;
 import frc.robot.subsystems.swerve.DriveConstants;
 import frc.robot.subsystems.swerve.GyroIO;
@@ -41,6 +44,7 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
+          intake = new Intake(new IntakeIOTalonFX());
         }
         case DEV -> {
           swerve =
@@ -73,6 +77,8 @@ public class RobotContainer {
               new ModuleIO() {});
     }
 
+    rollers = new Rollers(intake);
+
     configureBindings();
     configureAutos();
   }
@@ -96,7 +102,7 @@ public class RobotContainer {
 
     driverA.b().onTrue(rollers.setTargetCommand(Rollers.RollerState.INTAKE));
     driverA.a().onTrue(rollers.setTargetCommand(Rollers.RollerState.IDLE));
-    driverA.x().onTrue(rollers.setTargetCommand(Rollers.RollerState.EJECT));
+    driverA.x().onTrue(rollers.setTargetCommand(Rollers.RollerState.HOLD));
     driverA.y().onTrue(rollers.setTargetCommand(Rollers.RollerState.EJECT));
 
     // -----Flywheel Controls-----

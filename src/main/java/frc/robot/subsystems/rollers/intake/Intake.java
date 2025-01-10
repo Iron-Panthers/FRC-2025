@@ -5,22 +5,20 @@ import frc.robot.subsystems.rollers.GenericRollers;
 public class Intake extends GenericRollers<Intake.Target> {
   public enum Target implements GenericRollers.VoltageTarget {
     IDLE(0),
-    INTAKE(12),
-    HOLD(6),
-    EJECT(-8);
+    INTAKE(9),
+    HOLD(0.5),
+    EJECT(-1);
 
-    private int volts;
+    private double volts;
 
-    private Target(int volts) {
+    private Target(double volts) {
       this.volts = volts;
     }
 
-    public int getVolts() {
+    public double getVolts() {
       return volts;
     }
   }
-
-  private Target voltageTarget = Target.IDLE;
 
   public Intake(IntakeIO intakeIO) {
     super("Intake", intakeIO);
