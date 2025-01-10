@@ -6,6 +6,7 @@ public class Intake extends GenericRollers<Intake.Target> {
   public enum Target implements GenericRollers.VoltageTarget {
     IDLE(0),
     INTAKE(12),
+    HOLD(6),
     EJECT(-8);
 
     private int volts;

@@ -117,9 +117,10 @@ public class RobotContainer {
 
     // -----Intake Controls-----
 
-    driverA.b().onTrue(rollers.setTargetCommand(Rollers.RollerState.INTAKE) );
-    driverA.a().onTrue(rollers.setTargetCommand(Rollers.RollerState.IDLE) );
-    driverA.x().onTrue(rollers.setTargetCommand(Rollers.RollerState.EJECT) );
+    driverA.b().onTrue(rollers.setTargetCommand(Rollers.RollerState.INTAKE));
+    driverA.a().onTrue(rollers.setTargetCommand(Rollers.RollerState.IDLE));
+    driverA.x().onTrue(rollers.setTargetCommand(Rollers.RollerState.EJECT));
+    driverA.y().onTrue(rollers.setTargetCommand(Rollers.RollerState.EJECT));
 
     // -----Flywheel Controls-----
 

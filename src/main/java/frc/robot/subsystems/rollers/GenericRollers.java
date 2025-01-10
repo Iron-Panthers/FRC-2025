@@ -30,6 +30,10 @@ public abstract class GenericRollers<G extends GenericRollers.VoltageTarget> {
     return voltageTarget;
   }
 
+  public double getSupplyCurrentAmps() {
+    return inputs.supplyCurrentAmps;
+  }
+
   public void setVoltageTarget(G voltageTarget) {
     this.voltageTarget = voltageTarget;
   }
