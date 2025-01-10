@@ -18,11 +18,11 @@ public class Superstructure extends SubsystemBase {
     STOW, // Going to the lowest position
   }
 
-  private SuperstructureState targetState = SuperstructureState.STOP;
+  private SuperstructureState targetState = SuperstructureState.STOP; // current target state
 
   private final Elevator elevator;
 
-  // linear filter
+  // linear filter for elevator
   private final LinearFilter elevatorSupplyCurrentFilter;
   private double elevatorFilteredSupplyCurrentAmps = 0;
 
@@ -36,7 +36,7 @@ public class Superstructure extends SubsystemBase {
 
   @Override
   public void periodic() {
-    switch (targetState) {
+    switch (targetState) {// switch on the target state
       case SCORE_L1 -> {
         elevator.setPositionTarget(ElevatorTarget.L1);
       }
@@ -66,15 +66,16 @@ public class Superstructure extends SubsystemBase {
     }
     elevator.periodic();
 
+    // calculate our new filtered supply current
     elevatorFilteredSupplyCurrentAmps =
         elevatorSupplyCurrentFilter.calculate(elevator.getSupplyCurrentAmps());
 
-    // pivot.periodic(); don't do this yet lmao
     Logger.recordOutput("Superstructure/TargetState", targetState);
     Logger.recordOutput(
         "Superstructure/Filtered Supply Current", elevatorFilteredSupplyCurrentAmps);
   }
 
+  // Target state getter and setter
   public void setTargetState(SuperstructureState superstructureState) {
     targetState = superstructureState;
   }
@@ -83,16 +84,20 @@ public class Superstructure extends SubsystemBase {
     return targetState;
   }
 
+  /**
+   * Get the position of the elevator
+   * @return the position of the elevator
+   */
   public double getElevatorPosition() {
     return elevator.position();
   }
 
+  /**
+   * Get the supply current of the elevator
+   * @return the supply current of the elevator
+   */
   public double getElevatorSupplyCurrentAmps() {
     return elevator.getSupplyCurrentAmps();
   }
-
-  // public double getPivotSupplyCurrentAmps() {
-  //   return pivot.supplyCurrentAmps();
-  // }
 
 }
