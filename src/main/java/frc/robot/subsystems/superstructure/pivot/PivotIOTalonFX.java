@@ -5,7 +5,7 @@ import frc.robot.subsystems.superstructure.GenericSuperstructureIOTalonFX;
 import java.util.Optional;
 
 public class PivotIOTalonFX extends GenericSuperstructureIOTalonFX implements PivotIO {
-  //gear ratio 21.6 : 1
+  // gear ratio 21.6 : 1
 
   public static final double REDUCTION = 360 / 21.6; // rotations to degrees
   public static final boolean INVERTED = true; // FIXME
@@ -44,7 +44,8 @@ public class PivotIOTalonFX extends GenericSuperstructureIOTalonFX implements Pi
   }
 
   /**
-   * Runs the characterization of the pivot subsystem with a positivie voltage output so that it zeros at the hardstop above it (set at 90 degrees)
+   * Runs the characterization of the pivot subsystem with a positivie voltage output so that it
+   * zeros at the hardstop above it (set at 90 degrees)
    */
   @Override
   public void runCharacterization() {
@@ -52,8 +53,8 @@ public class PivotIOTalonFX extends GenericSuperstructureIOTalonFX implements Pi
   }
 
   /**
-   * Sets the offset of the pivot to 90 degrees instead of 0 degrees 
-   * this is because the hardstop is at 90 degrees above where we want the zero to be
+   * Sets the offset of the pivot to 90 degrees instead of 0 degrees this is because the hardstop is
+   * at 90 degrees above where we want the zero to be
    */
   @Override
   public void setOffset() {
