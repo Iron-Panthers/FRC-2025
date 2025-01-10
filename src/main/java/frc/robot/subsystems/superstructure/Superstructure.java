@@ -33,7 +33,7 @@ public class Superstructure extends SubsystemBase {
         // elevator.setPositionTarget(ElevatorTarget.STOW);
       }
       case SCORE -> {
-        pivot.setPositionTarget(PivotTarget.SCORE);
+        pivot.setPositionTarget(PivotTarget.L1);
         // elevator.setPositionTarget(ElevatorTarget.STOW); //FIXME: FIX ALL OF THESE MODES SO THEY
         // CORRESPOND WITH REEFSCAPES
       }

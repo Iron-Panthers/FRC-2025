@@ -39,6 +39,6 @@ public class ElevatorIOTalonFX extends GenericSuperstructureIOTalonFX implements
         UPPER_LIMIT,
         UPPER_VOLT_LIMIT,
         LOWER_VOLT_LIMIT);
-    setSlot0(P, I, D, S, 0, 0, GRAVITY_TYPE);
+    setSlot0(P, I, D, S, 0, 0, G, GRAVITY_TYPE);
   }
 }

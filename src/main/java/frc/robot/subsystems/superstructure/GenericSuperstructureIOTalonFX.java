@@ -73,7 +73,7 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
       config.Feedback.withSensorToMechanismRatio(reduction);
     }
     talon.getConfigurator().apply(config);
-    talon.setPosition(0);
+    setOffset();
     talon.setNeutralMode(NeutralModeValue.Brake);
 
     velocityRPS = talon.getVelocity();
@@ -127,6 +127,7 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
       double kS,
       double kV,
       double kA,
+      double kG,
       GravityTypeValue gravityTypeValue) {
     Slot0Configs gainsConfig = new Slot0Configs();
     gainsConfig.kP = kP;
@@ -135,6 +136,7 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
     gainsConfig.kS = kS;
     gainsConfig.kV = kV;
     gainsConfig.kA = kA;
+    gainsConfig.kG = kG;
     gainsConfig.GravityType = gravityTypeValue;
 
     talon.getConfigurator().apply(gainsConfig);

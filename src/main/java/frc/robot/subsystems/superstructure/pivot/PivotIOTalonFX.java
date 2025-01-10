@@ -7,7 +7,7 @@ import java.util.Optional;
 public class PivotIOTalonFX extends GenericSuperstructureIOTalonFX implements PivotIO {
   // gear ratio 21.6 : 1
 
-  public static final double REDUCTION = 360 / 21.6; // rotations to degrees
+  public static final double REDUCTION = 21.6 / 360; // rotations to degrees
   public static final boolean INVERTED = true; // FIXME
 
   public static final double SUPPLY_CURRENT_LIMIT = 30; // FIXME
@@ -17,7 +17,7 @@ public class PivotIOTalonFX extends GenericSuperstructureIOTalonFX implements Pi
   public static final int ID = 15;
   public static final int ENCODER_ID = 28;
 
-  public static final double P = 0.27;
+  public static final double P = 0.02;
   public static final double I = 0;
   public static final double D = 0;
 
@@ -26,8 +26,8 @@ public class PivotIOTalonFX extends GenericSuperstructureIOTalonFX implements Pi
 
   public static final double UPPER_LIMIT = 70;
 
-  public static final double UPPER_VOLT_LIMIT = 5;
-  public static final double LOWER_VOLT_LIMIT = -4;
+  public static final double UPPER_VOLT_LIMIT = 3;
+  public static final double LOWER_VOLT_LIMIT = -3;
   public static final GravityTypeValue GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
 
   public PivotIOTalonFX() {
@@ -40,7 +40,7 @@ public class PivotIOTalonFX extends GenericSuperstructureIOTalonFX implements Pi
         UPPER_LIMIT,
         UPPER_VOLT_LIMIT,
         LOWER_VOLT_LIMIT);
-    setSlot0(P, I, D, S, 0, 0, GRAVITY_TYPE);
+    setSlot0(P, I, D, S, 0, 0, G, GRAVITY_TYPE);
   }
 
   /**
@@ -58,6 +58,6 @@ public class PivotIOTalonFX extends GenericSuperstructureIOTalonFX implements Pi
    */
   @Override
   public void setOffset() {
-    talon.getConfigurator().setPosition(90);
+    talon.getConfigurator().setPosition(110);
   }
 }

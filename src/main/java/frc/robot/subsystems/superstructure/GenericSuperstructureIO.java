@@ -28,6 +28,7 @@ public interface GenericSuperstructureIO {
       double kS,
       double kV,
       double kA,
+      double kG,
       GravityTypeValue gravityTypeValue) {}
 
   default void stop() {}

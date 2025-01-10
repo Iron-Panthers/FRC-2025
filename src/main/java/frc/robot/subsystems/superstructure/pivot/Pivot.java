@@ -6,8 +6,8 @@ import frc.robot.subsystems.superstructure.GenericSuperstructure;
 
 public class Pivot extends GenericSuperstructure<Pivot.PivotTarget> {
   public enum PivotTarget implements GenericSuperstructure.PositionTarget {
-    STOW(0), // FIXME: Add zeroing code to make sure the robot ACTUALLY goes to 0
-    SCORE(25); // FIXME: this is just a placeholder value to make sure that the pivot actually moves
+    STOW(90), // FIXME: Add zeroing code to make sure the robot ACTUALLY goes to 0
+    L1(0); // FIXME: this is just a placeholder value to make sure that the pivot actually moves
     // FIXME: Change score to the separate L4, L3, L2, L1 scoring
     private double position;
 
