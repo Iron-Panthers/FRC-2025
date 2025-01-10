@@ -14,6 +14,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Threads;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -30,6 +31,8 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  */
 public class Robot extends LoggedRobot {
   private RobotContainer robotContainer;
+
+  private Command autoCommand;
 
   public Robot() {
     // Record metadata
@@ -98,7 +101,12 @@ public class Robot extends LoggedRobot {
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
-  public void autonomousInit() {}
+  public void autonomousInit() {
+    autoCommand = robotContainer.getAutoCommand();
+    if (autoCommand != null) {
+      autoCommand.schedule();
+    }
+  }
 
   /** This function is called periodically during autonomous. */
   @Override
@@ -106,7 +114,11 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    if (autoCommand != null) {
+      autoCommand.cancel();
+    }
+  }
 
   /** This function is called periodically during operator control. */
   @Override

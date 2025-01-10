@@ -46,10 +46,10 @@ public class DriveConstants {
   public static final ModuleConfig[] MODULE_CONFIGS =
       switch (getRobotType()) {
         case COMP -> new ModuleConfig[] {
-          new ModuleConfig(5, 6, 1, new Rotation2d(-1.608), false, false),
-          new ModuleConfig(7, 8, 2, new Rotation2d(-0.175), false, true),
-          new ModuleConfig(11, 12, 3, new Rotation2d(2.901), false, false),
-          new ModuleConfig(9, 10, 4, new Rotation2d(2.241), false, true)
+          new ModuleConfig(5, 6, 1, new Rotation2d(-2.152), false, false),
+          new ModuleConfig(7, 8, 2, new Rotation2d(-0.218), false, true),
+          new ModuleConfig(11, 12, 3, new Rotation2d(2.971), false, false),
+          new ModuleConfig(9, 10, 4, new Rotation2d(2.311), false, true)
         };
         case DEV -> new ModuleConfig[] {
           new ModuleConfig(2, 1, 27, new Rotation2d(0), true, false),
@@ -83,6 +83,9 @@ public class DriveConstants {
             3.125);
       };
 
+  public static final TrajectoryFollowerConstants TRAJECTORY_CONFIG =
+      new TrajectoryFollowerConstants(0, 0, 0, 0); // FIXME
+
   public record DrivebaseConfig(
       double wheelRadius,
       double trackWidth,
@@ -107,7 +110,8 @@ public class DriveConstants {
       double steerReduction,
       double couplingGearReduction) {}
 
-  public record TrajectoryFollowerConstants() {}
+  public record TrajectoryFollowerConstants(
+      double linearKP, double linearKD, double rotationKP, double rotationKD) {}
 
   public record Gains(double kS, double kV, double kA, double kP, double kI, double kD) {}
 
