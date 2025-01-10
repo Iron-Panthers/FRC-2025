@@ -15,7 +15,9 @@ public class Superstructure extends SubsystemBase {
     SHUTTLE,
     AMP,
     ZERO,
-    STOP
+    STOP,
+    PRESCORE,
+    SCORE;
   }
 
   private SuperstructureState targetState = SuperstructureState.STOW;
@@ -31,33 +33,37 @@ public class Superstructure extends SubsystemBase {
   @Override
   public void periodic() {
     switch (targetState) {
-      case STOW -> {
+      case STOW -> {  //basically just the default value
         pivot.setPositionTarget(PivotTarget.STOW);
-        elevator.setPositionTarget(ElevatorTarget.STOW);
+        //elevator.setPositionTarget(ElevatorTarget.STOW); 
+      }
+      case SCORE -> {
+        pivot.setPositionTarget(PivotTarget.SCORE);
+        //elevator.setPositionTarget(ElevatorTarget.STOW); //FIXME: FIX ALL OF THESE MODES SO THEY CORRESPOND WITH REEFSCAPES
       }
       case INTAKE -> {
         pivot.setPositionTarget(PivotTarget.STOW);
-        elevator.setPositionTarget(ElevatorTarget.STOW);
+        //elevator.setPositionTarget(ElevatorTarget.STOW);
       }
       case SUBWOOF_SHOT -> {
-        pivot.setPositionTarget(PivotTarget.SUBWOOF_SHOT);
-        elevator.setPositionTarget(ElevatorTarget.STOW);
+        //pivot.setPositionTarget(PivotTarget.SUBWOOF_SHOT);
+        //elevator.setPositionTarget(ElevatorTarget.STOW);
       }
       case SHUTTLE -> {
-        pivot.setPositionTarget(PivotTarget.SHUTTLE);
-        elevator.setPositionTarget(ElevatorTarget.STOW);
+        //pivot.setPositionTarget(PivotTarget.SHUTTLE);
+        //elevator.setPositionTarget(ElevatorTarget.STOW);
       }
       case AMP -> {
-        elevator.setPositionTarget(ElevatorTarget.AMP);
         pivot.setPositionTarget(PivotTarget.STOW);
+        //elevator.setPositionTarget(ElevatorTarget.AMP);
       }
       case ZERO -> {
-        elevator.runCharacterization();
         pivot.runCharacterization();
+        elevator.runCharacterization();
       }
       case STOP -> {
-        elevator.stop();
         pivot.stop();
+        elevator.stop();
         setTargetState(SuperstructureState.STOW);
       }
     }
