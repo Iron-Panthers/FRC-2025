@@ -2,7 +2,6 @@ package frc.robot.subsystems.superstructure;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
-import frc.robot.subsystems.superstructure.elevator.Elevator.ElevatorTarget;
 import frc.robot.subsystems.superstructure.pivot.Pivot;
 import frc.robot.subsystems.superstructure.pivot.Pivot.PivotTarget;
 import org.littletonrobotics.junction.Logger;
@@ -33,29 +32,30 @@ public class Superstructure extends SubsystemBase {
   @Override
   public void periodic() {
     switch (targetState) {
-      case STOW -> {  //basically just the default value
+      case STOW -> { // basically just the default value
         pivot.setPositionTarget(PivotTarget.STOW);
-        //elevator.setPositionTarget(ElevatorTarget.STOW); 
+        // elevator.setPositionTarget(ElevatorTarget.STOW);
       }
       case SCORE -> {
         pivot.setPositionTarget(PivotTarget.SCORE);
-        //elevator.setPositionTarget(ElevatorTarget.STOW); //FIXME: FIX ALL OF THESE MODES SO THEY CORRESPOND WITH REEFSCAPES
+        // elevator.setPositionTarget(ElevatorTarget.STOW); //FIXME: FIX ALL OF THESE MODES SO THEY
+        // CORRESPOND WITH REEFSCAPES
       }
       case INTAKE -> {
         pivot.setPositionTarget(PivotTarget.STOW);
-        //elevator.setPositionTarget(ElevatorTarget.STOW);
+        // elevator.setPositionTarget(ElevatorTarget.STOW);
       }
       case SUBWOOF_SHOT -> {
-        //pivot.setPositionTarget(PivotTarget.SUBWOOF_SHOT);
-        //elevator.setPositionTarget(ElevatorTarget.STOW);
+        // pivot.setPositionTarget(PivotTarget.SUBWOOF_SHOT);
+        // elevator.setPositionTarget(ElevatorTarget.STOW);
       }
       case SHUTTLE -> {
-        //pivot.setPositionTarget(PivotTarget.SHUTTLE);
-        //elevator.setPositionTarget(ElevatorTarget.STOW);
+        // pivot.setPositionTarget(PivotTarget.SHUTTLE);
+        // elevator.setPositionTarget(ElevatorTarget.STOW);
       }
       case AMP -> {
         pivot.setPositionTarget(PivotTarget.STOW);
-        //elevator.setPositionTarget(ElevatorTarget.AMP);
+        // elevator.setPositionTarget(ElevatorTarget.AMP);
       }
       case ZERO -> {
         pivot.runCharacterization();
