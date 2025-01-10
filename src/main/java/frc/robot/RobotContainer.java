@@ -6,9 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
-import frc.robot.subsystems.flywheels.Flywheels;
-import frc.robot.subsystems.flywheels.FlywheelsIO;
-import frc.robot.subsystems.flywheels.FlywheelsIOTalonFX;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.intake.Intake;
 import frc.robot.subsystems.rollers.intake.IntakeIO;
@@ -36,12 +33,9 @@ public class RobotContainer {
 
   private Drive swerve; // FIXME make final, implement other robot types
   private Rollers rollers;
-  private Flywheels flywheels;
   private Pivot pivot;
 
   public RobotContainer() {
-    Intake intake = null;
-
     if (Constants.getRobotMode() != Mode.REPLAY) {
       switch (Constants.getRobotType()) {
         case COMP -> {
@@ -52,9 +46,8 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
-          intake = new Intake(new IntakeIOTalonFX());
-          flywheels = new Flywheels(new FlywheelsIOTalonFX());
           pivot = new Pivot(new PivotIOTalonFX());
+          intake = new Intake(new IntakeIOTalonFX());
         }
         case DEV -> {
           swerve =
@@ -65,7 +58,6 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
           intake = new Intake(new IntakeIOTalonFX()); // FIXME
-          flywheels = new Flywheels(new FlywheelsIOTalonFX());
           pivot = new Pivot(new PivotIOTalonFX());
         }
         case SIM -> {
@@ -77,7 +69,6 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
           intake = new Intake(new IntakeIOTalonFX()); // FIXME
-          flywheels = new Flywheels(new FlywheelsIOTalonFX());
           pivot = new Pivot(new PivotIOTalonFX());
         }
       }
@@ -92,14 +83,6 @@ public class RobotContainer {
               new ModuleIO() {},
               new ModuleIO() {});
     }
-    if (flywheels == null) {
-      flywheels = new Flywheels(new FlywheelsIO() {});
-    }
-    if (intake == null) {
-      intake = new Intake(new IntakeIO() {});
-    }
-
-    rollers = new Rollers(intake);
 
     configureBindings();
     configureAutos();
@@ -121,8 +104,6 @@ public class RobotContainer {
     driverA.start().onTrue(swerve.zeroGyroCommand());
 
     // -----Intake Controls-----
-
-    // -----Flywheel Controls-----
 
     //------Pivot Controls------
 
