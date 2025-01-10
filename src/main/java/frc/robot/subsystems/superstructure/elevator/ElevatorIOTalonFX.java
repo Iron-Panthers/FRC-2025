@@ -2,6 +2,7 @@ package frc.robot.subsystems.superstructure.elevator;
 
 import frc.robot.subsystems.superstructure.GenericSuperstructureIOTalonFX;
 import java.util.Optional;
+import frc.robot.subsystems.superstructure.elevator.ElevatorConstants;
 
 public class ElevatorIOTalonFX extends GenericSuperstructureIOTalonFX implements ElevatorIO {
 

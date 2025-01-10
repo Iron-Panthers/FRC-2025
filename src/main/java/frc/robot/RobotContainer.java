@@ -7,13 +7,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
-import frc.robot.subsystems.flywheels.Flywheels;
-import frc.robot.subsystems.flywheels.FlywheelsIO;
-import frc.robot.subsystems.flywheels.FlywheelsIOTalonFX;
-import frc.robot.subsystems.rollers.Rollers;
-import frc.robot.subsystems.rollers.intake.Intake;
-import frc.robot.subsystems.rollers.intake.IntakeIO;
-import frc.robot.subsystems.rollers.intake.IntakeIOTalonFX;
 import frc.robot.subsystems.superstructure.Superstructure;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
 import frc.robot.subsystems.superstructure.elevator.ElevatorIO;
@@ -38,15 +31,12 @@ public class RobotContainer {
   private final CommandXboxController driverB = new CommandXboxController(1);
 
   private Drive swerve; // FIXME make final, implement other robot types
-  private Rollers rollers;
-  private Flywheels flywheels;
 
   // superstructure
   private Elevator elevator;
   private Superstructure superstructure;
 
   public RobotContainer() {
-    Intake intake = null;
 
     if (Constants.getRobotMode() != Mode.REPLAY) {
       switch (Constants.getRobotType()) {
@@ -58,8 +48,6 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
-          intake = new Intake(new IntakeIOTalonFX());
-          flywheels = new Flywheels(new FlywheelsIOTalonFX());
           elevator = new Elevator(new ElevatorIOTalonFX());
         }
         case DEV -> {
@@ -70,8 +58,6 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
-          intake = new Intake(new IntakeIOTalonFX()); // FIXME
-          flywheels = new Flywheels(new FlywheelsIOTalonFX());
         }
         case SIM -> {
           swerve =
@@ -81,8 +67,6 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
-          intake = new Intake(new IntakeIOTalonFX()); // FIXME
-          flywheels = new Flywheels(new FlywheelsIOTalonFX());
         }
       }
     }
@@ -96,14 +80,6 @@ public class RobotContainer {
               new ModuleIO() {},
               new ModuleIO() {});
     }
-    if (flywheels == null) {
-      flywheels = new Flywheels(new FlywheelsIO() {});
-    }
-    // rollers
-    if (intake == null) {
-      intake = new Intake(new IntakeIO() {});
-    }
-    rollers = new Rollers(intake);
 
     // superstructure
     if (elevator == null) {
