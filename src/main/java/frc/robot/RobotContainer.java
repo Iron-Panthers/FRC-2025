@@ -78,7 +78,7 @@ public class RobotContainer {
               new ModuleIO() {},
               new ModuleIO() {});
     }
-
+    superstructure = new Superstructure(pivot);
     configureBindings();
     configureAutos();
   }
@@ -100,17 +100,13 @@ public class RobotContainer {
 
     // -----Intake Controls-----
 
-    //------Pivot Controls------
-    driverB.y()
-      .onTrue(
-        new InstantCommand(
-          () -> 
-            superstructure.setTargetState(SuperstructureState.SCORE)));
-    driverB.a()
-      .onTrue(new InstantCommand(
-        () -> 
-          superstructure.setTargetState(SuperstructureState.STOW)));
-
+    // ------Pivot Controls------
+    driverB
+        .y()
+        .onTrue(new InstantCommand(() -> superstructure.setTargetState(SuperstructureState.SCORE)));
+    driverB
+        .a()
+        .onTrue(new InstantCommand(() -> superstructure.setTargetState(SuperstructureState.STOW)));
   }
 
   private void configureAutos() {}

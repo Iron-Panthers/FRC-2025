@@ -14,7 +14,7 @@ public class PivotIOTalonFX extends GenericSuperstructureIOTalonFX implements Pi
 
   public static final int ZEROING_VOLTS = -2; // FIXME
 
-  public static final int ID = 17;
+  public static final int ID = 15;
   public static final int ENCODER_ID = 28;
 
   public static final double P = 0.27;
@@ -35,7 +35,7 @@ public class PivotIOTalonFX extends GenericSuperstructureIOTalonFX implements Pi
         ID,
         INVERTED,
         SUPPLY_CURRENT_LIMIT,
-        Optional.of(ENCODER_ID),
+        Optional.empty(),
         REDUCTION,
         UPPER_LIMIT,
         UPPER_VOLT_LIMIT,
