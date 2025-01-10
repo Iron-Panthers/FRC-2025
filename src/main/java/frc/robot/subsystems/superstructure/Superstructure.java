@@ -17,7 +17,6 @@ public class Superstructure extends SubsystemBase {
     STOP,
     SCORE;
   }
-
   private SuperstructureState targetState = SuperstructureState.STOW;
 
   private final Elevator elevator;

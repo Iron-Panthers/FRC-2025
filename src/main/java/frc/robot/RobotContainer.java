@@ -4,9 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
 import frc.robot.subsystems.superstructure.Superstructure;
+import frc.robot.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.robot.subsystems.superstructure.pivot.Pivot;
 import frc.robot.subsystems.superstructure.pivot.PivotIOTalonFX;
 import frc.robot.subsystems.swerve.Drive;
@@ -27,7 +29,7 @@ public class RobotContainer {
 
   private final CommandXboxController driverA = new CommandXboxController(0);
   private final CommandXboxController driverB = new CommandXboxController(1);
-
+  private Superstructure superstructure;
   private Drive swerve; // FIXME make final, implement other robot types
   private Pivot pivot;
 
@@ -99,8 +101,15 @@ public class RobotContainer {
     // -----Intake Controls-----
 
     //------Pivot Controls------
-    driverB.y().onTrue(setTargetState(Superstructure.SuperstructureState.SCORE));
-    driverB.a().onTrue(setTargetState(Superstructure.SuperstructureState.STOW));
+    driverB.y()
+      .onTrue(
+        new InstantCommand(
+          () -> 
+            superstructure.setTargetState(SuperstructureState.SCORE)));
+    driverB.a()
+      .onTrue(new InstantCommand(
+        () -> 
+          superstructure.setTargetState(SuperstructureState.STOW)));
 
   }
 
