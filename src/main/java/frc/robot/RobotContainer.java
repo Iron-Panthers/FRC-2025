@@ -5,11 +5,13 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.RobotConfig;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
 import frc.robot.autonomous.PathCommand;
@@ -101,6 +103,10 @@ public class RobotContainer {
   }
 
   private void configureAutos() {
+    NamedCommands.registerCommand(
+        "TestPrintCommand",
+        new InstantCommand(
+            () -> System.out.println("\nWe'd do something if we had the subsystems to do it :( \n"))); //FIXME Only for testing event markers
     RobotConfig robotConfig;
     try {
       robotConfig = RobotConfig.fromGUISettings();
