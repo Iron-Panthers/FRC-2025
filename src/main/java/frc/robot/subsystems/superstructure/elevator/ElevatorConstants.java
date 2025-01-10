@@ -6,7 +6,7 @@ import frc.robot.Constants;
 public class ElevatorConstants {
   public static final ElevatorConfig ELEVATOR_CONFIG =
       switch (Constants.getRobotType()) {
-        case COMP -> new ElevatorConfig(37, (1 / 9) * 1.273 * Math.PI);
+        case COMP -> new ElevatorConfig(37, 1);
         case DEV -> new ElevatorConfig(0, 1); // FIXME
         case SIM -> new ElevatorConfig(0, 1); // FIXME
       };

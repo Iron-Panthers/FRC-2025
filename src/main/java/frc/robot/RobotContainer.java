@@ -118,35 +118,50 @@ public class RobotContainer {
 
   private void configureBindings() {
     // -----Driver Controls-----
-    // swerve.setDefaultCommand(
-    //     swerve
-    //         .run(
-    //             () -> {
-    //               swerve.driveTeleopController(
-    //                   -driverA.getLeftY(),
-    //                   -driverA.getLeftX(),
-    //                   driverA.getLeftTriggerAxis() - driverA.getRightTriggerAxis());
-    //             })
-    //         .withName("Drive Teleop"));
+    swerve.setDefaultCommand(
+        swerve
+            .run(
+                () -> {
+                  swerve.driveTeleopController(
+                      -driverA.getLeftY(),
+                      -driverA.getLeftX(),
+                      driverA.getLeftTriggerAxis() - driverA.getRightTriggerAxis());
+                })
+            .withName("Drive Teleop"));
 
-    // driverA.start().onTrue(swerve.zeroGyroCommand());
+    driverA.start().onTrue(swerve.zeroGyroCommand());
 
     // -----Intake Controls-----
 
     // -----Flywheel Controls-----
 
     // -----Superstructure Controls-----
-    driverA
-        .a()
-        .onTrue(
-            new InstantCommand(
-                () -> superstructure.setTargetState(Superstructure.SuperstructureState.MIDDLE)));
-
-    driverA
+    driverA // GO TO BOTTOM
         .b()
         .onTrue(
             new InstantCommand(
-                () -> superstructure.setTargetState(Superstructure.SuperstructureState.BOTTOM)));
+                () -> superstructure.setTargetState(Superstructure.SuperstructureState.STOW),
+                superstructure));
+    driverA // GO TO L3
+        .a()
+        .onTrue(
+            new InstantCommand(
+                () -> superstructure.setTargetState(Superstructure.SuperstructureState.SCORE_L3),
+                superstructure));
+
+    driverA // GO TO L4
+        .y()
+        .onTrue(
+            new InstantCommand(
+                () -> superstructure.setTargetState(Superstructure.SuperstructureState.SCORE_L4),
+                superstructure));
+
+    driverA // ZERO
+        .x()
+        .onTrue(
+            new InstantCommand(
+                () -> superstructure.setTargetState(Superstructure.SuperstructureState.ZERO),
+                superstructure));
   }
 
   private void configureAutos() {}
