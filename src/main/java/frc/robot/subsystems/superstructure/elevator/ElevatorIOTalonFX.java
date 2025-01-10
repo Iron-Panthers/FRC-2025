@@ -2,27 +2,27 @@ package frc.robot.subsystems.superstructure.elevator;
 
 import frc.robot.subsystems.superstructure.GenericSuperstructureIOTalonFX;
 import java.util.Optional;
-import frc.robot.subsystems.superstructure.elevator.ElevatorConstants;
+import static frc.robot.subsystems.superstructure.elevator.ElevatorConstants.*;
 
 public class ElevatorIOTalonFX extends GenericSuperstructureIOTalonFX implements ElevatorIO {
 
   public ElevatorIOTalonFX() {
     super(
-        ElevatorConstants.ELEVATOR_CONFIG.motorID(),
-        ElevatorConstants.INVERT_MOTOR,
-        ElevatorConstants.SUPPLY_CURRENT_LIMIT,
+        ELEVATOR_CONFIG.motorID(),
+        INVERT_MOTOR,
+        SUPPLY_CURRENT_LIMIT,
         Optional.empty(),
-        ElevatorConstants.ELEVATOR_CONFIG.reduction(),
-        ElevatorConstants.UPPER_EXTENSION_LIMIT,
-        ElevatorConstants.UPPER_VOLT_LIMIT,
-        ElevatorConstants.LOWER_VOLT_LIMIT);
+        ELEVATOR_CONFIG.reduction(),
+        UPPER_EXTENSION_LIMIT,
+        UPPER_VOLT_LIMIT,
+        LOWER_VOLT_LIMIT);
     setSlot0(
-        ElevatorConstants.GAINS.kP(),
-        ElevatorConstants.GAINS.kI(),
-        ElevatorConstants.GAINS.kD(),
-        ElevatorConstants.GAINS.kS(),
-        ElevatorConstants.GAINS.kV(),
-        ElevatorConstants.GAINS.kA(),
-        ElevatorConstants.GRAVITY_TYPE);
+        GAINS.kP(),
+        GAINS.kI(),
+        GAINS.kD(),
+        GAINS.kS(),
+        GAINS.kV(),
+        GAINS.kA(),
+        GRAVITY_TYPE);
   }
 }

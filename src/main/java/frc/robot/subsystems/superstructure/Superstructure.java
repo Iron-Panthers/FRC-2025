@@ -36,7 +36,7 @@ public class Superstructure extends SubsystemBase {
 
   @Override
   public void periodic() {
-    switch (targetState) {// switch on the target state
+    switch (targetState) { // switch on the target state
       case SCORE_L1 -> {
         elevator.setPositionTarget(ElevatorTarget.L1);
       }
@@ -66,7 +66,7 @@ public class Superstructure extends SubsystemBase {
     }
     elevator.periodic();
 
-    // calculate our new filtered supply current
+    // calculate our new filtered supply current for the elevator
     elevatorFilteredSupplyCurrentAmps =
         elevatorSupplyCurrentFilter.calculate(elevator.getSupplyCurrentAmps());
 
@@ -86,6 +86,7 @@ public class Superstructure extends SubsystemBase {
 
   /**
    * Get the position of the elevator
+   *
    * @return the position of the elevator
    */
   public double getElevatorPosition() {
@@ -94,10 +95,10 @@ public class Superstructure extends SubsystemBase {
 
   /**
    * Get the supply current of the elevator
+   *
    * @return the supply current of the elevator
    */
   public double getElevatorSupplyCurrentAmps() {
     return elevator.getSupplyCurrentAmps();
   }
-
 }
