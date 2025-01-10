@@ -6,10 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
-import frc.robot.subsystems.rollers.Rollers;
-import frc.robot.subsystems.rollers.intake.Intake;
-import frc.robot.subsystems.rollers.intake.IntakeIO;
-import frc.robot.subsystems.rollers.intake.IntakeIOTalonFX;
+import frc.robot.subsystems.superstructure.Superstructure;
 import frc.robot.subsystems.superstructure.pivot.Pivot;
 import frc.robot.subsystems.superstructure.pivot.PivotIOTalonFX;
 import frc.robot.subsystems.swerve.Drive;
@@ -32,7 +29,6 @@ public class RobotContainer {
   private final CommandXboxController driverB = new CommandXboxController(1);
 
   private Drive swerve; // FIXME make final, implement other robot types
-  private Rollers rollers;
   private Pivot pivot;
 
   public RobotContainer() {
@@ -47,7 +43,6 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
           pivot = new Pivot(new PivotIOTalonFX());
-          intake = new Intake(new IntakeIOTalonFX());
         }
         case DEV -> {
           swerve =
@@ -57,7 +52,6 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
-          intake = new Intake(new IntakeIOTalonFX()); // FIXME
           pivot = new Pivot(new PivotIOTalonFX());
         }
         case SIM -> {
@@ -68,7 +62,6 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
-          intake = new Intake(new IntakeIOTalonFX()); // FIXME
           pivot = new Pivot(new PivotIOTalonFX());
         }
       }
@@ -106,6 +99,8 @@ public class RobotContainer {
     // -----Intake Controls-----
 
     //------Pivot Controls------
+    driverB.y().onTrue(setTargetState(Superstructure.SuperstructureState.SCORE));
+    driverB.a().onTrue(setTargetState(Superstructure.SuperstructureState.STOW));
 
   }
 

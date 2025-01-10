@@ -16,7 +16,6 @@ public class Superstructure extends SubsystemBase {
     AMP,
     ZERO,
     STOP,
-    PRESCORE,
     SCORE;
   }
 
