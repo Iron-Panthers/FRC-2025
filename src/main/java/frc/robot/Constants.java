@@ -26,7 +26,7 @@ public final class Constants {
   /* FIXME
    * as of 2025-01-11
    * PROG: mini "test" bot
-   * DEV: alpha bot
+   * ALPHA: alpha bot
    * */
   public static RobotType ROBOT_TYPE = RobotType.PROG;
 
