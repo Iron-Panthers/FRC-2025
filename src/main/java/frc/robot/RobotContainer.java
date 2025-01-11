@@ -61,7 +61,7 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
           elevator = new Elevator(new ElevatorIOTalonFX());
         }
-        case DEV -> {
+        case ALPHA -> {
           swerve =
               new Drive(
                   new GyroIOPigeon2(),

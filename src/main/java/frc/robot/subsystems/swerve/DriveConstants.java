@@ -18,7 +18,7 @@ public class DriveConstants {
             Units.inchesToMeters(33),
             5, // FIXME
             5);
-        case DEV -> new DrivebaseConfig(
+        case ALPHA -> new DrivebaseConfig(
             Units.inchesToMeters(2),
             Units.inchesToMeters(22.5),
             Units.inchesToMeters(38.5),
@@ -51,7 +51,7 @@ public class DriveConstants {
           new ModuleConfig(11, 12, 3, new Rotation2d(2.9314), false, false),
           new ModuleConfig(9, 10, 4, new Rotation2d(2.2426), false, true)
         };
-        case DEV -> new ModuleConfig[] {
+        case ALPHA -> new ModuleConfig[] {
           new ModuleConfig(5, 6, 1, new Rotation2d(1.1612), true, false),
           new ModuleConfig(7, 8, 2, new Rotation2d(0.8099), true, true),
           new ModuleConfig(11, 12, 3, new Rotation2d(1.4327), true, false),
@@ -74,7 +74,7 @@ public class DriveConstants {
             12.8,
             6.75,
             3.125);
-        case DEV -> new ModuleConstants(
+        case ALPHA -> new ModuleConstants(
             new Gains(0, 0, 0, 50, 0, 0),
             new MotionProfileGains(4, 64, 640),
             new Gains(0, 0, 0, 1.5, 0, 0),
@@ -86,7 +86,7 @@ public class DriveConstants {
   public static final TrajectoryFollowerConstants TRAJECTORY_CONFIG =
       switch (getRobotType()) {
         case PROG, SIM -> new TrajectoryFollowerConstants(0, 0, 0, 0);
-        case DEV -> new TrajectoryFollowerConstants(0, 0, 0, 0);
+        case ALPHA -> new TrajectoryFollowerConstants(0, 0, 0, 0);
       };
 
   public record DrivebaseConfig(
