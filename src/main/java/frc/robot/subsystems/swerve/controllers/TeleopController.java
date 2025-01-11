@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import frc.robot.RobotState;
 
 public class TeleopController {
 
@@ -23,7 +24,7 @@ public class TeleopController {
   }
 
   /* update controller with current desired state */
-  public ChassisSpeeds update(Rotation2d yaw) {
+  public ChassisSpeeds update() {
     Translation2d linearVelocity = calculateLinearVelocity(controllerX, controllerY);
 
     double omega = MathUtil.applyDeadband(controllerOmega, 0.1);
@@ -34,7 +35,7 @@ public class TeleopController {
         linearVelocity.getX() * DRIVE_CONFIG.maxLinearVelocity(),
         linearVelocity.getY() * DRIVE_CONFIG.maxLinearVelocity(),
         omega * DRIVE_CONFIG.maxAngularVelocity(),
-        yaw);
+        RobotState.getInstance().getOdometryPose().getRotation()); // change to estimatedpose
 
     /* ChassisSpeeds speeds =
         new ChassisSpeeds(

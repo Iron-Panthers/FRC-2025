@@ -3,6 +3,7 @@ package frc.robot.subsystems.swerve;
 import static frc.robot.subsystems.swerve.DriveConstants.DRIVE_CONFIG;
 import static frc.robot.subsystems.swerve.DriveConstants.KINEMATICS;
 
+import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -16,6 +17,7 @@ import frc.robot.Constants;
 import frc.robot.RobotState;
 import frc.robot.subsystems.swerve.controllers.HeadingController;
 import frc.robot.subsystems.swerve.controllers.TeleopController;
+import frc.robot.subsystems.swerve.controllers.TrajectoryController;
 import java.util.Arrays;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -42,6 +44,7 @@ public class Drive extends SubsystemBase {
   private ChassisSpeeds targetSpeeds = new ChassisSpeeds();
 
   private final TeleopController teleopController;
+  private TrajectoryController trajectoryController = null;
   private HeadingController headingController = null;
 
   public Drive(GyroIO gyroIO, ModuleIO fl, ModuleIO fr, ModuleIO bl, ModuleIO br) {
@@ -86,7 +89,10 @@ public class Drive extends SubsystemBase {
           targetSpeeds.omegaRadiansPerSecond = headingController.update();
         }
       }
-      case TRAJECTORY -> {}
+      case TRAJECTORY -> {
+        targetSpeeds = trajectoryController.update();
+        // add heading controll override
+      }
     }
 
     // run modules
@@ -95,6 +101,8 @@ public class Drive extends SubsystemBase {
     ChassisSpeeds discretizedSpeeds =
         ChassisSpeeds.discretize(targetSpeeds, Constants.PERIODIC_LOOP_SEC);
 
+    // SwerveModuleState[] moduleTargetStates =
+    KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(1, 0, 0));
     SwerveModuleState[] moduleTargetStates = KINEMATICS.toSwerveModuleStates(discretizedSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         moduleTargetStates, DRIVE_CONFIG.maxLinearVelocity());
@@ -113,15 +121,24 @@ public class Drive extends SubsystemBase {
       if (driveMode != DriveModes.TELEOP) {
         driveMode = DriveModes.TELEOP;
       }
-
       teleopController.acceptJoystickInput(xAxis, yAxis, omega);
     }
   }
 
-  public void setTrajectoryFollower(ChassisSpeeds trajectorySpeeds) {
+  public void setTrajectory(PathPlannerTrajectory trajectory) {
     if (DriverStation.isAutonomousEnabled()) {
       driveMode = DriveModes.TRAJECTORY;
+      trajectoryController = new TrajectoryController(trajectory);
     }
+  }
+
+  public void clearTrajectory() {
+    driveMode = DriveModes.TELEOP;
+    trajectoryController = null;
+  }
+
+  public boolean isTrajectoryComplete() {
+    return trajectoryController != null && trajectoryController.isFinished();
   }
 
   private void zeroGyro() {
@@ -130,6 +147,18 @@ public class Drive extends SubsystemBase {
 
   public Command zeroGyroCommand() {
     return this.runOnce(() -> zeroGyro());
+  }
+
+  @AutoLogOutput(key = "Swerve/ModuleStates")
+  public SwerveModuleState[] getModuleStates() {
+    return Arrays.stream(modules)
+        .map(module -> module.getModuleState())
+        .toArray(SwerveModuleState[]::new);
+  }
+
+  @AutoLogOutput(key = "Swerve/RobotSpeeds")
+  public ChassisSpeeds getRobotSpeeds() {
+    return KINEMATICS.toChassisSpeeds(getModuleStates());
   }
 
   public void setTargetHeading(Supplier<Rotation2d> targetHeadingSupplier) {

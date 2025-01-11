@@ -4,15 +4,29 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.config.RobotConfig;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
+import frc.robot.autonomous.PathCommand;
+import frc.robot.subsystems.superstructure.Superstructure;
+import frc.robot.subsystems.superstructure.elevator.Elevator;
+import frc.robot.subsystems.superstructure.elevator.ElevatorIO;
+import frc.robot.subsystems.superstructure.elevator.ElevatorIOTalonFX;
 import frc.robot.subsystems.swerve.Drive;
 import frc.robot.subsystems.swerve.DriveConstants;
 import frc.robot.subsystems.swerve.GyroIO;
 import frc.robot.subsystems.swerve.GyroIOPigeon2;
 import frc.robot.subsystems.swerve.ModuleIO;
 import frc.robot.subsystems.swerve.ModuleIOTalonFX;
+import java.util.function.BooleanSupplier;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -30,10 +44,17 @@ public class RobotContainer {
 
   private Drive swerve; // FIXME make final, implement other robot types
 
+  private SendableChooser<Command> autoChooser;
+
+  // superstructure
+  private Elevator elevator;
+  private Superstructure superstructure;
+
   public RobotContainer() {
+
     if (Constants.getRobotMode() != Mode.REPLAY) {
       switch (Constants.getRobotType()) {
-        case COMP -> {
+        case PROG -> {
           swerve =
               new Drive(
                   new GyroIOPigeon2(),
@@ -41,8 +62,9 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
+          elevator = new Elevator(new ElevatorIOTalonFX());
         }
-        case DEV -> {
+        case ALPHA -> {
           swerve =
               new Drive(
                   new GyroIOPigeon2(),
@@ -73,6 +95,13 @@ public class RobotContainer {
               new ModuleIO() {});
     }
 
+    // superstructure
+    if (elevator == null) {
+      elevator = new Elevator(new ElevatorIO() {});
+    }
+    // TODO: add pivot
+    superstructure = new Superstructure(elevator);
+
     configureBindings();
     configureAutos();
   }
@@ -95,7 +124,85 @@ public class RobotContainer {
             .withName("Drive Teleop"));
 
     driverA.start().onTrue(swerve.zeroGyroCommand());
+
+    // -----Intake Controls-----
+
+    // -----Flywheel Controls-----
+
+    // -----Superstructure Controls-----
+    driverA // GO TO BOTTOM
+        .b()
+        .onTrue(
+            new InstantCommand(
+                () -> superstructure.setTargetState(Superstructure.SuperstructureState.STOW),
+                superstructure));
+    driverA // GO TO L3
+        .a()
+        .onTrue(
+            new InstantCommand(
+                () -> superstructure.setTargetState(Superstructure.SuperstructureState.SCORE_L3),
+                superstructure));
+
+    driverA // GO TO L4
+        .y()
+        .onTrue(
+            new InstantCommand(
+                () -> superstructure.setTargetState(Superstructure.SuperstructureState.SCORE_L4),
+                superstructure));
+
+    driverA // ZERO
+        .x()
+        .onTrue(
+            new InstantCommand(
+                () -> superstructure.setTargetState(Superstructure.SuperstructureState.ZERO),
+                superstructure));
   }
 
-  private void configureAutos() {}
+  private void configureAutos() {
+    NamedCommands.registerCommand(
+        "TestPrintCommand",
+        new InstantCommand(
+            () ->
+                System.out.println(
+                    "\nWe'd do something if we had the subsystems to do it :( \n"))); // FIXME Only
+    // for testing
+    // event
+    // markers
+    RobotConfig robotConfig;
+    try {
+      robotConfig = RobotConfig.fromGUISettings();
+    } catch (Exception e) {
+      e.printStackTrace();
+      robotConfig = null;
+    }
+
+    var passRobotConfig = robotConfig; // workaround
+
+    BooleanSupplier flipAlliance =
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        };
+
+    AutoBuilder.configureCustom(
+        (path) -> new PathCommand(path, flipAlliance, swerve, passRobotConfig),
+        () -> RobotState.getInstance().getOdometryPose(),
+        (pose) -> RobotState.getInstance().resetPose(pose),
+        flipAlliance,
+        true);
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+  }
+
+  public Command getAutoCommand() {
+    return autoChooser.getSelected();
+  }
 }
