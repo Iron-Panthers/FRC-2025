@@ -36,4 +36,8 @@ public class ElevatorConstants {
   public static final double LOWER_VOLT_LIMIT = -7;
   public static final double SUPPLY_CURRENT_LIMIT = 30;
   public static final int ZEROING_CURRENT_LIMIT = 20; // FIXME currently doesn't exist lmao
+
+  // ZEROING CONSTANTS
+  public static final double ZEROING_VOLTS = -1;
+  public static final double ZEROING_OFFSET = 0; // offset in inches
 }

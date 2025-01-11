@@ -15,7 +15,9 @@ public class PivotIOTalonFX extends GenericSuperstructureIOTalonFX implements Pi
         PIVOT_CONFIG.reduction(),
         UPPER_EXTENSION_LIMIT,
         UPPER_VOLT_LIMIT,
-        LOWER_VOLT_LIMIT);
+        LOWER_VOLT_LIMIT
+        ZEROING_VOLTS,
+        ZEROING_OFFSET);
     setSlot0(
         GAINS.kP(),
         GAINS.kI(),
