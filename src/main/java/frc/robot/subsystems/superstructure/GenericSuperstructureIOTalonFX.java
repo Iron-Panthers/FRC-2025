@@ -65,7 +65,9 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
       double zeroingOffset) {
     talon = new TalonFX(id);
 
-    // set the zeroing values such that when the robot zeros it will apply the zeroing volts and when it reaches a resistance from part of the mechanism, it sets the position to the zeroing Offset
+    // set the zeroing values such that when the robot zeros it will apply the zeroing volts and
+    // when it reaches a resistance from part of the mechanism, it sets the position to the zeroing
+    // Offset
     this.zeroingVolts = zeroingVolts;
     this.zeroingOffset = zeroingOffset;
 

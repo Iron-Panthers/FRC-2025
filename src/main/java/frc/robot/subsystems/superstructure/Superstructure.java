@@ -1,18 +1,17 @@
 package frc.robot.subsystems.superstructure;
 
-import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.superstructure.GenericSuperstructure.ControlMode;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
 import frc.robot.subsystems.superstructure.elevator.Elevator.ElevatorTarget;
 import frc.robot.subsystems.superstructure.pivot.Pivot;
 import frc.robot.subsystems.superstructure.pivot.Pivot.PivotTarget;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
   public enum SuperstructureState {
-    ZERO, // Zero the superstructure
     STOP, // Stop the superstructure
     SCORE_L4, // Scoring in L4
     SCORE_L3, // Scoring in L3
@@ -26,23 +25,11 @@ public class Superstructure extends SubsystemBase {
   private final Elevator elevator;
   private final Pivot pivot;
 
-  // linear filter for elevator
-  private final LinearFilter elevatorSupplyCurrentFilter;
-  private final LinearFilter pivotSupplyCurrentFilter;
-
-  private double elevatorFilteredSupplyCurrentAmps = 0;
-  private double pivotFilteredSupplyCurrentAmps = 0;
-
-
   public Superstructure(Elevator elevator, Pivot pivot) {
     this.elevator = elevator;
     this.pivot = pivot;
     pivot.setPositionTarget(PivotTarget.TOP);
     elevator.setPositionTarget(ElevatorTarget.BOTTOM);
-
-    // setup the linear filter
-    elevatorSupplyCurrentFilter = LinearFilter.movingAverage(10);
-    pivotSupplyCurrentFilter = LinearFilter.movingAverage(10);
   }
 
   @Override
@@ -68,16 +55,6 @@ public class Superstructure extends SubsystemBase {
         elevator.setPositionTarget(ElevatorTarget.BOTTOM);
         pivot.setPositionTarget(PivotTarget.TOP);
       }
-      case ZERO -> {
-        elevator.setControlMode(ControlMode.ZERO);
-        pivot.setControlMode(ControlMode.ZERO);
-        //FIXME zeroing BAD 
-        if (elevatorFilteredSupplyCurrentAmps > 4 && pivotFilteredSupplyCurrentAmps > 4 ) { // then stop it when it hits the bottom
-          elevator.setOffset(); // set the offset
-          pivot.setOffset();
-          targetState = SuperstructureState.STOW; // then go to the stow position
-        }
-      }
       case STOP -> {
         elevator.setControlMode(ControlMode.STOP);
         pivot.setControlMode(ControlMode.STOP);
@@ -86,18 +63,7 @@ public class Superstructure extends SubsystemBase {
     elevator.periodic();
     pivot.periodic();
 
-    // calculate our new filtered supply current for the elevator
-    elevatorFilteredSupplyCurrentAmps =
-        elevatorSupplyCurrentFilter.calculate(elevator.getSupplyCurrentAmps());
-
-    pivotFilteredSupplyCurrentAmps =
-    pivotSupplyCurrentFilter.calculate(pivot.getSupplyCurrentAmps());
-
     Logger.recordOutput("Superstructure/TargetState", targetState);
-    Logger.recordOutput(
-        "Superstructure/Elevator Filtered Supply Current", elevatorFilteredSupplyCurrentAmps);
-    Logger.recordOutput(
-      "Superstructure/Pivot Filtered Supply Current", pivotFilteredSupplyCurrentAmps);
   }
 
   // Target state getter and setter
@@ -142,5 +108,14 @@ public class Superstructure extends SubsystemBase {
    */
   public double getPivotSupplyCurrentAmps() {
     return pivot.getSupplyCurrentAmps();
+  }
+
+  public Command getZeroCommand() {
+    return new InstantCommand(
+        () -> {
+          pivot.setControlMode(ControlMode.ZERO);
+          elevator.setControlMode(ControlMode.ZERO);
+        },
+        this);
   }
 }

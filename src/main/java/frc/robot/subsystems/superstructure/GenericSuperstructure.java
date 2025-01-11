@@ -1,5 +1,6 @@
 package frc.robot.subsystems.superstructure;
 
+import edu.wpi.first.math.filter.LinearFilter;
 import org.littletonrobotics.junction.Logger;
 
 public class GenericSuperstructure<G extends GenericSuperstructure.PositionTarget> {
@@ -22,9 +23,16 @@ public class GenericSuperstructure<G extends GenericSuperstructure.PositionTarge
       new GenericSuperstructureIOInputsAutoLogged();
   private G positionTarget;
 
+  // linear filter for superstrucure
+  private final LinearFilter supplyCurrentFilter;
+  private double filteredSupplyCurrentAmps = 0;
+
   public GenericSuperstructure(String name, GenericSuperstructureIO superstructureIO) {
     this.name = name;
     this.superstructureIO = superstructureIO;
+
+    // setup the linear filter
+    supplyCurrentFilter = LinearFilter.movingAverage(10);
   }
 
   public void periodic() {
@@ -39,14 +47,23 @@ public class GenericSuperstructure<G extends GenericSuperstructure.PositionTarge
       }
       case ZERO -> {
         superstructureIO.runCharacterization();
+        if (filteredSupplyCurrentAmps > 4) {
+          setOffset();
+          setControlMode(ControlMode.POSITION);
+        }
       }
       case STOP -> {
         superstructureIO.stop();
       }
     }
 
+    // calculate our new filtered supply current for the elevator
+    filteredSupplyCurrentAmps = supplyCurrentFilter.calculate(getSupplyCurrentAmps());
+
     Logger.recordOutput("Superstructure/" + name + "/Target", positionTarget.toString());
     Logger.recordOutput("Superstructure/" + name + "/Control Mode", controlMode.toString());
+    Logger.recordOutput(
+        "Superstructure/" + name + "/Filtered supply current amps", controlMode.toString());
   }
 
   public G getGetPositionTarget() {
@@ -54,7 +71,7 @@ public class GenericSuperstructure<G extends GenericSuperstructure.PositionTarge
   }
 
   public void setPositionTarget(G positionTarget) {
-    setControlMode(ControlMode.POSITION);
+    if (getControlMode() != ControlMode.ZERO) setControlMode(ControlMode.POSITION);
     this.positionTarget = positionTarget;
   }
 

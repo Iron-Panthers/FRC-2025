@@ -1,14 +1,13 @@
 package frc.robot.subsystems.superstructure.pivot;
 
-import java.util.Optional;
-
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import frc.robot.Constants;
+import java.util.Optional;
 
 public class PivotConstants {
   public static final PivotConfig PIVOT_CONFIG =
       switch (Constants.getRobotType()) {
-        case COMP -> new PivotConfig(15, Optional.empty(), 21.6 / 360);//FIXME
+        case COMP -> new PivotConfig(15, Optional.empty(), 21.6 / 360); // FIXME
         case DEV -> new PivotConfig(0, Optional.empty(), 1); // FIXME
         case SIM -> new PivotConfig(0, Optional.empty(), 1); // FIXME
       };
@@ -20,10 +19,10 @@ public class PivotConstants {
         case SIM -> new PIDGains(0, 0, 0, 0, 0, 0, 0);
       };
 
-
   public record PivotConfig(int motorID, Optional<Integer> canCoderID, double reduction) {}
 
-  public record PIDGains(double kP, double kI, double kD, double kS, double kV, double kA, double kG) {}
+  public record PIDGains(
+      double kP, double kI, double kD, double kS, double kV, double kA, double kG) {}
 
   public static final GravityTypeValue GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
 

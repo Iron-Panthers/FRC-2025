@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.RobotConfig;
@@ -12,18 +11,16 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
-import frc.robot.subsystems.superstructure.Superstructure;
-import frc.robot.subsystems.superstructure.Superstructure.SuperstructureState;
-import frc.robot.subsystems.superstructure.pivot.Pivot;
-import frc.robot.subsystems.superstructure.pivot.PivotIO;
-import frc.robot.subsystems.superstructure.pivot.PivotIOTalonFX;
 import frc.robot.autonomous.PathCommand;
 import frc.robot.subsystems.superstructure.Superstructure;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
 import frc.robot.subsystems.superstructure.elevator.ElevatorIO;
-import frc.robot.subsystems.superstructure.elevator.ElevatorIOTalonFX;
+import frc.robot.subsystems.superstructure.pivot.Pivot;
+import frc.robot.subsystems.superstructure.pivot.PivotIO;
+import frc.robot.subsystems.superstructure.pivot.PivotIOTalonFX;
 import frc.robot.subsystems.swerve.Drive;
 import frc.robot.subsystems.swerve.DriveConstants;
 import frc.robot.subsystems.swerve.GyroIO;
@@ -64,7 +61,7 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
-          elevator = new Elevator(new ElevatorIOTalonFX());
+          // elevator = new Elevator(new ElevatorIOTalonFX());
           pivot = new Pivot(new PivotIOTalonFX());
         }
         case DEV -> {
@@ -156,20 +153,11 @@ public class RobotContainer {
 
     driverA // ZERO
         .x()
-        .onTrue(
-            new InstantCommand(
-                () -> superstructure.setTargetState(Superstructure.SuperstructureState.ZERO),
-                superstructure));
+        .onTrue(superstructure.getZeroCommand());
 
     // -----Intake Controls-----
 
     // ------Pivot Controls------
-    driverB
-        .y()
-        .onTrue(new InstantCommand(() -> superstructure.setTargetState(SuperstructureState.SCORE_L3)));
-    driverB
-        .a()
-        .onTrue(new InstantCommand(() -> superstructure.setTargetState(SuperstructureState.STOW)));
   }
 
   private void configureAutos() {

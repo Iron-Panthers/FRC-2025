@@ -1,8 +1,9 @@
 package frc.robot.subsystems.superstructure.pivot;
 
+import static frc.robot.subsystems.superstructure.pivot.PivotConstants.*;
+
 import frc.robot.subsystems.superstructure.GenericSuperstructureIOTalonFX;
 import java.util.Optional;
-import static frc.robot.subsystems.superstructure.pivot.PivotConstants.*;
 
 public class PivotIOTalonFX extends GenericSuperstructureIOTalonFX implements PivotIO {
 
@@ -15,7 +16,7 @@ public class PivotIOTalonFX extends GenericSuperstructureIOTalonFX implements Pi
         PIVOT_CONFIG.reduction(),
         UPPER_EXTENSION_LIMIT,
         UPPER_VOLT_LIMIT,
-        LOWER_VOLT_LIMIT
+        LOWER_VOLT_LIMIT,
         ZEROING_VOLTS,
         ZEROING_OFFSET);
     setSlot0(
