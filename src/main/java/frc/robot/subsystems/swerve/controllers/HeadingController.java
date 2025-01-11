@@ -14,10 +14,10 @@ import org.littletonrobotics.junction.AutoLogOutput;
 public class HeadingController {
   private ProfiledPIDController controller;
 
-  private Supplier<Rotation2d> headingSupplier;
+  private Supplier<Rotation2d> targetHeadingSupplier;
 
-  public HeadingController(Supplier<Rotation2d> headingSupplier) {
-    this.headingSupplier = headingSupplier;
+  public HeadingController(Supplier<Rotation2d> targetHeadingSupplier) {
+    this.targetHeadingSupplier = targetHeadingSupplier;
 
     controller =
         new ProfiledPIDController(
@@ -37,7 +37,7 @@ public class HeadingController {
     double output =
         controller.calculate(
             RobotState.getInstance().getOdometryPose().getRotation().getRadians(),
-            headingSupplier.get().getRadians());
+            targetHeadingSupplier.get().getRadians());
 
     return output;
   }
@@ -52,5 +52,8 @@ public class HeadingController {
 
   public boolean epsilonEquals(double a, double b, double epsilon) {
     return (a - epsilon <= b) && (a + epsilon >= b);
+  }
+  public Rotation2d getTargetHeading() {
+    return targetHeadingSupplier.get();
   }
 }

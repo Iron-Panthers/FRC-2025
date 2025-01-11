@@ -102,10 +102,10 @@ public class Drive extends SubsystemBase {
     for (int i = 0; i < modules.length; i++) {
       modules[i].runToSetpoint(moduleTargetStates[i]);
     }
-
     Logger.recordOutput("Swerve/ModuleStates", moduleTargetStates);
     Logger.recordOutput("Swerve/TargetSpeeds", targetSpeeds);
     Logger.recordOutput("Swerve/DriveMode", driveMode);
+    Logger.recordOutput("Swerve/HeadingTarget", headingController.getTargetHeading().getRadians());
   }
 
   public void driveTeleopController(double xAxis, double yAxis, double omega) {
@@ -132,8 +132,8 @@ public class Drive extends SubsystemBase {
     return this.runOnce(() -> zeroGyro());
   }
 
-  public void setHeading(Supplier<Rotation2d> headingSupplier) {
-    headingController = new HeadingController(headingSupplier);
+  public void setTargetHeading(Supplier<Rotation2d> targetHeadingSupplier) {
+    headingController = new HeadingController(targetHeadingSupplier);
   }
 
   public void clearHeadingControl() {

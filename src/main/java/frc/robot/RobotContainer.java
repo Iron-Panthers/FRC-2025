@@ -89,7 +89,7 @@ public class RobotContainer {
                           new Rotation2d(
                               driverA.getLeftTriggerAxis() - driverA.getRightTriggerAxis()));
 
-                  swerve.setHeading(() -> targetHeading);
+                  swerve.setTargetHeading(() -> targetHeading);
                   swerve.driveTeleopController(-driverA.getLeftY(), -driverA.getLeftX(), 0);
                 })
             .withName("Drive Teleop"));
