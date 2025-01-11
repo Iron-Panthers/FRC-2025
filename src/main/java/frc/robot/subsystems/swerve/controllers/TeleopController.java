@@ -15,6 +15,7 @@ public class TeleopController {
   private double controllerX = 0;
   private double controllerY = 0;
   private double controllerOmega = 0;
+  private Rotation2d offset = new Rotation2d();
 
   /* accept driver input from joysticks */
   public void acceptJoystickInput(double controllerX, double controllerY, double controllerOmega) {
@@ -27,7 +28,7 @@ public class TeleopController {
   public ChassisSpeeds update() {
     Translation2d linearVelocity = calculateLinearVelocity(controllerX, controllerY);
 
-    double omega = MathUtil.applyDeadband(controllerOmega, 0.1);
+    double omega = MathUtil.applyDeadband(controllerOmega, 0.001);
     omega = Math.copySign(Math.pow(Math.abs(omega), 1.5), omega);
 
     // eventaully run off of pose estimation?
@@ -53,12 +54,16 @@ public class TeleopController {
     double magnitude = MathUtil.applyDeadband(Math.hypot(x, y), 0.1);
     magnitude = Math.pow(magnitude, 1.5);
 
-    Rotation2d theta = new Rotation2d(x, y);
+    Rotation2d theta = new Rotation2d(x, y).plus(offset);
 
     Translation2d linearVelocity =
         new Pose2d(new Translation2d(), theta)
             .transformBy(new Transform2d(magnitude, 0, new Rotation2d()))
             .getTranslation();
     return linearVelocity;
+  }
+
+  public void setGyroOffset(Rotation2d offset) {
+    this.offset = offset;
   }
 }

@@ -137,6 +137,7 @@ public class Drive extends SubsystemBase {
 
   private void zeroGyro() {
     gyroYawOffset = gyroInputs.yawPosition;
+    teleopController.setGyroOffset(gyroYawOffset);
   }
 
   public Command zeroGyroCommand() {
