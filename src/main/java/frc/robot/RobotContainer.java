@@ -17,6 +17,7 @@ import frc.robot.Constants.Mode;
 import frc.robot.subsystems.superstructure.Superstructure;
 import frc.robot.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.robot.subsystems.superstructure.pivot.Pivot;
+import frc.robot.subsystems.superstructure.pivot.PivotIO;
 import frc.robot.subsystems.superstructure.pivot.PivotIOTalonFX;
 import frc.robot.autonomous.PathCommand;
 import frc.robot.subsystems.superstructure.Superstructure;
@@ -42,15 +43,14 @@ public class RobotContainer {
 
   private final CommandXboxController driverA = new CommandXboxController(0);
   private final CommandXboxController driverB = new CommandXboxController(1);
-  private Superstructure superstructure;
   private Drive swerve; // FIXME make final, implement other robot types
-  private Pivot pivot;
 
   private SendableChooser<Command> autoChooser;
 
   // superstructure
   private Elevator elevator;
   private Superstructure superstructure;
+  private Pivot pivot;
 
   public RobotContainer() {
 
@@ -104,10 +104,12 @@ public class RobotContainer {
     if (elevator == null) {
       elevator = new Elevator(new ElevatorIO() {});
     }
+    if (pivot == null) {
+      pivot = new Pivot(new PivotIO() {});
+    }
     // TODO: add pivot
-    superstructure = new Superstructure(elevator);
+    superstructure = new Superstructure(elevator, pivot);
 
-    superstructure = new Superstructure(pivot);
     configureBindings();
     configureAutos();
   }
@@ -164,7 +166,7 @@ public class RobotContainer {
     // ------Pivot Controls------
     driverB
         .y()
-        .onTrue(new InstantCommand(() -> superstructure.setTargetState(SuperstructureState.SCORE)));
+        .onTrue(new InstantCommand(() -> superstructure.setTargetState(SuperstructureState.SCORE_L3)));
     driverB
         .a()
         .onTrue(new InstantCommand(() -> superstructure.setTargetState(SuperstructureState.STOW)));

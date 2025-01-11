@@ -13,14 +13,14 @@ public class ElevatorConstants {
 
   public static final PIDGains GAINS =
       switch (Constants.getRobotType()) {
-        case COMP -> new PIDGains(2, 0, .2, 0, 0.09, 0);
-        case DEV -> new PIDGains(0, 0, 0, 0, 0, 0);
-        case SIM -> new PIDGains(0, 0, 0, 0, 0, 0);
+        case COMP -> new PIDGains(2, 0, .2, 0, 0.09, 0, 0.34);//FIXME kG
+        case DEV -> new PIDGains(0, 0, 0, 0, 0, 0, 0);
+        case SIM -> new PIDGains(0, 0, 0, 0, 0, 0, 0);
       };
 
   public record ElevatorConfig(int motorID, double reduction) {}
 
-  public record PIDGains(double kP, double kI, double kD, double kS, double kV, double kA) {}
+  public record PIDGains(double kP, double kI, double kD, double kS, double kV, double kA, double kG) {}
 
   public static final GravityTypeValue GRAVITY_TYPE = GravityTypeValue.Elevator_Static;
 

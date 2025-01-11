@@ -23,7 +23,7 @@ public class ElevatorIOTalonFX extends GenericSuperstructureIOTalonFX implements
         GAINS.kS(),
         GAINS.kV(),
         GAINS.kA(),
+        GAINS.kG(),
         GRAVITY_TYPE);
-    setSlot0(P, I, D, S, 0, 0, G, GRAVITY_TYPE);
   }
 }
