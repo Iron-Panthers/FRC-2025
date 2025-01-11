@@ -113,7 +113,9 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("Swerve/ModuleStates", moduleTargetStates);
     Logger.recordOutput("Swerve/TargetSpeeds", targetSpeeds);
     Logger.recordOutput("Swerve/DriveMode", driveMode);
-    Logger.recordOutput("Swerve/HeadingTarget", headingController.getTargetHeading().getRadians());
+    if (headingController != null)
+      Logger.recordOutput(
+          "Swerve/HeadingTarget", headingController.getTargetHeading().getRadians());
   }
 
   public void driveTeleopController(double xAxis, double yAxis, double omega) {
