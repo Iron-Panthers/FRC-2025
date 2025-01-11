@@ -31,10 +31,27 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
   private final StatusSignal<Current> supplyCurrent;
   private final StatusSignal<Temperature> temp;
 
+  private final double zeroingVolts;
+  private final double zeroingOffset;
+
   protected final VoltageOut voltageOutput = new VoltageOut(0).withUpdateFreqHz(0);
   private final NeutralOut neutralOutput = new NeutralOut();
   private final PositionVoltage positionControl = new PositionVoltage(0).withUpdateFreqHz(0);
 
+  /**
+   * Constructs a new GenericSuperstructureIOTalonFX.
+   *
+   * @param id The ID of the TalonFX motor controller.
+   * @param inverted Whether the motor is inverted.
+   * @param supplyCurrentLimit The supply current limit for the motor.
+   * @param canCoderID The optional ID of the CANcoder.
+   * @param reduction The reduction ratio for the mechanism.
+   * @param upperLimit The upper limit for the motor position.
+   * @param upperVoltLimit The upper voltage limit for the motor.
+   * @param lowerVoltLimit The lower voltage limit for the motor.
+   * @param zeroingVolts The voltage to apply during zeroing.
+   * @param zeroingOffset The offset to set after zeroing.
+   */
   public GenericSuperstructureIOTalonFX(
       int id,
       boolean inverted,
@@ -43,8 +60,14 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
       double reduction,
       double upperLimit,
       double upperVoltLimit,
-      double lowerVoltLimit) {
+      double lowerVoltLimit,
+      double zeroingVolts,
+      double zeroingOffset) {
     talon = new TalonFX(id);
+
+    // set the zeroing values such that when the robot zeros it will apply the zeroing volts and when it reaches a resistance from part of the mechanism, it sets the position to the zeroing Offset
+    this.zeroingVolts = zeroingVolts;
+    this.zeroingOffset = zeroingOffset;
 
     // VOLTAGE, LIMITS AND RATIO CONFIG
     TalonFXConfiguration config = new TalonFXConfiguration();
@@ -107,10 +130,9 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
     talon.setControl(positionControl.withPosition(rotations));
   }
 
-  /** */
   @Override
   public void runCharacterization() {
-    talon.setControl(voltageOutput.withOutput(-1));
+    talon.setControl(voltageOutput.withOutput(zeroingVolts));
   }
 
   @Override
@@ -120,7 +142,7 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
 
   @Override
   public void setOffset() {
-    talon.getConfigurator().setPosition(0);
+    talon.getConfigurator().setPosition(zeroingOffset);
   }
 
   @Override
