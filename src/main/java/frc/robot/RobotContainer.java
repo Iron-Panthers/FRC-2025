@@ -107,7 +107,6 @@ public class RobotContainer {
     if (pivot == null) {
       pivot = new Pivot(new PivotIO() {});
     }
-    // TODO: add pivot
     superstructure = new Superstructure(elevator, pivot);
 
     configureBindings();
@@ -163,13 +162,6 @@ public class RobotContainer {
 
     // -----Intake Controls-----
 
-    // ------Pivot Controls------
-    driverB
-        .y()
-        .onTrue(new InstantCommand(() -> superstructure.setTargetState(SuperstructureState.SCORE_L3)));
-    driverB
-        .a()
-        .onTrue(new InstantCommand(() -> superstructure.setTargetState(SuperstructureState.STOW)));
   }
 
   private void configureAutos() {
