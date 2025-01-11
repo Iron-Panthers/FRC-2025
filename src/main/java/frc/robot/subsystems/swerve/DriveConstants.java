@@ -84,7 +84,10 @@ public class DriveConstants {
       };
 
   public static final TrajectoryFollowerConstants TRAJECTORY_CONFIG =
-      new TrajectoryFollowerConstants(0, 0, 0, 0); // FIXME
+      switch (getRobotType()) {
+        case COMP, SIM -> new TrajectoryFollowerConstants(0, 0, 0, 0);
+        case DEV -> new TrajectoryFollowerConstants(0, 0, 0, 0);
+      };
 
   public record DrivebaseConfig(
       double wheelRadius,
