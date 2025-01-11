@@ -84,7 +84,7 @@ public class Drive extends SubsystemBase {
 
     switch (driveMode) {
       case TELEOP -> {
-        targetSpeeds = teleopController.update(arbitraryYaw);
+        targetSpeeds = teleopController.update();
         if (headingController != null) {
           targetSpeeds.omegaRadiansPerSecond = headingController.update();
         }

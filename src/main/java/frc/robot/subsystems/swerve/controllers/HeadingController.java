@@ -53,6 +53,7 @@ public class HeadingController {
   public boolean epsilonEquals(double a, double b, double epsilon) {
     return (a - epsilon <= b) && (a + epsilon >= b);
   }
+
   public Rotation2d getTargetHeading() {
     return targetHeadingSupplier.get();
   }
