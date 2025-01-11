@@ -51,7 +51,7 @@ public class RobotContainer {
 
     if (Constants.getRobotMode() != Mode.REPLAY) {
       switch (Constants.getRobotType()) {
-        case COMP -> {
+        case PROG -> {
           swerve =
               new Drive(
                   new GyroIOPigeon2(),

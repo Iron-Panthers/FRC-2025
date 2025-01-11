@@ -25,15 +25,15 @@ public final class Constants {
 
   /* FIXME
    * as of 2025-01-11
-   * COMP: mini "test" bot
+   * PROG: mini "test" bot
    * DEV: alpha bot
    * */
-  public static RobotType ROBOT_TYPE = RobotType.DEV;
+  public static RobotType ROBOT_TYPE = RobotType.PROG;
 
   /* running mode of robot */
   public static Mode getRobotMode() {
     return switch (ROBOT_TYPE) {
-      case COMP, DEV -> RobotBase.isReal() ? Mode.REAL : Mode.REPLAY;
+      case PROG, DEV -> RobotBase.isReal() ? Mode.REAL : Mode.REPLAY;
       case SIM -> Mode.SIM;
     };
   }
@@ -56,7 +56,7 @@ public final class Constants {
 
   /* */
   public enum RobotType {
-    COMP,
+    PROG,
     DEV,
     SIM;
   }
