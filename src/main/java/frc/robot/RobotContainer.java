@@ -126,8 +126,6 @@ public class RobotContainer {
 
     driverA.start().onTrue(swerve.zeroGyroCommand());
 
-    // -----Intake Controls-----
-
     // -----Flywheel Controls-----
 
     // -----Superstructure Controls-----
@@ -159,13 +157,10 @@ public class RobotContainer {
                 superstructure));
 
     // -----Intake Controls-----
-
     driverB.b().onTrue(rollers.setTargetCommand(Rollers.RollerState.INTAKE));
     driverB.a().onTrue(rollers.setTargetCommand(Rollers.RollerState.IDLE));
     driverB.x().onTrue(rollers.setTargetCommand(Rollers.RollerState.HOLD));
     driverB.y().onTrue(rollers.setTargetCommand(Rollers.RollerState.EJECT));
-
-    // -----Flywheel Controls-----
 
   }
 
