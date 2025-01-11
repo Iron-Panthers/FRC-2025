@@ -51,7 +51,7 @@ public class RobotContainer {
 
     if (Constants.getRobotMode() != Mode.REPLAY) {
       switch (Constants.getRobotType()) {
-        case COMP -> {
+        case PROG -> {
           swerve =
               new Drive(
                   new GyroIOPigeon2(),
@@ -61,7 +61,7 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
           elevator = new Elevator(new ElevatorIOTalonFX());
         }
-        case DEV -> {
+        case ALPHA -> {
           swerve =
               new Drive(
                   new GyroIOPigeon2(),
