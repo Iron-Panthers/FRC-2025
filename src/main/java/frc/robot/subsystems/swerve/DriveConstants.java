@@ -68,9 +68,9 @@ public class DriveConstants {
   public static final ModuleConstants MODULE_CONSTANTS =
       switch (getRobotType()) {
         case PROG, SIM -> new ModuleConstants(
-            new Gains(0, 0, 0, 50, 0, 0), // revisit kP
+            new Gains(0.25, 2.26, 0, 50, 0, 0), // revisit kP
             new MotionProfileGains(4, 64, 640), // revisit all
-            new Gains(0, 0, 0, 1.5, 0, 0), // FIXME placeholder, to do
+            new Gains(0.3, 0.63, 0, 1.5, 0, 0), // FIXME placeholder, to do
             12.8,
             6.75,
             3.125);
@@ -90,7 +90,7 @@ public class DriveConstants {
       };
 
   public static final HeadingControllerConstants HEADING_CONTROLLER_CONSTANTS =
-      new HeadingControllerConstants(5, 0, 9, 12.5, 2);
+      new HeadingControllerConstants(1, 0, 81, 81, 0.02);
 
   public record DrivebaseConfig(
       double wheelRadius,

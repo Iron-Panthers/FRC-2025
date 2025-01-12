@@ -35,9 +35,12 @@ public class HeadingController {
 
   public double update() {
     double output =
-        controller.calculate(
-            RobotState.getInstance().getOdometryPose().getRotation().getRadians(),
-            targetHeadingSupplier.get().getRadians());
+        1.6
+            * calculateRelativeAngularDifference(
+                targetHeadingSupplier.get().getRadians(),
+                RobotState.getInstance().getOdometryPose().getRotation().getRadians());
+    // controller.calculate(
+    //     RobotState.getInstance().getOdometryPose().getRotation().getRadians(), 0);
 
     return output;
   }
@@ -56,5 +59,15 @@ public class HeadingController {
 
   public Rotation2d getTargetHeading() {
     return targetHeadingSupplier.get();
+  }
+
+  private double calculateRelativeAngularDifference(double currentAngle, double targetAngle) {
+    double a = normalizeRadians(currentAngle - targetAngle);
+    double b = normalizeRadians(targetAngle - currentAngle);
+    return a < b ? a : -b;
+  }
+
+  private double normalizeRadians(double radians) {
+    return (radians % (2 * Math.PI) + (2 * Math.PI)) % (2 * Math.PI);
   }
 }

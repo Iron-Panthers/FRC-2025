@@ -4,6 +4,7 @@ import static frc.robot.subsystems.swerve.DriveConstants.DRIVE_CONFIG;
 import static frc.robot.subsystems.swerve.DriveConstants.KINEMATICS;
 
 import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -86,7 +87,15 @@ public class Drive extends SubsystemBase {
       case TELEOP -> {
         targetSpeeds = teleopController.update();
         if (headingController != null) {
-          targetSpeeds.omegaRadiansPerSecond = headingController.update();
+          targetSpeeds.omegaRadiansPerSecond =
+              headingController.update()
+                  * (1
+                      + 0.6
+                          * MathUtil.clamp(
+                              Math.hypot(
+                                  targetSpeeds.vxMetersPerSecond, targetSpeeds.vyMetersPerSecond),
+                              0,
+                              9));
         }
       }
       case TRAJECTORY -> {
@@ -103,7 +112,7 @@ public class Drive extends SubsystemBase {
 
     // SwerveModuleState[] moduleTargetStates =
     KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(1, 0, 0));
-    SwerveModuleState[] moduleTargetStates = KINEMATICS.toSwerveModuleStates(discretizedSpeeds);
+    SwerveModuleState[] moduleTargetStates = KINEMATICS.toSwerveModuleStates(targetSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         moduleTargetStates, DRIVE_CONFIG.maxLinearVelocity());
 
@@ -113,9 +122,15 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("Swerve/ModuleStates", moduleTargetStates);
     Logger.recordOutput("Swerve/TargetSpeeds", targetSpeeds);
     Logger.recordOutput("Swerve/DriveMode", driveMode);
-    if (headingController != null)
+    Logger.recordOutput(
+        "Swerve/Magnitude",
+        MathUtil.clamp(
+            Math.hypot(targetSpeeds.vxMetersPerSecond, targetSpeeds.vyMetersPerSecond), 0, 3));
+    if (headingController != null) {
       Logger.recordOutput(
           "Swerve/HeadingTarget", headingController.getTargetHeading().getRadians());
+      Logger.recordOutput("Swerve/HeadingOutput", headingController.update());
+    }
   }
 
   public void driveTeleopController(double xAxis, double yAxis, double omega) {
