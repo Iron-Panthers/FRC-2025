@@ -58,8 +58,8 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
       double supplyCurrentLimit,
       Optional<Integer> canCoderID,
       double reduction,
-      double upperLimit,
-      double lowerLimit,
+      Optional<Double> upperLimit,
+      Optional<Double> lowerLimit,
       double upperVoltLimit,
       double lowerVoltLimit,
       double zeroingVolts,
@@ -78,10 +78,14 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
         inverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
     config.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
-    config.SoftwareLimitSwitch.withForwardSoftLimitEnable(true);
-    config.SoftwareLimitSwitch.withForwardSoftLimitThreshold(upperLimit);
-    config.SoftwareLimitSwitch.withReverseSoftLimitEnable(true);
-    config.SoftwareLimitSwitch.withForwardSoftLimitThreshold(lowerLimit);
+    if (upperLimit.isPresent()) { // only set the upper limit if we have one
+      config.SoftwareLimitSwitch.withForwardSoftLimitEnable(true);
+      config.SoftwareLimitSwitch.withForwardSoftLimitThreshold(upperLimit.get());
+    }
+    if (lowerLimit.isPresent()) { // only set the upper limit if we have one
+      config.SoftwareLimitSwitch.withReverseSoftLimitEnable(true);
+      config.SoftwareLimitSwitch.withForwardSoftLimitThreshold(lowerLimit.get());
+    }
 
     config.Voltage.withPeakForwardVoltage(upperVoltLimit);
     config.Voltage.withPeakReverseVoltage(lowerVoltLimit);

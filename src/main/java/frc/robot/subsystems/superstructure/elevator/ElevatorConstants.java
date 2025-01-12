@@ -2,6 +2,7 @@ package frc.robot.subsystems.superstructure.elevator;
 
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import frc.robot.Constants;
+import java.util.Optional;
 
 public class ElevatorConstants {
   public static final ElevatorConfig ELEVATOR_CONFIG =
@@ -28,10 +29,9 @@ public class ElevatorConstants {
   public static final boolean INVERT_MOTOR = true;
 
   // SOFT LIMITS
-  public static final double UPPER_EXTENSION_LIMIT = 121; // top limit is 121 rotations
-  public static final double LOWER_EXTENSION_LIMIT = -100000; // top limit is 121 rotations
-
-  // top limit is 121 rotations
+  public static final Optional<Double> UPPER_EXTENSION_LIMIT =
+      Optional.of(121d); // top limit is 121 rotations
+  public static final Optional<Double> LOWER_EXTENSION_LIMIT = Optional.empty();
 
   // CURRENT LIMITS
   public static final double UPPER_VOLT_LIMIT = 10;
@@ -40,6 +40,6 @@ public class ElevatorConstants {
   public static final int ZEROING_CURRENT_LIMIT = 20; // FIXME currently doesn't exist lmao
 
   // ZEROING CONSTANTS
-  public static final double ZEROING_VOLTS = -3;
+  public static final double ZEROING_VOLTS = -1;
   public static final double ZEROING_OFFSET = 0; // offset in inches
 }
