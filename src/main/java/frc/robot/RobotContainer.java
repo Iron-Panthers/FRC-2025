@@ -18,6 +18,7 @@ import frc.robot.autonomous.PathCommand;
 import frc.robot.subsystems.superstructure.Superstructure;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
 import frc.robot.subsystems.superstructure.elevator.ElevatorIO;
+import frc.robot.subsystems.superstructure.elevator.ElevatorIOTalonFX;
 import frc.robot.subsystems.superstructure.pivot.Pivot;
 import frc.robot.subsystems.superstructure.pivot.PivotIO;
 import frc.robot.subsystems.superstructure.pivot.PivotIOTalonFX;
@@ -61,7 +62,7 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
-          // elevator = new Elevator(new ElevatorIOTalonFX());
+          elevator = new Elevator(new ElevatorIOTalonFX());
           pivot = new Pivot(new PivotIOTalonFX());
         }
         case DEV -> {
@@ -151,9 +152,12 @@ public class RobotContainer {
                 () -> superstructure.setTargetState(Superstructure.SuperstructureState.SCORE_L4),
                 superstructure));
 
-    driverA // ZERO
+    driverA // ZERO our mechanism
         .x()
-        .onTrue(superstructure.getZeroCommand());
+        .onTrue(
+            new InstantCommand(
+                () -> superstructure.setTargetState(Superstructure.SuperstructureState.ZERO),
+                superstructure));
 
     // -----Intake Controls-----
 

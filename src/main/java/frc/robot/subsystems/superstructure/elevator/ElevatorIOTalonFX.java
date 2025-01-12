@@ -1,7 +1,6 @@
 package frc.robot.subsystems.superstructure.elevator;
 
 import static frc.robot.subsystems.superstructure.elevator.ElevatorConstants.*;
-import static frc.robot.subsystems.superstructure.pivot.PivotConstants.ZEROING_OFFSET;
 
 import frc.robot.subsystems.superstructure.GenericSuperstructureIOTalonFX;
 import java.util.Optional;
@@ -16,6 +15,7 @@ public class ElevatorIOTalonFX extends GenericSuperstructureIOTalonFX implements
         Optional.empty(),
         ELEVATOR_CONFIG.reduction(),
         UPPER_EXTENSION_LIMIT,
+        LOWER_EXTENSION_LIMIT,
         UPPER_VOLT_LIMIT,
         LOWER_VOLT_LIMIT,
         ZEROING_VOLTS,

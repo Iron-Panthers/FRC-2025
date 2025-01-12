@@ -32,7 +32,7 @@ public class GenericSuperstructure<G extends GenericSuperstructure.PositionTarge
     this.superstructureIO = superstructureIO;
 
     // setup the linear filter
-    supplyCurrentFilter = LinearFilter.movingAverage(10);
+    supplyCurrentFilter = LinearFilter.movingAverage(30);
   }
 
   public void periodic() {
@@ -47,10 +47,6 @@ public class GenericSuperstructure<G extends GenericSuperstructure.PositionTarge
       }
       case ZERO -> {
         superstructureIO.runCharacterization();
-        if (filteredSupplyCurrentAmps > 4) {
-          setOffset();
-          setControlMode(ControlMode.POSITION);
-        }
       }
       case STOP -> {
         superstructureIO.stop();
@@ -63,7 +59,7 @@ public class GenericSuperstructure<G extends GenericSuperstructure.PositionTarge
     Logger.recordOutput("Superstructure/" + name + "/Target", positionTarget.toString());
     Logger.recordOutput("Superstructure/" + name + "/Control Mode", controlMode.toString());
     Logger.recordOutput(
-        "Superstructure/" + name + "/Filtered supply current amps", controlMode.toString());
+        "Superstructure/" + name + "/Filtered supply current amps", filteredSupplyCurrentAmps);
   }
 
   public G getGetPositionTarget() {
@@ -71,7 +67,7 @@ public class GenericSuperstructure<G extends GenericSuperstructure.PositionTarge
   }
 
   public void setPositionTarget(G positionTarget) {
-    if (getControlMode() != ControlMode.ZERO) setControlMode(ControlMode.POSITION);
+    setControlMode(ControlMode.POSITION);
     this.positionTarget = positionTarget;
   }
 
@@ -89,6 +85,10 @@ public class GenericSuperstructure<G extends GenericSuperstructure.PositionTarge
 
   public double getSupplyCurrentAmps() {
     return inputs.supplyCurrentAmps;
+  }
+
+  public double getFilteredSupplyCurrentAmps() {
+    return filteredSupplyCurrentAmps;
   }
 
   public double position() {

@@ -29,7 +29,8 @@ public class PivotConstants {
   public static final boolean INVERT_MOTOR = true;
 
   // SOFT LIMITS
-  public static final double UPPER_EXTENSION_LIMIT = 110; // top limit is 121 rotations
+  public static final double UPPER_EXTENSION_LIMIT = Double.MAX_VALUE; // top limit is 121 rotations
+  public static final double LOWER_EXTENSION_LIMIT = Double.MIN_VALUE; // top limit is 121 rotations
 
   // top limit is 121 rotations
 

@@ -1,7 +1,5 @@
 package frc.robot.subsystems.superstructure;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.superstructure.GenericSuperstructure.ControlMode;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
@@ -18,9 +16,10 @@ public class Superstructure extends SubsystemBase {
     SCORE_L2, // Scoring in L2
     SCORE_L1, // Scoring in the trough
     STOW, // Going to the lowest position
+    ZERO, // Zero the motor
   }
 
-  private SuperstructureState targetState = SuperstructureState.STOP; // current target state
+  private SuperstructureState targetState = SuperstructureState.STOW; // current target state
 
   private final Elevator elevator;
   private final Pivot pivot;
@@ -54,6 +53,27 @@ public class Superstructure extends SubsystemBase {
       case STOW -> {
         elevator.setPositionTarget(ElevatorTarget.BOTTOM);
         pivot.setPositionTarget(PivotTarget.TOP);
+      }
+      case ZERO -> {
+        if (notZeroing()) { // set our mechanisms to zero if they aren't already
+          elevator.setControlMode(ControlMode.ZERO);
+          pivot.setControlMode(ControlMode.ZERO);
+        } else { // if our mechanisms are currently zeroing run this logic
+          if (elevator.getFilteredSupplyCurrentAmps()
+              > 4) { // check if the elevator is done zeroing and set offsets accordingly
+            elevator.setOffset();
+            elevator.setControlMode(ControlMode.POSITION);
+          }
+          if (pivot.getFilteredSupplyCurrentAmps()
+              > 5) { // check if pivot is done zeroing and set offsets accordingly
+            pivot.setOffset();
+            pivot.setControlMode(ControlMode.POSITION);
+          }
+          if (notZeroing()) { // if both of our mechanisms aren't zeroing anymore, exit out of this
+            // madness
+            setTargetState(SuperstructureState.STOW);
+          }
+        }
       }
       case STOP -> {
         elevator.setControlMode(ControlMode.STOP);
@@ -110,12 +130,11 @@ public class Superstructure extends SubsystemBase {
     return pivot.getSupplyCurrentAmps();
   }
 
-  public Command getZeroCommand() {
-    return new InstantCommand(
-        () -> {
-          pivot.setControlMode(ControlMode.ZERO);
-          elevator.setControlMode(ControlMode.ZERO);
-        },
-        this);
+  /**
+   * @return a boolean that says weather or not both of our mechanisms have finished zeroing
+   */
+  public boolean notZeroing() {
+    return elevator.getControlMode() != ControlMode.ZERO
+        && pivot.getControlMode() != ControlMode.ZERO;
   }
 }

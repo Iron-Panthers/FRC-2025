@@ -29,6 +29,7 @@ public class ElevatorConstants {
 
   // SOFT LIMITS
   public static final double UPPER_EXTENSION_LIMIT = 121; // top limit is 121 rotations
+  public static final double LOWER_EXTENSION_LIMIT = -100000; // top limit is 121 rotations
 
   // top limit is 121 rotations
 
@@ -39,6 +40,6 @@ public class ElevatorConstants {
   public static final int ZEROING_CURRENT_LIMIT = 20; // FIXME currently doesn't exist lmao
 
   // ZEROING CONSTANTS
-  public static final double ZEROING_VOLTS = -1;
+  public static final double ZEROING_VOLTS = -3;
   public static final double ZEROING_OFFSET = 0; // offset in inches
 }

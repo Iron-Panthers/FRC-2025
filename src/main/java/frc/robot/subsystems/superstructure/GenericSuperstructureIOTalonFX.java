@@ -59,6 +59,7 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
       Optional<Integer> canCoderID,
       double reduction,
       double upperLimit,
+      double lowerLimit,
       double upperVoltLimit,
       double lowerVoltLimit,
       double zeroingVolts,
@@ -79,6 +80,9 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
     config.SoftwareLimitSwitch.withForwardSoftLimitEnable(true);
     config.SoftwareLimitSwitch.withForwardSoftLimitThreshold(upperLimit);
+    config.SoftwareLimitSwitch.withReverseSoftLimitEnable(true);
+    config.SoftwareLimitSwitch.withForwardSoftLimitThreshold(lowerLimit);
+
     config.Voltage.withPeakForwardVoltage(upperVoltLimit);
     config.Voltage.withPeakReverseVoltage(lowerVoltLimit);
     config.Feedback.withSensorToMechanismRatio(reduction);
