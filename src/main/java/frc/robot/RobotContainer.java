@@ -105,7 +105,6 @@ public class RobotContainer {
     if (pivot == null) {
       pivot = new Pivot(new PivotIO() {});
     }
-    // TODO: add pivot
     superstructure = new Superstructure(elevator, pivot);
 
     configureBindings();
