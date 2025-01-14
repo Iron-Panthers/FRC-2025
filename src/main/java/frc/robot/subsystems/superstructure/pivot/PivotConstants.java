@@ -46,4 +46,5 @@ public class PivotConstants {
   // ZEROING CONSTANTS
   public static final double ZEROING_VOLTS = 1;
   public static final double ZEROING_OFFSET = 110; // offset in degrees
+  public static final double ZEROING_VOLTAGE_THRESHOLD = 5;
 }
