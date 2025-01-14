@@ -28,7 +28,7 @@ public final class Constants {
    * PROG: mini "test" bot
    * ALPHA: alpha bot
    * */
-  public static RobotType ROBOT_TYPE = RobotType.PROG;
+  public static RobotType ROBOT_TYPE = RobotType.ALPHA;
 
   /* running mode of robot */
   public static Mode getRobotMode() {

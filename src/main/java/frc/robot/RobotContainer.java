@@ -66,14 +66,15 @@ public class RobotContainer {
           pivot = new Pivot(new PivotIOTalonFX());
         }
         case ALPHA -> {
-          swerve =
-              new Drive(
-                  new GyroIOPigeon2(),
-                  new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[0]),
-                  new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
-                  new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
-                  new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
+          // swerve =
+          //     new Drive(
+          //         new GyroIOPigeon2(),
+          //         new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[0]),
+          //         new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
+          //         new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
+          //         new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
           pivot = new Pivot(new PivotIOTalonFX());
+          elevator = new Elevator(new ElevatorIOTalonFX());
         }
         case SIM -> {
           swerve =

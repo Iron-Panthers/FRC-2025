@@ -3,11 +3,11 @@ package frc.robot.subsystems.superstructure;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.superstructure.GenericSuperstructure.ControlMode;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
-import frc.robot.subsystems.superstructure.elevator.ElevatorConstants;
 import frc.robot.subsystems.superstructure.elevator.Elevator.ElevatorTarget;
+import frc.robot.subsystems.superstructure.elevator.ElevatorConstants;
 import frc.robot.subsystems.superstructure.pivot.Pivot;
-import frc.robot.subsystems.superstructure.pivot.PivotConstants;
 import frc.robot.subsystems.superstructure.pivot.Pivot.PivotTarget;
+import frc.robot.subsystems.superstructure.pivot.PivotConstants;
 import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
@@ -94,12 +94,16 @@ public class Superstructure extends SubsystemBase {
           pivot.setControlMode(ControlMode.ZERO);
         } else { // if our mechanisms are currently zeroing run this logic
           if (elevator.getFilteredSupplyCurrentAmps()
-              > ElevatorConstants.ZEROING_VOLTAGE_THRESHOLD) { // check if the elevator is done zeroing and set offsets accordingly
+              > ElevatorConstants
+                  .ZEROING_VOLTAGE_THRESHOLD) { // check if the elevator is done zeroing and set
+            // offsets accordingly
             elevator.setOffset();
             elevator.setControlMode(ControlMode.POSITION);
           }
           if (pivot.getFilteredSupplyCurrentAmps()
-              > PivotConstants.ZEROING_VOLTAGE_THRESHOLD) { // check if pivot is done zeroing and set offsets accordingly
+              > PivotConstants
+                  .ZEROING_VOLTAGE_THRESHOLD) { // check if pivot is done zeroing and set offsets
+            // accordingly
             pivot.setOffset();
             pivot.setControlMode(ControlMode.POSITION);
           }
@@ -178,7 +182,7 @@ public class Superstructure extends SubsystemBase {
   /**
    * @return if both subsystems in the superstructure have reached their target
    */
-  public boolean superstructureReachedTarget(){
+  public boolean superstructureReachedTarget() {
     return elevator.reachedTarget() && pivot.reachedTarget();
   }
 }

@@ -28,7 +28,7 @@ public class ElevatorConstants {
 
   public static final boolean INVERT_MOTOR = true;
 
-  public static final double POSITION_TARGET_EPSILON = 0.5;
+  public static final double POSITION_TARGET_EPSILON = 1;
 
   // SOFT LIMITS
   public static final Optional<Double> UPPER_EXTENSION_LIMIT =
