@@ -86,7 +86,7 @@ public class DriveConstants {
   public static final TrajectoryFollowerConstants TRAJECTORY_CONFIG =
       switch (getRobotType()) {
         case PROG, SIM -> new TrajectoryFollowerConstants(0, 0, 0, 0);
-        case ALPHA -> new TrajectoryFollowerConstants(0, 0, 0, 0);
+        case ALPHA -> new TrajectoryFollowerConstants(5, 0, 0, 0);
       };
 
   public record DrivebaseConfig(

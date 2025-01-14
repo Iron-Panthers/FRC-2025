@@ -47,7 +47,7 @@ public class TrajectoryController {
 
     // feedback control
     double xFeedback = xController.calculate(currentPose.getX(), setpointState.pose.getX());
-    double yFeedback = yController.calculate(currentPose.getX(), setpointState.pose.getX());
+    double yFeedback = yController.calculate(currentPose.getY(), setpointState.pose.getY());
     double rotationFeedback =
         rotationController.calculate(
             currentPose.getRotation().getRadians(), setpointState.pose.getRotation().getRadians());
