@@ -14,9 +14,9 @@ public class ElevatorConstants {
 
   public static final PIDGains GAINS =
       switch (Constants.getRobotType()) {
-        case PROG -> new PIDGains(0, 0, 0, 0, 0, 0);
-        case ALPHA -> new PIDGains(2, 0, 0.2, 0, 0.09, 0);
-        case SIM -> new PIDGains(0, 0, 0, 0, 0, 0);
+        case PROG -> new PIDGains(0, 0, 0, 0, 0, 0, 0);
+        case ALPHA -> new PIDGains(2, 0, 0.2, 0, 0.09, 0, .34);
+        case SIM -> new PIDGains(0, 0, 0, 0, 0, 0, 0);
       };
 
   public record ElevatorConfig(int motorID, double reduction) {}

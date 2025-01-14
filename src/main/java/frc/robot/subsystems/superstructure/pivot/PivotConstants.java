@@ -7,15 +7,15 @@ import java.util.Optional;
 public class PivotConstants {
   public static final PivotConfig PIVOT_CONFIG =
       switch (Constants.getRobotType()) {
-        case COMP -> new PivotConfig(15, Optional.empty(), 21.6 / 360); // FIXME
-        case DEV -> new PivotConfig(0, Optional.empty(), 1); // FIXME
+        case ALPHA -> new PivotConfig(15, Optional.empty(), 21.6 / 360); // FIXME
+        case PROG -> new PivotConfig(0, Optional.empty(), 1); // FIXME
         case SIM -> new PivotConfig(0, Optional.empty(), 1); // FIXME
       };
 
   public static final PIDGains GAINS =
       switch (Constants.getRobotType()) {
-        case COMP -> new PIDGains(0.2, 0, 0.02, 0.03, 0.09, 0, 0.4);
-        case DEV -> new PIDGains(0, 0, 0, 0, 0, 0, 0);
+        case ALPHA -> new PIDGains(0.2, 0, 0.02, 0.03, 0.09, 0, 0.4);
+        case PROG -> new PIDGains(0, 0, 0, 0, 0, 0, 0);
         case SIM -> new PIDGains(0, 0, 0, 0, 0, 0, 0);
       };
 
