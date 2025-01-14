@@ -11,14 +11,14 @@ public class DriveConstants {
   // measures in meters (per sec) and radians (per sec)
   public static final DrivebaseConfig DRIVE_CONFIG =
       switch (getRobotType()) {
-        case COMP, SIM -> new DrivebaseConfig(
+        case PROG, SIM -> new DrivebaseConfig(
             Units.inchesToMeters(2),
             Units.inchesToMeters(22.5),
             Units.inchesToMeters(38.5),
             Units.inchesToMeters(33),
             5, // FIXME
             5);
-        case DEV -> new DrivebaseConfig(
+        case ALPHA -> new DrivebaseConfig(
             Units.inchesToMeters(2),
             Units.inchesToMeters(22.5),
             Units.inchesToMeters(38.5),
@@ -45,17 +45,17 @@ public class DriveConstants {
   // fl, fr, bl, br; negate offsets
   public static final ModuleConfig[] MODULE_CONFIGS =
       switch (getRobotType()) {
-        case COMP -> new ModuleConfig[] {
-          new ModuleConfig(5, 6, 1, new Rotation2d(-2.152), false, false),
-          new ModuleConfig(7, 8, 2, new Rotation2d(-0.218), false, true),
-          new ModuleConfig(11, 12, 3, new Rotation2d(2.971), false, false),
-          new ModuleConfig(9, 10, 4, new Rotation2d(2.311), false, true)
+        case PROG -> new ModuleConfig[] {
+          new ModuleConfig(5, 6, 1, new Rotation2d(-0.1503), false, false),
+          new ModuleConfig(7, 8, 2, new Rotation2d(-0.18254), false, true),
+          new ModuleConfig(11, 12, 3, new Rotation2d(2.9314), false, false),
+          new ModuleConfig(9, 10, 4, new Rotation2d(2.2426), false, true)
         };
-        case DEV -> new ModuleConfig[] {
-          new ModuleConfig(2, 1, 27, new Rotation2d(0), true, false),
-          new ModuleConfig(13, 12, 26, new Rotation2d(0), true, true),
-          new ModuleConfig(4, 3, 24, new Rotation2d(0), true, false),
-          new ModuleConfig(11, 10, 25, new Rotation2d(0), true, true)
+        case ALPHA -> new ModuleConfig[] {
+          new ModuleConfig(5, 6, 1, new Rotation2d(1.1612), true, false),
+          new ModuleConfig(7, 8, 2, new Rotation2d(0.8099), true, true),
+          new ModuleConfig(11, 12, 3, new Rotation2d(1.4327), true, false),
+          new ModuleConfig(9, 10, 4, new Rotation2d(-1.8392), true, true)
         };
         case SIM -> new ModuleConfig[] {
           new ModuleConfig(0, 0, 0, new Rotation2d(0), true, false),
@@ -67,16 +67,16 @@ public class DriveConstants {
 
   public static final ModuleConstants MODULE_CONSTANTS =
       switch (getRobotType()) {
-        case COMP, SIM -> new ModuleConstants(
-            new Gains(0, 0, 0, 0, 0, 0), // revisit kP
+        case PROG, SIM -> new ModuleConstants(
+            new Gains(0, 0, 0, 50, 0, 0), // revisit kP
             new MotionProfileGains(4, 64, 640), // revisit all
             new Gains(0, 0, 0, 0, 0, 0), // FIXME placeholder, to do
             12.8,
             6.75,
             3.125);
-        case DEV -> new ModuleConstants(
-            new Gains(0, 0, 0, 11, 0, 0),
-            new MotionProfileGains(0, 0, 0),
+        case ALPHA -> new ModuleConstants(
+            new Gains(0, 0, 0, 50, 0, 0),
+            new MotionProfileGains(4, 64, 640),
             new Gains(0, 0, 0, 1.5, 0, 0),
             5.357142857142857,
             21.428571428571427,
@@ -84,7 +84,10 @@ public class DriveConstants {
       };
 
   public static final TrajectoryFollowerConstants TRAJECTORY_CONFIG =
-      new TrajectoryFollowerConstants(0, 0, 0, 0); // FIXME
+      switch (getRobotType()) {
+        case PROG, SIM -> new TrajectoryFollowerConstants(0, 0, 0, 0);
+        case ALPHA -> new TrajectoryFollowerConstants(0, 0, 0, 0);
+      };
 
   public record DrivebaseConfig(
       double wheelRadius,

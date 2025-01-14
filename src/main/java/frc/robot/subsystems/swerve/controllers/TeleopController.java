@@ -8,13 +8,18 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import frc.robot.RobotState;
+import java.util.function.Supplier;
 
 public class TeleopController {
-
+  private final Supplier<Rotation2d> yawSupplier;
   private double controllerX = 0;
   private double controllerY = 0;
   private double controllerOmega = 0;
+
+  /* teleop control with specified yaw supplier, typically "arbitrary" yaw */
+  public TeleopController(Supplier<Rotation2d> yawSupplier) {
+    this.yawSupplier = yawSupplier;
+  }
 
   /* accept driver input from joysticks */
   public void acceptJoystickInput(double controllerX, double controllerY, double controllerOmega) {
@@ -27,25 +32,14 @@ public class TeleopController {
   public ChassisSpeeds update() {
     Translation2d linearVelocity = calculateLinearVelocity(controllerX, controllerY);
 
-    double omega = MathUtil.applyDeadband(controllerOmega, 0.1);
+    double omega = MathUtil.applyDeadband(controllerOmega, 0.001);
     omega = Math.copySign(Math.pow(Math.abs(omega), 1.5), omega);
 
-    // eventaully run off of pose estimation?
     return ChassisSpeeds.fromFieldRelativeSpeeds(
         linearVelocity.getX() * DRIVE_CONFIG.maxLinearVelocity(),
         linearVelocity.getY() * DRIVE_CONFIG.maxLinearVelocity(),
         omega * DRIVE_CONFIG.maxAngularVelocity(),
-        RobotState.getInstance().getOdometryPose().getRotation()); // change to estimatedpose
-
-    /* ChassisSpeeds speeds =
-        new ChassisSpeeds(
-            linearVelocity.getX() * DRIVE_CONFIG.maxLinearVelocity(),
-            linearVelocity.getY() * DRIVE_CONFIG.maxLinearVelocity(),
-            omega * DRIVE_CONFIG.maxAngularVelocity());
-    // eventually run off of pose estimation?
-    speeds.toRobotRelativeSpeeds(yaw);
-
-    return speeds; */
+        yawSupplier.get());
   }
 
   public Translation2d calculateLinearVelocity(double x, double y) {

@@ -37,7 +37,7 @@ public class Drive extends SubsystemBase {
   private Rotation2d arbitraryYaw = new Rotation2d();
 
   @AutoLogOutput(key = "Swerve/YawOffset")
-  private Rotation2d gyroYawOffset = new Rotation2d(0);
+  private Rotation2d gyroYawOffset = new Rotation2d();
 
   private ChassisSpeeds targetSpeeds = new ChassisSpeeds();
 
@@ -52,7 +52,7 @@ public class Drive extends SubsystemBase {
     modules[2] = new Module(bl, 2);
     modules[3] = new Module(br, 3);
 
-    teleopController = new TeleopController();
+    teleopController = new TeleopController(() -> arbitraryYaw);
   }
 
   @Override
