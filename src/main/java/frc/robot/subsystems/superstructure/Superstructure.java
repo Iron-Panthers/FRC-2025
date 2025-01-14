@@ -41,7 +41,7 @@ public class Superstructure extends SubsystemBase {
       case SETUP_L1 -> { // go to the position before scoring
         elevator.setPositionTarget(ElevatorTarget.L1);
         pivot.setPositionTarget(PivotTarget.SETUP_L1);
-        if (elevator.reachedTarget() && pivot.reachedTarget()) {
+        if (superstructureReachedTarget()) {
           setTargetState(SuperstructureState.SCORE_L1);
         }
       }
@@ -52,7 +52,7 @@ public class Superstructure extends SubsystemBase {
       case SETUP_L2 -> { // go to the position before scoring
         elevator.setPositionTarget(ElevatorTarget.L2);
         pivot.setPositionTarget(PivotTarget.SETUP_L2);
-        if (elevator.reachedTarget() && pivot.reachedTarget()) {
+        if (superstructureReachedTarget()) {
           setTargetState(SuperstructureState.SCORE_L2);
         }
       }
@@ -63,7 +63,7 @@ public class Superstructure extends SubsystemBase {
       case SETUP_L3 -> { // go to the position before scoring
         elevator.setPositionTarget(ElevatorTarget.L3);
         pivot.setPositionTarget(PivotTarget.SETUP_L3);
-        if (elevator.reachedTarget() && pivot.reachedTarget()) {
+        if (superstructureReachedTarget()) {
           setTargetState(SuperstructureState.SCORE_L3);
         }
       }
@@ -74,7 +74,7 @@ public class Superstructure extends SubsystemBase {
       case SETUP_L4 -> { // go to the position before scoring
         elevator.setPositionTarget(ElevatorTarget.L4);
         pivot.setPositionTarget(PivotTarget.SETUP_L4);
-        if (elevator.reachedTarget() && pivot.reachedTarget()) {
+        if (superstructureReachedTarget()) {
           setTargetState(SuperstructureState.SCORE_L4);
         }
       }
@@ -116,6 +116,9 @@ public class Superstructure extends SubsystemBase {
     pivot.periodic();
 
     Logger.recordOutput("Superstructure/TargetState", targetState);
+    Logger.recordOutput("Superstructure/Elevator reached target", elevator.reachedTarget());
+    Logger.recordOutput("Superstructure/Pivot reached target", pivot.reachedTarget());
+    Logger.recordOutput("Superstructure/Reached Target", superstructureReachedTarget());
   }
 
   // Target state getter and setter
@@ -168,5 +171,12 @@ public class Superstructure extends SubsystemBase {
   public boolean notZeroing() {
     return elevator.getControlMode() != ControlMode.ZERO
         && pivot.getControlMode() != ControlMode.ZERO;
+  }
+
+  /**
+   * @return if both subsystems in the superstructure have reached their target
+   */
+  public boolean superstructureReachedTarget(){
+    return elevator.reachedTarget() && pivot.reachedTarget();
   }
 }
