@@ -34,4 +34,8 @@ public interface GenericSuperstructureIO {
   default void stop() {}
 
   default void setOffset() {}
+
+  default double getPositionTargetEpsilon() {
+    return 0;
+  }
 }

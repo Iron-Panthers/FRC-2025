@@ -141,14 +141,14 @@ public class RobotContainer {
         .a()
         .onTrue(
             new InstantCommand(
-                () -> superstructure.setTargetState(Superstructure.SuperstructureState.SCORE_L3),
+                () -> superstructure.setTargetState(Superstructure.SuperstructureState.SETUP_L2),
                 superstructure));
 
     driverA // GO TO L4
         .y()
         .onTrue(
             new InstantCommand(
-                () -> superstructure.setTargetState(Superstructure.SuperstructureState.SCORE_L4),
+                () -> superstructure.setTargetState(Superstructure.SuperstructureState.SETUP_L4),
                 superstructure));
 
     driverA // ZERO our mechanism

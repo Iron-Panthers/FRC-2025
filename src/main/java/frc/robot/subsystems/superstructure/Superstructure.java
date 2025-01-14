@@ -11,9 +11,13 @@ import org.littletonrobotics.junction.Logger;
 public class Superstructure extends SubsystemBase {
   public enum SuperstructureState {
     STOP, // Stop the superstructure
+    SETUP_L4, // Setting up for scoring in L4
     SCORE_L4, // Scoring in L4
+    SETUP_L3, // Setting up for scoring in L3
     SCORE_L3, // Scoring in L3
+    SETUP_L2, // Setting up for scoring in L2
     SCORE_L2, // Scoring in L2
+    SETUP_L1, // Setting up the position to score in the trough
     SCORE_L1, // Scoring in the trough
     STOW, // Going to the lowest position
     ZERO, // Zero the motor
@@ -34,21 +38,49 @@ public class Superstructure extends SubsystemBase {
   @Override
   public void periodic() {
     switch (targetState) { // switch on the target state
+      case SETUP_L1 -> { // go to the position before scoring
+        elevator.setPositionTarget(ElevatorTarget.L1);
+        pivot.setPositionTarget(PivotTarget.SETUP_L1);
+        if (elevator.reachedTarget() && pivot.reachedTarget()) {
+          setTargetState(SuperstructureState.SCORE_L1);
+        }
+      }
       case SCORE_L1 -> {
         elevator.setPositionTarget(ElevatorTarget.L1);
-        pivot.setPositionTarget(PivotTarget.L1);
+        pivot.setPositionTarget(PivotTarget.SCORE_L1);
+      }
+      case SETUP_L2 -> { // go to the position before scoring
+        elevator.setPositionTarget(ElevatorTarget.L2);
+        pivot.setPositionTarget(PivotTarget.SETUP_L2);
+        if (elevator.reachedTarget() && pivot.reachedTarget()) {
+          setTargetState(SuperstructureState.SCORE_L2);
+        }
       }
       case SCORE_L2 -> {
         elevator.setPositionTarget(ElevatorTarget.L2);
-        pivot.setPositionTarget(PivotTarget.L2);
+        pivot.setPositionTarget(PivotTarget.SCORE_L2);
+      }
+      case SETUP_L3 -> { // go to the position before scoring
+        elevator.setPositionTarget(ElevatorTarget.L3);
+        pivot.setPositionTarget(PivotTarget.SETUP_L3);
+        if (elevator.reachedTarget() && pivot.reachedTarget()) {
+          setTargetState(SuperstructureState.SCORE_L3);
+        }
       }
       case SCORE_L3 -> {
         elevator.setPositionTarget(ElevatorTarget.L3);
-        pivot.setPositionTarget(PivotTarget.L3);
+        pivot.setPositionTarget(PivotTarget.SCORE_L3);
+      }
+      case SETUP_L4 -> { // go to the position before scoring
+        elevator.setPositionTarget(ElevatorTarget.L4);
+        pivot.setPositionTarget(PivotTarget.SETUP_L4);
+        if (elevator.reachedTarget() && pivot.reachedTarget()) {
+          setTargetState(SuperstructureState.SCORE_L4);
+        }
       }
       case SCORE_L4 -> {
         elevator.setPositionTarget(ElevatorTarget.L4);
-        pivot.setPositionTarget(PivotTarget.L4);
+        pivot.setPositionTarget(PivotTarget.SCORE_L4);
       }
       case STOW -> {
         elevator.setPositionTarget(ElevatorTarget.BOTTOM);

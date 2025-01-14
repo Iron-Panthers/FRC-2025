@@ -14,7 +14,7 @@ public class PivotConstants {
 
   public static final PIDGains GAINS =
       switch (Constants.getRobotType()) {
-        case COMP -> new PIDGains(0.02, 0, 0.02, 0.03, 0.09, 0, 0.4);
+        case COMP -> new PIDGains(0.2, 0, 0.02, 0.03, 0.09, 0, 0.4);
         case DEV -> new PIDGains(0, 0, 0, 0, 0, 0, 0);
         case SIM -> new PIDGains(0, 0, 0, 0, 0, 0, 0);
       };
@@ -27,6 +27,8 @@ public class PivotConstants {
   public static final GravityTypeValue GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
 
   public static final boolean INVERT_MOTOR = true;
+
+  public static final double POSITION_TARGET_EPSILON = 5;
 
   // SOFT LIMITS
   public static final Optional<Double> UPPER_EXTENSION_LIMIT =

@@ -1,5 +1,6 @@
 package frc.robot.subsystems.superstructure.pivot;
 
+import static frc.robot.subsystems.superstructure.elevator.ElevatorConstants.POSITION_TARGET_EPSILON;
 import static frc.robot.subsystems.superstructure.pivot.PivotConstants.*;
 
 import frc.robot.subsystems.superstructure.GenericSuperstructureIOTalonFX;
@@ -19,7 +20,8 @@ public class PivotIOTalonFX extends GenericSuperstructureIOTalonFX implements Pi
         UPPER_VOLT_LIMIT,
         LOWER_VOLT_LIMIT,
         ZEROING_VOLTS,
-        ZEROING_OFFSET);
+        ZEROING_OFFSET,
+        POSITION_TARGET_EPSILON);
     setSlot0(
         GAINS.kP(),
         GAINS.kI(),

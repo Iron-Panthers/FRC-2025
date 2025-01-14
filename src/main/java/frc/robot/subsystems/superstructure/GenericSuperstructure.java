@@ -94,4 +94,14 @@ public class GenericSuperstructure<G extends GenericSuperstructure.PositionTarge
   public double position() {
     return inputs.positionRotations;
   }
+
+  /**
+   * This function returns weather or not the subsystem has reached its position target
+   *
+   * @return weather the subsystem has reached its position target
+   */
+  public boolean reachedTarget() {
+    return Math.abs(inputs.positionRotations - positionTarget.getPosition())
+        <= superstructureIO.getPositionTargetEpsilon();
+  }
 }
