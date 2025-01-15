@@ -14,6 +14,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
+import frc.robot.subsystems.rollers.Rollers;
+import frc.robot.subsystems.rollers.intake.Intake;
+import frc.robot.subsystems.rollers.intake.IntakeIOTalonFX;
 import frc.robot.autonomous.PathCommand;
 import frc.robot.subsystems.superstructure.Superstructure;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
@@ -42,6 +45,8 @@ public class RobotContainer {
   private final CommandXboxController driverA = new CommandXboxController(0);
   private final CommandXboxController driverB = new CommandXboxController(1);
   private Drive swerve; // FIXME make final, implement other robot types
+  private Intake intake;
+  private Rollers rollers;
 
   private SendableChooser<Command> autoChooser;
 
@@ -51,7 +56,7 @@ public class RobotContainer {
   private Pivot pivot;
 
   public RobotContainer() {
-
+    intake = null;
     if (Constants.getRobotMode() != Mode.REPLAY) {
       switch (Constants.getRobotType()) {
         case PROG -> {
@@ -62,6 +67,7 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
+          intake = new Intake(new IntakeIOTalonFX());
           elevator = new Elevator(new ElevatorIOTalonFX());
           pivot = new Pivot(new PivotIOTalonFX());
         }
@@ -99,6 +105,8 @@ public class RobotContainer {
               new ModuleIO() {});
     }
 
+    rollers = new Rollers(intake);
+
     // superstructure
     if (elevator == null) {
       elevator = new Elevator(new ElevatorIO() {});
@@ -126,8 +134,6 @@ public class RobotContainer {
             .withName("Drive Teleop"));
 
     driverA.start().onTrue(swerve.zeroGyroCommand());
-
-    // -----Intake Controls-----
 
     // -----Flywheel Controls-----
 
@@ -160,8 +166,11 @@ public class RobotContainer {
                 superstructure));
 
     // -----Intake Controls-----
+    driverB.b().onTrue(rollers.setTargetCommand(Rollers.RollerState.INTAKE));
+    driverB.a().onTrue(rollers.setTargetCommand(Rollers.RollerState.IDLE));
+    driverB.x().onTrue(rollers.setTargetCommand(Rollers.RollerState.HOLD));
+    driverB.y().onTrue(rollers.setTargetCommand(Rollers.RollerState.EJECT));
 
-    // ------Pivot Controls------
   }
 
   private void configureAutos() {
