@@ -7,20 +7,12 @@ public class GenericSuperstructure<G extends GenericSuperstructure.PositionTarge
     double getPosition();
   }
 
-  public enum ControlMode {
-    POSITION,
-    ZERO,
-    STOP,
-  }
-
-  private ControlMode controlMode = ControlMode.STOP;
-
   private final String name;
   private final GenericSuperstructureIO superstructureIO;
 
   private GenericSuperstructureIOInputsAutoLogged inputs =
       new GenericSuperstructureIOInputsAutoLogged();
-  private G positionTarget;
+  private G positionTarget; // current position target
 
   public GenericSuperstructure(String name, GenericSuperstructureIO superstructureIO) {
     this.name = name;
@@ -32,49 +24,6 @@ public class GenericSuperstructure<G extends GenericSuperstructure.PositionTarge
     superstructureIO.updateInputs(inputs);
     Logger.processInputs(name, inputs);
 
-    // Process control mode
-    switch (controlMode) {
-      case POSITION -> {
-        superstructureIO.runPosition(positionTarget.getPosition());
-      }
-      case ZERO -> {
-        superstructureIO.runCharacterization();
-      }
-      case STOP -> {
-        superstructureIO.stop();
-      }
-    }
-
-    Logger.recordOutput("Superstructure/" + name + "/Target", positionTarget.toString());
-    Logger.recordOutput("Superstructure/" + name + "/Control Mode", controlMode.toString());
-  }
-
-  public G getGetPositionTarget() {
-    return positionTarget;
-  }
-
-  public void setPositionTarget(G positionTarget) {
-    setControlMode(ControlMode.POSITION);
-    this.positionTarget = positionTarget;
-  }
-
-  public ControlMode getControlMode() {
-    return controlMode;
-  }
-
-  public void setControlMode(ControlMode controlMode) {
-    this.controlMode = controlMode;
-  }
-
-  public void setOffset() {
-    superstructureIO.setOffset();
-  }
-
-  public double getSupplyCurrentAmps() {
-    return inputs.supplyCurrentAmps;
-  }
-
-  public double position() {
-    return inputs.positionRotations;
+    // process the rest of your logic here
   }
 }

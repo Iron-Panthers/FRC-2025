@@ -59,7 +59,6 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
-          elevator = new Elevator(new ElevatorIOTalonFX());
         }
         case ALPHA -> {
           swerve =
@@ -69,6 +68,7 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
+          elevator = new Elevator(new ElevatorIOTalonFX());
         }
         case SIM -> {
           swerve =
@@ -123,32 +123,7 @@ public class RobotContainer {
     // -----Flywheel Controls-----
 
     // -----Superstructure Controls-----
-    driverA // GO TO BOTTOM
-        .b()
-        .onTrue(
-            new InstantCommand(
-                () -> superstructure.setTargetState(Superstructure.SuperstructureState.STOW),
-                superstructure));
-    driverA // GO TO L3
-        .a()
-        .onTrue(
-            new InstantCommand(
-                () -> superstructure.setTargetState(Superstructure.SuperstructureState.SCORE_L3),
-                superstructure));
-
-    driverA // GO TO L4
-        .y()
-        .onTrue(
-            new InstantCommand(
-                () -> superstructure.setTargetState(Superstructure.SuperstructureState.SCORE_L4),
-                superstructure));
-
-    driverA // ZERO
-        .x()
-        .onTrue(
-            new InstantCommand(
-                () -> superstructure.setTargetState(Superstructure.SuperstructureState.ZERO),
-                superstructure));
+    // add controls here 
   }
 
   private void configureAutos() {
