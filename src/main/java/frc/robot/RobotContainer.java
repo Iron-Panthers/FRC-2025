@@ -14,11 +14,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
+import frc.robot.autonomous.PathCommand;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.intake.Intake;
 import frc.robot.subsystems.rollers.intake.IntakeIOTalonFX;
-import frc.robot.autonomous.PathCommand;
 import frc.robot.subsystems.superstructure.Superstructure;
+import frc.robot.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
 import frc.robot.subsystems.superstructure.elevator.ElevatorIO;
 import frc.robot.subsystems.superstructure.elevator.ElevatorIOTalonFX;
@@ -144,19 +145,26 @@ public class RobotContainer {
             new InstantCommand(
                 () -> superstructure.setTargetState(Superstructure.SuperstructureState.STOW),
                 superstructure));
-    driverA // GO TO L3
-        .a()
-        .onTrue(
-            new InstantCommand(
-                () -> superstructure.setTargetState(Superstructure.SuperstructureState.SETUP_L2),
-                superstructure));
+   
+    driverA // GO TO L4
+      .a()
+      .onTrue(superstructure.initiateScoringSequence(SuperstructureState.SETUP_L2)
+              .andThen(
+                  new InstantCommand(
+                      () -> {
+                        rollers.setTargetCommand(Rollers.RollerState.EJECT);
+                      },
+                      rollers)));
 
     driverA // GO TO L4
         .y()
-        .onTrue(
-            new InstantCommand(
-                () -> superstructure.setTargetState(Superstructure.SuperstructureState.SETUP_L4),
-                superstructure));
+        .onTrue(superstructure.initiateScoringSequence(SuperstructureState.SETUP_L4)
+                .andThen(
+                    new InstantCommand(
+                        () -> {
+                          rollers.setTargetCommand(Rollers.RollerState.EJECT);
+                        },
+                        rollers)));
 
     driverA // ZERO our mechanism
         .x()
@@ -170,7 +178,6 @@ public class RobotContainer {
     driverB.a().onTrue(rollers.setTargetCommand(Rollers.RollerState.IDLE));
     driverB.x().onTrue(rollers.setTargetCommand(Rollers.RollerState.HOLD));
     driverB.y().onTrue(rollers.setTargetCommand(Rollers.RollerState.EJECT));
-
   }
 
   private void configureAutos() {
