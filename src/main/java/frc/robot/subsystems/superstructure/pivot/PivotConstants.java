@@ -14,7 +14,7 @@ public class PivotConstants {
 
   public static final PIDGains GAINS =
       switch (Constants.getRobotType()) {
-        case ALPHA -> new PIDGains(0.2, 0, 0.02, 0.03, 0.09, 0, 0.4);
+        case ALPHA -> new PIDGains(1.5, 0, 0.01, 0.03, 0.09, 0, 0.51);
         case PROG -> new PIDGains(0, 0, 0, 0, 0, 0, 0);
         case SIM -> new PIDGains(0, 0, 0, 0, 0, 0, 0);
       };
