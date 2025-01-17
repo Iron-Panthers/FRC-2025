@@ -8,40 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0,
-        "y": 7.0
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.0,
-        "y": 7.0
-      },
-      "prevControl": {
-        "x": 2.75,
-        "y": 7.0
-      },
-      "nextControl": {
-        "x": 3.25,
-        "y": 7.0
-      },
-      "isLocked": true,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.0,
-        "y": 6.0
-      },
-      "prevControl": {
-        "x": 3.1643137830282537,
-        "y": 6.188417039322201
-      },
-      "nextControl": {
-        "x": 2.8356862169717463,
-        "y": 5.811582960677799
+        "x": 2.0,
+        "y": 6.080411514187601
       },
       "isLocked": false,
       "linkedName": null
@@ -49,15 +17,47 @@
     {
       "anchor": {
         "x": 2.0,
-        "y": 6.0
+        "y": 2.0
       },
       "prevControl": {
-        "x": 2.123672220038708,
-        "y": 5.782732464480548
+        "x": 1.75,
+        "y": 2.0
       },
       "nextControl": {
-        "x": 1.876327779961291,
-        "y": 6.217267535519454
+        "x": 3.0,
+        "y": 2.0
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.0,
+        "y": 2.0
+      },
+      "prevControl": {
+        "x": 6.478167032456856,
+        "y": 2.0
+      },
+      "nextControl": {
+        "x": 7.25,
+        "y": 2.0
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.0,
+        "y": 7.0
+      },
+      "prevControl": {
+        "x": 7.0,
+        "y": 6.75
+      },
+      "nextControl": {
+        "x": 7.0,
+        "y": 7.25
       },
       "isLocked": false,
       "linkedName": null
@@ -68,8 +68,8 @@
         "y": 7.0
       },
       "prevControl": {
-        "x": 2.0,
-        "y": 6.461387077333156
+        "x": 2.2500000000000004,
+        "y": 7.0
       },
       "nextControl": null,
       "isLocked": false,
@@ -79,22 +79,10 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "TestEvent",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "TestPrintCommand"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -105,10 +93,10 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Testing",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }
