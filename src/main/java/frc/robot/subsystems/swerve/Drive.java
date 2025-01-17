@@ -80,7 +80,7 @@ public class Drive extends SubsystemBase {
     RobotState.getInstance()
         .addOdometryMeasurement(
             new RobotState.OdometryMeasurement(
-                wheelPositions, gyroInputs.yawPosition, Timer.getFPGATimestamp()));
+                wheelPositions, arbitraryYaw, Timer.getFPGATimestamp()));
 
     switch (driveMode) {
       case TELEOP -> {
@@ -153,6 +153,7 @@ public class Drive extends SubsystemBase {
 
   private void zeroGyro() {
     gyroYawOffset = gyroInputs.yawPosition;
+    headingController = null;
   }
 
   public Command zeroGyroCommand() {

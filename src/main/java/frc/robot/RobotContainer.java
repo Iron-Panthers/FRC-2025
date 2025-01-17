@@ -122,15 +122,8 @@ public class RobotContainer {
                     swerve.setTargetHeading(
                         new Rotation2d(
                             MathUtil.applyDeadband(driverA.getRightX(), 0.1),
-                            MathUtil.applyDeadband(driverA.getRightY(), 0.1)));
-                    // () ->
-                    //     new Rotation2d(
-                    //         Math.round(
-                    //                 (Math.atan2(driverA.getRightY(), driverA.getLeftX())
-                    //                         + 2 * Math.PI)
-                    //                     % (2 * Math.PI)
-                    //                     / (Math.PI / 3.0))
-                    //             * (Math.PI / 3.0)));
+                            MathUtil.applyDeadband(
+                                driverA.getRightY(), 0.1))); // FIXME to circular deadband
                   }
                   if (Math.abs(driverA.getLeftTriggerAxis()) > 0.1
                       || Math.abs(driverA.getRightTriggerAxis()) > 0.1) {
@@ -140,6 +133,15 @@ public class RobotContainer {
             .withName("Drive Teleop"));
 
     driverA.start().onTrue(swerve.zeroGyroCommand());
+
+    driverA
+        .x()
+        .onTrue(
+            new InstantCommand(() -> swerve.setTargetHeading(new Rotation2d(Math.toRadians(-52)))));
+    driverA
+        .b()
+        .onTrue(
+            new InstantCommand(() -> swerve.setTargetHeading(new Rotation2d(Math.toRadians(52)))));
 
     // -----Intake Controls-----
 
