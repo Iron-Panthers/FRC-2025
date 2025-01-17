@@ -95,8 +95,6 @@ public class Drive extends SubsystemBase {
     ChassisSpeeds discretizedSpeeds =
         ChassisSpeeds.discretize(targetSpeeds, Constants.PERIODIC_LOOP_SEC);
 
-    // SwerveModuleState[] moduleTargetStates =
-    KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(1, 0, 0));
     SwerveModuleState[] moduleTargetStates = KINEMATICS.toSwerveModuleStates(discretizedSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         moduleTargetStates, DRIVE_CONFIG.maxLinearVelocity());

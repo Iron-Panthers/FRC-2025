@@ -25,8 +25,8 @@ public class DriveConstants {
             Units.inchesToMeters(33),
             // 5.4764, // FIXME
             // 6.7759);
-            4,
-            4);
+            3.3,
+            5);
       };
 
   public static final Translation2d[] MODULE_TRANSLATIONS =
@@ -77,7 +77,7 @@ public class DriveConstants {
         case ALPHA -> new ModuleConstants(
             new Gains(0.18, 3, 0, 50, 0, 0),
             new MotionProfileGains(4, 64, 640),
-            new Gains(0, 0, 0, 1.5, 0, 0),
+            new Gains(0.3, 0.5, 0, 2, 0, 0),
             5.357142857142857,
             21.428571428571427,
             3.125);
