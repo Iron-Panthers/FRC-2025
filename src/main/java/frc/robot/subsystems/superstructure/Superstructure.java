@@ -218,9 +218,10 @@ public class Superstructure extends SubsystemBase {
         null,
         null,
         () -> {
-          // Ends when superstrucutre has reached target and is already at next score state
-          return this.superstructureReachedTarget()
-              && superstructureState.getNextState() == this.targetState;
+          // Ends when we've transitioned to the next state (the score state)
+          // AND we've reached the target (we're ready to place)
+          return this.targetState == superstructureState.getNextState()
+          && this.superstructureReachedTarget();
         },
         this);
   }
