@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.Mode;
@@ -145,20 +146,24 @@ public class RobotContainer {
             new InstantCommand(
                 () -> superstructure.setTargetState(Superstructure.SuperstructureState.STOW),
                 superstructure));
-   
+
     driverA // GO TO L4
-      .a()
-      .onTrue(superstructure.initiateScoringSequence(SuperstructureState.SETUP_L2)
-              .andThen(
-                  new InstantCommand(
-                      () -> {
-                        rollers.setTargetCommand(Rollers.RollerState.EJECT);
-                      },
-                      rollers)));
+        .a()
+        .onTrue(
+            superstructure
+                .initiateScoringSequence(SuperstructureState.SETUP_L2)
+                .andThen(
+                    new InstantCommand(
+                        () -> {
+                          rollers.setTargetCommand(Rollers.RollerState.EJECT);
+                        },
+                        rollers)));
 
     driverA // GO TO L4
         .y()
-        .onTrue(superstructure.initiateScoringSequence(SuperstructureState.SETUP_L4)
+        .onTrue(
+            superstructure
+                .initiateScoringSequence(SuperstructureState.SETUP_L4)
                 .andThen(
                     new InstantCommand(
                         () -> {
@@ -172,6 +177,44 @@ public class RobotContainer {
             new InstantCommand(
                 () -> superstructure.setTargetState(Superstructure.SuperstructureState.ZERO),
                 superstructure));
+
+    driverA
+        .rightTrigger()
+        .onTrue(
+            new FunctionalCommand(
+                    () -> {
+                      superstructure.setTargetState(
+                          Superstructure.SuperstructureState.SETUP_INTAKE);
+                    },
+                    null,
+                    null,
+                    () -> {
+                      // Ends when we've transitioned to the next state (the score state)
+                      // AND we've reached the target (we're ready to place)
+                      return superstructure.superstructureReachedTarget();
+                    },
+                    superstructure)
+                .andThen(rollers.setTargetCommand(Rollers.RollerState.INTAKE))
+                .andThen(
+                    new FunctionalCommand(
+                        () -> {
+                          superstructure.setTargetState(Superstructure.SuperstructureState.INTAKE);
+                        },
+                        null,
+                        null,
+                        () -> {
+                          // Ends when we've transitioned to the next state (the score
+                          // state)
+                          // AND we've reached the target (we're ready to place)
+                          return rollers.getTargetState() == Rollers.RollerState.HOLD;
+                        },
+                        superstructure))
+                .andThen(
+                    new InstantCommand(
+                        () -> {
+                          superstructure.setTargetState(SuperstructureState.STOW);
+                        },
+                        superstructure)));
 
     // -----Intake Controls-----
     driverB.b().onTrue(rollers.setTargetCommand(Rollers.RollerState.INTAKE));

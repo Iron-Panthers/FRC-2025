@@ -10,9 +10,7 @@ import frc.robot.subsystems.superstructure.elevator.ElevatorConstants;
 import frc.robot.subsystems.superstructure.pivot.Pivot;
 import frc.robot.subsystems.superstructure.pivot.Pivot.PivotTarget;
 import frc.robot.subsystems.superstructure.pivot.PivotConstants;
-
 import java.util.Optional;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Superstructure extends SubsystemBase {
@@ -26,29 +24,28 @@ public class Superstructure extends SubsystemBase {
     SETUP_L2(SuperstructureState.SCORE_L2), // Setting up for scoring in L2
     SCORE_L1, // Scoring in the trough
     SETUP_L1(SuperstructureState.SCORE_L1), // Setting up the position to score in the trough
+    INTAKE,
+    SETUP_INTAKE(SuperstructureState.INTAKE),
     STOW, // Going to the lowest position
     ZERO; // Zero the motor
 
     private Optional<SuperstructureState> nextState;
 
-    public SuperstructureState getNextState(){
+    public SuperstructureState getNextState() {
       // If it exists, just return the next state
-      if(nextState.isPresent()) return nextState.get();
+      if (nextState.isPresent()) return nextState.get();
 
       // Default is to just return to stow
       return STOW;
-
     }
 
-    private SuperstructureState(){
+    private SuperstructureState() {
       this.nextState = Optional.empty();
     }
 
-    private SuperstructureState(SuperstructureState nextState){
+    private SuperstructureState(SuperstructureState nextState) {
       this.nextState = Optional.of(nextState);
     }
-
-
   }
 
   private SuperstructureState targetState = SuperstructureState.ZERO; // current target state
@@ -113,6 +110,14 @@ public class Superstructure extends SubsystemBase {
       case STOW -> {
         elevator.setPositionTarget(ElevatorTarget.BOTTOM);
         pivot.setPositionTarget(PivotTarget.TOP);
+      }
+      case SETUP_INTAKE -> {
+        elevator.setPositionTarget(ElevatorTarget.SETUP_INTAKE);
+        pivot.setPositionTarget(PivotTarget.INTAKE);
+      }
+      case INTAKE -> {
+        elevator.setPositionTarget(ElevatorTarget.INTAKE);
+        pivot.setPositionTarget(PivotTarget.INTAKE);
       }
       case ZERO -> {
         if (notZeroing()) { // set our mechanisms to zero if they aren't already
@@ -221,7 +226,7 @@ public class Superstructure extends SubsystemBase {
           // Ends when we've transitioned to the next state (the score state)
           // AND we've reached the target (we're ready to place)
           return this.targetState == superstructureState.getNextState()
-          && this.superstructureReachedTarget();
+              && this.superstructureReachedTarget();
         },
         this);
   }
