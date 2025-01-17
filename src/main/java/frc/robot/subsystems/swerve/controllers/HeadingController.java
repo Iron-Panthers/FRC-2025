@@ -13,10 +13,10 @@ import org.littletonrobotics.junction.AutoLogOutput;
 public class HeadingController {
   private ProfiledPIDController controller;
 
-  private Rotation2d targetHeadingSupplier;
+  private Rotation2d targetHeading;
 
   public HeadingController(Rotation2d targetHeadingSupplier) {
-    this.targetHeadingSupplier = targetHeadingSupplier;
+    this.targetHeading = targetHeadingSupplier;
 
     controller =
         new ProfiledPIDController(
@@ -36,12 +36,12 @@ public class HeadingController {
     double output =
         controller.calculate(
             RobotState.getInstance().getOdometryPose().getRotation().getRadians(),
-            targetHeadingSupplier.getRadians());
+            targetHeading.getRadians());
 
     return Math.abs(output) > 0.02 ? output : 0;
   }
 
-  @AutoLogOutput(key = "Swerve/HeadingController/AtTarget")
+  @AutoLogOutput(key = "Swerve/AtTarget")
   public boolean atTarget() {
     return epsilonEquals(
         controller.getSetpoint().position,
@@ -54,6 +54,10 @@ public class HeadingController {
   }
 
   public Rotation2d getTargetHeading() {
-    return targetHeadingSupplier;
+    return targetHeading;
+  }
+
+  public void setTargeHeading(Rotation2d targetHeading) {
+    this.targetHeading = targetHeading;
   }
 }

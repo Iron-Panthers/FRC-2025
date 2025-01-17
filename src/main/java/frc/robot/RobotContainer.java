@@ -119,7 +119,6 @@ public class RobotContainer {
                       -driverA.getLeftX(),
                       driverA.getLeftTriggerAxis() - driverA.getRightTriggerAxis());
                   if (Math.abs(driverA.getRightY()) > 0.2 || Math.abs(driverA.getRightX()) > 0.2) {
-                    swerve.clearHeadingControl();
                     swerve.setTargetHeading(
                         new Rotation2d(
                             MathUtil.applyDeadband(driverA.getRightX(), 0.1),

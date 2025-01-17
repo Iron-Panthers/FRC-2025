@@ -86,14 +86,9 @@ public class Drive extends SubsystemBase {
       case TELEOP -> {
         targetSpeeds = teleopController.update();
         if (headingController != null) {
-          targetSpeeds.omegaRadiansPerSecond = headingController.update();
-          // * (1
-          //     + 0.6
-          //         * MathUtil.clamp(
-          //             Math.hypot(
-          //                 targetSpeeds.vxMetersPerSecond, targetSpeeds.vyMetersPerSecond),
-          //             0,
-          //             9));
+          // 0.0001 to make the wheels stop in a diamond shape instead of straight so they do not
+          // vibrate
+          targetSpeeds.omegaRadiansPerSecond = headingController.update() + 0.0001;
         }
       }
       case TRAJECTORY -> {
@@ -176,10 +171,14 @@ public class Drive extends SubsystemBase {
     return KINEMATICS.toChassisSpeeds(getModuleStates());
   }
 
-  @AutoLogOutput(key = "Swerve/TargetHEadingSupplier")
-  public double setTargetHeading(Rotation2d targetHeadingSupplier) {
-    headingController = new HeadingController(targetHeadingSupplier);
-    return targetHeadingSupplier.getRadians();
+  public double setTargetHeading(Rotation2d targetHeading) {
+    if (headingController == null) {
+      headingController = new HeadingController(targetHeading);
+    } else {
+      headingController.setTargeHeading(targetHeading);
+    }
+
+    return targetHeading.getRadians();
   }
 
   public void clearHeadingControl() {
