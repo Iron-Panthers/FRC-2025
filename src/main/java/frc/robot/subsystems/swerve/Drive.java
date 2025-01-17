@@ -20,7 +20,6 @@ import frc.robot.subsystems.swerve.controllers.HeadingController;
 import frc.robot.subsystems.swerve.controllers.TeleopController;
 import frc.robot.subsystems.swerve.controllers.TrajectoryController;
 import java.util.Arrays;
-import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -87,15 +86,14 @@ public class Drive extends SubsystemBase {
       case TELEOP -> {
         targetSpeeds = teleopController.update();
         if (headingController != null) {
-          targetSpeeds.omegaRadiansPerSecond =
-              headingController.update()
-                  * (1
-                      + 0.6
-                          * MathUtil.clamp(
-                              Math.hypot(
-                                  targetSpeeds.vxMetersPerSecond, targetSpeeds.vyMetersPerSecond),
-                              0,
-                              9));
+          targetSpeeds.omegaRadiansPerSecond = headingController.update();
+          // * (1
+          //     + 0.6
+          //         * MathUtil.clamp(
+          //             Math.hypot(
+          //                 targetSpeeds.vxMetersPerSecond, targetSpeeds.vyMetersPerSecond),
+          //             0,
+          //             9));
         }
       }
       case TRAJECTORY -> {
@@ -112,7 +110,7 @@ public class Drive extends SubsystemBase {
 
     // SwerveModuleState[] moduleTargetStates =
     KINEMATICS.toSwerveModuleStates(new ChassisSpeeds(1, 0, 0));
-    SwerveModuleState[] moduleTargetStates = KINEMATICS.toSwerveModuleStates(targetSpeeds);
+    SwerveModuleState[] moduleTargetStates = KINEMATICS.toSwerveModuleStates(discretizedSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         moduleTargetStates, DRIVE_CONFIG.maxLinearVelocity());
 
@@ -178,8 +176,10 @@ public class Drive extends SubsystemBase {
     return KINEMATICS.toChassisSpeeds(getModuleStates());
   }
 
-  public void setTargetHeading(Supplier<Rotation2d> targetHeadingSupplier) {
+  @AutoLogOutput(key = "Swerve/TargetHEadingSupplier")
+  public double setTargetHeading(Rotation2d targetHeadingSupplier) {
     headingController = new HeadingController(targetHeadingSupplier);
+    return targetHeadingSupplier.getRadians();
   }
 
   public void clearHeadingControl() {

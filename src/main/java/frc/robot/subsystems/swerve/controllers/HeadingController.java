@@ -8,15 +8,14 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 import frc.robot.RobotState;
-import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 public class HeadingController {
   private ProfiledPIDController controller;
 
-  private Supplier<Rotation2d> targetHeadingSupplier;
+  private Rotation2d targetHeadingSupplier;
 
-  public HeadingController(Supplier<Rotation2d> targetHeadingSupplier) {
+  public HeadingController(Rotation2d targetHeadingSupplier) {
     this.targetHeadingSupplier = targetHeadingSupplier;
 
     controller =
@@ -35,14 +34,11 @@ public class HeadingController {
 
   public double update() {
     double output =
-        1.6
-            * calculateRelativeAngularDifference(
-                targetHeadingSupplier.get().getRadians(),
-                RobotState.getInstance().getOdometryPose().getRotation().getRadians());
-    // controller.calculate(
-    //     RobotState.getInstance().getOdometryPose().getRotation().getRadians(), 0);
+        controller.calculate(
+            RobotState.getInstance().getOdometryPose().getRotation().getRadians(),
+            targetHeadingSupplier.getRadians());
 
-    return output;
+    return Math.abs(output) > 0.02 ? output : 0;
   }
 
   @AutoLogOutput(key = "Swerve/HeadingController/AtTarget")
@@ -58,16 +54,6 @@ public class HeadingController {
   }
 
   public Rotation2d getTargetHeading() {
-    return targetHeadingSupplier.get();
-  }
-
-  private double calculateRelativeAngularDifference(double currentAngle, double targetAngle) {
-    double a = normalizeRadians(currentAngle - targetAngle);
-    double b = normalizeRadians(targetAngle - currentAngle);
-    return a < b ? a : -b;
-  }
-
-  private double normalizeRadians(double radians) {
-    return (radians % (2 * Math.PI) + (2 * Math.PI)) % (2 * Math.PI);
+    return targetHeadingSupplier;
   }
 }

@@ -7,6 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.RobotConfig;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -113,13 +114,29 @@ public class RobotContainer {
         swerve
             .run(
                 () -> {
-                  targetHeading =
-                      targetHeading.plus(
-                          new Rotation2d(
-                              (driverA.getLeftTriggerAxis() - driverA.getRightTriggerAxis()) / 5));
-
-                  swerve.setTargetHeading(() -> targetHeading);
-                  swerve.driveTeleopController(-driverA.getLeftY(), -driverA.getLeftX(), 0);
+                  swerve.driveTeleopController(
+                      -driverA.getLeftY(),
+                      -driverA.getLeftX(),
+                      driverA.getLeftTriggerAxis() - driverA.getRightTriggerAxis());
+                  if (Math.abs(driverA.getRightY()) > 0.2 || Math.abs(driverA.getRightX()) > 0.2) {
+                    swerve.clearHeadingControl();
+                    swerve.setTargetHeading(
+                        new Rotation2d(
+                            MathUtil.applyDeadband(driverA.getRightX(), 0.1),
+                            MathUtil.applyDeadband(driverA.getRightY(), 0.1)));
+                    // () ->
+                    //     new Rotation2d(
+                    //         Math.round(
+                    //                 (Math.atan2(driverA.getRightY(), driverA.getLeftX())
+                    //                         + 2 * Math.PI)
+                    //                     % (2 * Math.PI)
+                    //                     / (Math.PI / 3.0))
+                    //             * (Math.PI / 3.0)));
+                  }
+                  if (Math.abs(driverA.getLeftTriggerAxis()) > 0.1
+                      || Math.abs(driverA.getRightTriggerAxis()) > 0.1) {
+                    swerve.clearHeadingControl();
+                  }
                 })
             .withName("Drive Teleop"));
 
