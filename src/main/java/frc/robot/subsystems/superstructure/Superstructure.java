@@ -220,8 +220,12 @@ public class Superstructure extends SubsystemBase {
   public Command initiateScoringSequence(SuperstructureState superstructureState) {
     return new FunctionalCommand(
         () -> this.setTargetState(superstructureState),
-        null,
-        null,
+        () -> {
+          // Execute logic here (if any)
+        },
+        interrupted -> {
+          // End logic here (if any)
+        },
         () -> {
           // Ends when we've transitioned to the next state (the score state)
           // AND we've reached the target (we're ready to place)

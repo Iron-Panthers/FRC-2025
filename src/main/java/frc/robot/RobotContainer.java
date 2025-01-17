@@ -81,6 +81,7 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
+          intake = new Intake(new IntakeIOTalonFX());
           pivot = new Pivot(new PivotIOTalonFX());
           elevator = new Elevator(new ElevatorIOTalonFX());
         }
@@ -152,24 +153,14 @@ public class RobotContainer {
         .onTrue(
             superstructure
                 .initiateScoringSequence(SuperstructureState.SETUP_L2)
-                .andThen(
-                    new InstantCommand(
-                        () -> {
-                          rollers.setTargetCommand(Rollers.RollerState.EJECT);
-                        },
-                        rollers)));
+                .andThen(rollers.setTargetCommand(Rollers.RollerState.EJECT)));
 
     driverA // GO TO L4
         .y()
         .onTrue(
             superstructure
                 .initiateScoringSequence(SuperstructureState.SETUP_L4)
-                .andThen(
-                    new InstantCommand(
-                        () -> {
-                          rollers.setTargetCommand(Rollers.RollerState.EJECT);
-                        },
-                        rollers)));
+                .andThen(rollers.setTargetCommand(Rollers.RollerState.EJECT)));
 
     driverA // ZERO our mechanism
         .x()
@@ -186,8 +177,12 @@ public class RobotContainer {
                       superstructure.setTargetState(
                           Superstructure.SuperstructureState.SETUP_INTAKE);
                     },
-                    null,
-                    null,
+                    () -> {
+                      // Execute logic here (if any)
+                    },
+                    interrupted -> {
+                      // End logic here (if any)
+                    },
                     () -> {
                       // Ends when we've transitioned to the next state (the score state)
                       // AND we've reached the target (we're ready to place)
@@ -200,8 +195,12 @@ public class RobotContainer {
                         () -> {
                           superstructure.setTargetState(Superstructure.SuperstructureState.INTAKE);
                         },
-                        null,
-                        null,
+                        () -> {
+                          // Execute logic here (if any)
+                        },
+                        interrupted -> {
+                          // End logic here (if any)
+                        },
                         () -> {
                           // Ends when we've transitioned to the next state (the score
                           // state)
@@ -212,7 +211,7 @@ public class RobotContainer {
                 .andThen(
                     new InstantCommand(
                         () -> {
-                          superstructure.setTargetState(SuperstructureState.STOW);
+                          superstructure.setTargetState(SuperstructureState.SETUP_L4);
                         },
                         superstructure)));
 
