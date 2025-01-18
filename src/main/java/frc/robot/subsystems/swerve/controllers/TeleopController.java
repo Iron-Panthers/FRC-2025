@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import frc.robot.Constants;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
 
@@ -44,7 +45,7 @@ public class TeleopController {
         MathUtil.clamp(
             Math.abs(linearVelocity.getDistance(pastLinearVelocity)),
             0,
-            DRIVE_CONFIG.maxLinearAcceleration());
+            DRIVE_CONFIG.maxLinearAcceleration() * (Constants.PERIODIC_LOOP_SEC));
     Translation2d newVelocity =
         pastLinearVelocity.plus(
             new Translation2d(clampedVelocityDiff, linearVelocityDiff.getAngle()));
