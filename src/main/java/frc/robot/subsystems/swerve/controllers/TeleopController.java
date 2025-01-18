@@ -47,7 +47,9 @@ public class TeleopController {
     double magnitude = MathUtil.applyDeadband(Math.hypot(x, y), 0.1);
     magnitude = Math.pow(magnitude, 1.5);
 
-    Rotation2d theta = new Rotation2d(x, y);
+    Rotation2d theta;
+    if (x != 0 || y != 0) theta = new Rotation2d(x, y);
+    else theta = new Rotation2d(0);
 
     Translation2d linearVelocity =
         new Pose2d(new Translation2d(), theta)
