@@ -19,7 +19,7 @@ public class DriveConstants {
             5, // FIXME
             5);
         case ALPHA -> new DrivebaseConfig(
-            Units.inchesToMeters(1.94),
+            Units.inchesToMeters(1.903),
             Units.inchesToMeters(22.5),
             Units.inchesToMeters(38.5),
             Units.inchesToMeters(33),
@@ -86,7 +86,7 @@ public class DriveConstants {
   public static final TrajectoryFollowerConstants TRAJECTORY_CONFIG =
       switch (getRobotType()) {
         case PROG, SIM -> new TrajectoryFollowerConstants(0, 0, 0, 0);
-        case ALPHA -> new TrajectoryFollowerConstants(15, 0, 0, 0);
+        case ALPHA -> new TrajectoryFollowerConstants(13, 0, 11, 0);
       };
 
   public record DrivebaseConfig(
