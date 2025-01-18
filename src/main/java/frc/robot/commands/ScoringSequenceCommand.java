@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.Rollers.RollerState;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
@@ -18,13 +19,21 @@ import frc.robot.subsystems.superstructure.pivot.Pivot.PivotTarget;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ScoringSequenceCommand extends SequentialCommandGroup {
   /** Creates a new ScoringSequenceCommand. */
-  public ScoringSequenceCommand(Elevator elevator, Pivot pivot, Rollers rollers, ElevatorTarget elevatorTarget, PivotTarget pivotSetupTarget, PivotTarget pivotScoreTarget) {
+  public ScoringSequenceCommand(
+      Elevator elevator,
+      Pivot pivot,
+      Rollers rollers,
+      ElevatorTarget elevatorTarget,
+      PivotTarget pivotSetupTarget,
+      PivotTarget pivotScoreTarget) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ParallelCommandGroup( elevator.goToPositionCommand(elevatorTarget), pivot.goToPositionCommand(pivotSetupTarget)),
-      pivot.goToPositionCommand(pivotScoreTarget),
-      rollers.setTargetCommand(RollerState.EJECT)
-    );
+        new ParallelCommandGroup(
+            elevator.goToPositionCommand(elevatorTarget),
+            pivot.goToPositionCommand(pivotSetupTarget)),
+        pivot.goToPositionCommand(pivotScoreTarget),
+        new WaitCommand(1),
+        rollers.setTargetCommand(RollerState.EJECT));
   }
 }

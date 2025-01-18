@@ -172,7 +172,7 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
   }
 
   @Override
-  public double getZeroingVoltageThreshold(){
+  public double getZeroingVoltageThreshold() {
     return zeroingVoltageThreshold;
   }
 

@@ -1,6 +1,5 @@
-//EXPERIMENTAL CHANGE
-// WE *hopefully* no longer need this 
-
+// EXPERIMENTAL CHANGE
+// WE *hopefully* no longer need this
 
 // package frc.robot.subsystems.superstructure;
 
@@ -140,7 +139,8 @@
 //             pivot.setOffset();
 //             pivot.setControlMode(ControlMode.POSITION);
 //           }
-//           if (notZeroing()) { // if both of our mechanisms aren't zeroing anymore, exit out of this
+//           if (notZeroing()) { // if both of our mechanisms aren't zeroing anymore, exit out of
+// this
 //             // madness
 //             setTargetState(SuperstructureState.STOW);
 //           }

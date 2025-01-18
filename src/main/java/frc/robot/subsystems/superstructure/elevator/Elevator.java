@@ -26,5 +26,6 @@ public class Elevator extends GenericSuperstructure<Elevator.ElevatorTarget> {
   public Elevator(ElevatorIO io) {
     super("Elevator", io);
     setPositionTarget(ElevatorTarget.BOTTOM);
+    setControlMode(ControlMode.STOP);
   }
 }
