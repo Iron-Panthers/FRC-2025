@@ -18,7 +18,7 @@ public class DriveConstants {
             Units.inchesToMeters(33),
             5, // FIXME
             5,
-            0.2);
+            0.05); // unitless
         case ALPHA -> new DrivebaseConfig(
             Units.inchesToMeters(1.94),
             Units.inchesToMeters(22.5),

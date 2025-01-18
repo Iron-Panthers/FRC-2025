@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class TeleopController {
   private final Supplier<Rotation2d> yawSupplier;
@@ -16,6 +17,7 @@ public class TeleopController {
   private double controllerY = 0;
   private double controllerOmega = 0;
   private Translation2d pastLinearVelocity = new Translation2d();
+  private double clampedVelocityDiff = 0;
 
   /* teleop control with specified yaw supplier, typically "arbitrary" yaw */
   public TeleopController(Supplier<Rotation2d> yawSupplier) {
@@ -38,7 +40,7 @@ public class TeleopController {
 
     // acceleration limiting
     Translation2d linearVelocityDiff = linearVelocity.minus(pastLinearVelocity);
-    double clampedVelocityDiff =
+    clampedVelocityDiff =
         MathUtil.clamp(
             Math.abs(linearVelocity.getDistance(pastLinearVelocity)),
             0,
@@ -46,7 +48,7 @@ public class TeleopController {
     Translation2d newVelocity =
         pastLinearVelocity.plus(
             new Translation2d(clampedVelocityDiff, linearVelocityDiff.getAngle()));
-    pastLinearVelocity = linearVelocity;
+    pastLinearVelocity = newVelocity;
 
     return ChassisSpeeds.fromFieldRelativeSpeeds(
         newVelocity.getX() * DRIVE_CONFIG.maxLinearVelocity(),
@@ -69,5 +71,10 @@ public class TeleopController {
             .transformBy(new Transform2d(magnitude, 0, new Rotation2d()))
             .getTranslation();
     return linearVelocity;
+  }
+
+  @AutoLogOutput(key = "Swerve/Acceleration")
+  private double getAccerlation() {
+    return clampedVelocityDiff;
   }
 }
