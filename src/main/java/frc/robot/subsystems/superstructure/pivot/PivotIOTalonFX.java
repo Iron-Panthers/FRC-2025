@@ -1,19 +1,20 @@
-package frc.robot.subsystems.superstructure.elevator;
+package frc.robot.subsystems.superstructure.pivot;
 
-import static frc.robot.subsystems.superstructure.elevator.ElevatorConstants.*;
+import static frc.robot.subsystems.superstructure.elevator.ElevatorConstants.POSITION_TARGET_EPSILON;
+import static frc.robot.subsystems.superstructure.pivot.PivotConstants.*;
 
 import frc.robot.subsystems.superstructure.GenericSuperstructureIOTalonFX;
 import java.util.Optional;
 
-public class ElevatorIOTalonFX extends GenericSuperstructureIOTalonFX implements ElevatorIO {
+public class PivotIOTalonFX extends GenericSuperstructureIOTalonFX implements PivotIO {
 
-  public ElevatorIOTalonFX() {
+  public PivotIOTalonFX() {
     super(
-        ELEVATOR_CONFIG.motorID(),
+        PIVOT_CONFIG.motorID(),
         INVERT_MOTOR,
         SUPPLY_CURRENT_LIMIT,
         Optional.empty(),
-        ELEVATOR_CONFIG.reduction(),
+        PIVOT_CONFIG.reduction(),
         UPPER_EXTENSION_LIMIT,
         LOWER_EXTENSION_LIMIT,
         UPPER_VOLT_LIMIT,

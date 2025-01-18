@@ -23,7 +23,7 @@ import edu.wpi.first.units.measure.Voltage;
 import java.util.Optional;
 
 public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
-  private final TalonFX talon;
+  protected final TalonFX talon;
 
   private final StatusSignal<Angle> positionRotations;
   private final StatusSignal<AngularVelocity> velocityRPS;
@@ -31,20 +31,57 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
   private final StatusSignal<Current> supplyCurrent;
   private final StatusSignal<Temperature> temp;
 
-  private final VoltageOut voltageOutput = new VoltageOut(0).withUpdateFreqHz(0);
+  // zeroing stuff
+  private final double zeroingVolts;
+  private final double zeroingOffset;
+  private final double zeroingVoltageThreshold;
+
+  private final double positionTargetEpsilon;
+
+  protected final VoltageOut voltageOutput = new VoltageOut(0).withUpdateFreqHz(0);
   private final NeutralOut neutralOutput = new NeutralOut();
   private final PositionVoltage positionControl = new PositionVoltage(0).withUpdateFreqHz(0);
 
+  /**
+   * Constructs a new GenericSuperstructureIOTalonFX.
+   *
+   * @param id The ID of the TalonFX motor controller.
+   * @param inverted Whether the motor is inverted.
+   * @param supplyCurrentLimit The supply current limit for the motor.
+   * @param canCoderID The optional ID of the CANcoder.
+   * @param reduction The reduction ratio for the mechanism.
+   * @param upperLimit The upper limit for the motor position.
+   * @param lowerLimit The lower limit for the motor position.
+   * @param upperVoltLimit The upper voltage limit for the motor.
+   * @param lowerVoltLimit The lower voltage limit for the motor.
+   * @param zeroingVolts The voltage to apply during zeroing.
+   * @param zeroingOffset The offset to set after zeroing.
+   * @param positionTargetEpsilon The allowable error in position target.
+   */
   public GenericSuperstructureIOTalonFX(
       int id,
       boolean inverted,
       double supplyCurrentLimit,
       Optional<Integer> canCoderID,
       double reduction,
-      double upperLimit,
+      Optional<Double> upperLimit,
+      Optional<Double> lowerLimit,
       double upperVoltLimit,
-      double lowerVoltLimit) {
+      double lowerVoltLimit,
+      double zeroingVolts,
+      double zeroingOffset,
+      double zeroingVoltageThreshold,
+      double positionTargetEpsilon) {
     talon = new TalonFX(id);
+
+    // set the zeroing values such that when the robot zeros it will apply the zeroing volts and
+    // when it reaches a resistance from part of the mechanism, it sets the position to the zeroing
+    // Offset
+    this.zeroingVolts = zeroingVolts;
+    this.zeroingOffset = zeroingOffset;
+    this.zeroingVoltageThreshold = zeroingVoltageThreshold;
+
+    this.positionTargetEpsilon = positionTargetEpsilon;
 
     // VOLTAGE, LIMITS AND RATIO CONFIG
     TalonFXConfiguration config = new TalonFXConfiguration();
@@ -52,8 +89,15 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
         inverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
     config.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
-    config.SoftwareLimitSwitch.withForwardSoftLimitEnable(true);
-    config.SoftwareLimitSwitch.withForwardSoftLimitThreshold(upperLimit);
+    if (upperLimit.isPresent()) { // only set the upper limit if we have one
+      config.SoftwareLimitSwitch.withForwardSoftLimitEnable(true);
+      config.SoftwareLimitSwitch.withForwardSoftLimitThreshold(upperLimit.get());
+    }
+    if (lowerLimit.isPresent()) { // only set the lower limit if we have one
+      config.SoftwareLimitSwitch.withReverseSoftLimitEnable(true);
+      config.SoftwareLimitSwitch.withReverseSoftLimitThreshold(lowerLimit.get());
+    }
+
     config.Voltage.withPeakForwardVoltage(upperVoltLimit);
     config.Voltage.withPeakReverseVoltage(lowerVoltLimit);
     config.Feedback.withSensorToMechanismRatio(reduction);
@@ -75,7 +119,7 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
       config.Feedback.withSensorToMechanismRatio(reduction);
     }
     talon.getConfigurator().apply(config);
-    talon.setPosition(0);
+    setOffset();
     talon.setNeutralMode(NeutralModeValue.Brake);
 
     // STATUS SIGNALS
@@ -107,10 +151,9 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
     talon.setControl(positionControl.withPosition(rotations));
   }
 
-  /** */
   @Override
   public void runCharacterization() {
-    talon.setControl(voltageOutput.withOutput(-1));
+    talon.setControl(voltageOutput.withOutput(zeroingVolts));
   }
 
   @Override
@@ -120,7 +163,17 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
 
   @Override
   public void setOffset() {
-    talon.getConfigurator().setPosition(0);
+    talon.getConfigurator().setPosition(zeroingOffset);
+  }
+
+  @Override
+  public double getPositionTargetEpsilon() {
+    return positionTargetEpsilon;
+  }
+
+  @Override
+  public double getZeroingVoltageThreshold() {
+    return zeroingVoltageThreshold;
   }
 
   @Override
@@ -131,6 +184,7 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
       double kS,
       double kV,
       double kA,
+      double kG,
       GravityTypeValue gravityTypeValue) {
     Slot0Configs gainsConfig = new Slot0Configs();
     gainsConfig.kP = kP;
@@ -139,6 +193,7 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
     gainsConfig.kS = kS;
     gainsConfig.kV = kV;
     gainsConfig.kA = kA;
+    gainsConfig.kG = kG;
     gainsConfig.GravityType = gravityTypeValue;
 
     talon.getConfigurator().apply(gainsConfig);

@@ -70,7 +70,7 @@ public class DriveConstants {
         case PROG, SIM -> new ModuleConstants(
             new Gains(0, 0, 0, 50, 0, 0), // revisit kP
             new MotionProfileGains(4, 64, 640), // revisit all
-            new Gains(0, 0, 0, 1.5, 0, 0), // FIXME placeholder, to do
+            new Gains(0, 0, 0, 0, 0, 0), // FIXME placeholder, to do
             12.8,
             6.75,
             3.125);
