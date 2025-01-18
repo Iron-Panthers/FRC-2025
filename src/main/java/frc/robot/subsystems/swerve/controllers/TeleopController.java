@@ -15,6 +15,7 @@ public class TeleopController {
   private double controllerX = 0;
   private double controllerY = 0;
   private double controllerOmega = 0;
+  private Translation2d pastLinearVelocity = new Translation2d();
 
   /* teleop control with specified yaw supplier, typically "arbitrary" yaw */
   public TeleopController(Supplier<Rotation2d> yawSupplier) {
@@ -35,19 +36,33 @@ public class TeleopController {
     double omega = MathUtil.applyDeadband(controllerOmega, 0.001);
     omega = Math.copySign(Math.pow(Math.abs(omega), 1.5), omega);
 
+    // acceleration limiting
+    Translation2d linearVelocityDiff = linearVelocity.minus(pastLinearVelocity);
+    double clampedVelocityDiff =
+        MathUtil.clamp(
+            Math.abs(linearVelocity.getDistance(pastLinearVelocity)),
+            0,
+            DRIVE_CONFIG.maxLinearAcceleration());
+    Translation2d newVelocity =
+        pastLinearVelocity.plus(
+            new Translation2d(clampedVelocityDiff, linearVelocityDiff.getAngle()));
+    pastLinearVelocity = linearVelocity;
+
     return ChassisSpeeds.fromFieldRelativeSpeeds(
-        linearVelocity.getX() * DRIVE_CONFIG.maxLinearVelocity(),
-        linearVelocity.getY() * DRIVE_CONFIG.maxLinearVelocity(),
+        newVelocity.getX() * DRIVE_CONFIG.maxLinearVelocity(),
+        newVelocity.getY() * DRIVE_CONFIG.maxLinearVelocity(),
         omega * DRIVE_CONFIG.maxAngularVelocity(),
         yawSupplier.get());
   }
 
   public Translation2d calculateLinearVelocity(double x, double y) {
-    // apply deadband, raise magnitude to exponent
-    double magnitude = MathUtil.applyDeadband(Math.hypot(x, y), 0.1);
-    magnitude = Math.pow(magnitude, 1.5);
 
     Rotation2d theta = new Rotation2d(x, y);
+
+    double magnitude = MathUtil.applyDeadband(Math.hypot(x, y), 0.1);
+
+    // apply deadband, raise magnitude to exponent
+    magnitude = Math.pow(magnitude, 1.5);
 
     Translation2d linearVelocity =
         new Pose2d(new Translation2d(), theta)
