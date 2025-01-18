@@ -20,6 +20,7 @@ public class ElevatorIOTalonFX extends GenericSuperstructureIOTalonFX implements
         LOWER_VOLT_LIMIT,
         ZEROING_VOLTS,
         ZEROING_OFFSET,
+        ZEROING_VOLTAGE_THRESHOLD,
         POSITION_TARGET_EPSILON);
     setSlot0(
         GAINS.kP(),

@@ -1,9 +1,14 @@
 package frc.robot.subsystems.superstructure;
 
 import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.superstructure.elevator.ElevatorConstants;
+
 import org.littletonrobotics.junction.Logger;
 
-public class GenericSuperstructure<G extends GenericSuperstructure.PositionTarget> {
+public class GenericSuperstructure<G extends GenericSuperstructure.PositionTarget> extends SubsystemBase{
   public interface PositionTarget {
     double getPosition();
   }
@@ -56,13 +61,15 @@ public class GenericSuperstructure<G extends GenericSuperstructure.PositionTarge
     // calculate our new filtered supply current for the elevator
     filteredSupplyCurrentAmps = supplyCurrentFilter.calculate(getSupplyCurrentAmps());
 
-    Logger.recordOutput("Superstructure/" + name + "/Target", positionTarget.toString());
-    Logger.recordOutput("Superstructure/" + name + "/Control Mode", controlMode.toString());
+    Logger.recordOutput("Superstructure/" + name + "/Target", getPositionTarget().toString());
+    Logger.recordOutput("Superstructure/" + name + "/Control Mode", getControlMode().toString());
     Logger.recordOutput(
-        "Superstructure/" + name + "/Filtered supply current amps", filteredSupplyCurrentAmps);
+        "Superstructure/" + name + "/Filtered supply current amps", getFilteredSupplyCurrentAmps());
+    Logger.recordOutput(
+        "Superstructure/" + name + "/Reached target", reachedTarget());
   }
 
-  public G getGetPositionTarget() {
+  public G getPositionTarget() {
     return positionTarget;
   }
 
@@ -103,5 +110,25 @@ public class GenericSuperstructure<G extends GenericSuperstructure.PositionTarge
   public boolean reachedTarget() {
     return Math.abs(inputs.positionRotations - positionTarget.getPosition())
         <= superstructureIO.getPositionTargetEpsilon();
+  }
+
+  public Command zeroingCommand(){
+    return new FunctionalCommand(() -> {
+      setControlMode(ControlMode.ZERO);
+    }, () -> { // execute
+      // nothing needs to happen here
+    }, (e) -> { // on end
+      setOffset();
+      setControlMode(ControlMode.POSITION);
+    }, () -> (getFilteredSupplyCurrentAmps() > ElevatorConstants.ZEROING_VOLTAGE_THRESHOLD)// TODO: Make this work for both
+    , this);
+  }
+
+  public Command goToPositionCommand(G position){
+    return new FunctionalCommand(() -> {
+      setPositionTarget(position);
+    }, () -> { // execute
+    }, (e) -> { // on end
+    }, () -> reachedTarget(), this);
   }
 }

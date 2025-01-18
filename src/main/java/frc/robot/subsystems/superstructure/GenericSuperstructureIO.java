@@ -38,4 +38,8 @@ public interface GenericSuperstructureIO {
   default double getPositionTargetEpsilon() {
     return 0;
   }
+
+  default double getZeroingVoltageThreshold() {
+    return Double.POSITIVE_INFINITY;
+  }
 }

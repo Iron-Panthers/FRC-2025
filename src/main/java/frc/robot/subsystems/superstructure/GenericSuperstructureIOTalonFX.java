@@ -31,8 +31,10 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
   private final StatusSignal<Current> supplyCurrent;
   private final StatusSignal<Temperature> temp;
 
+  // zeroing stuff
   private final double zeroingVolts;
   private final double zeroingOffset;
+  private final double zeroingVoltageThreshold;
 
   private final double positionTargetEpsilon;
 
@@ -68,6 +70,7 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
       double lowerVoltLimit,
       double zeroingVolts,
       double zeroingOffset,
+      double zeroingVoltageThreshold,
       double positionTargetEpsilon) {
     talon = new TalonFX(id);
 
@@ -76,6 +79,7 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
     // Offset
     this.zeroingVolts = zeroingVolts;
     this.zeroingOffset = zeroingOffset;
+    this.zeroingVoltageThreshold = zeroingVoltageThreshold;
 
     this.positionTargetEpsilon = positionTargetEpsilon;
 
@@ -165,6 +169,11 @@ public class GenericSuperstructureIOTalonFX implements GenericSuperstructureIO {
   @Override
   public double getPositionTargetEpsilon() {
     return positionTargetEpsilon;
+  }
+
+  @Override
+  public double getZeroingVoltageThreshold(){
+    return zeroingVoltageThreshold;
   }
 
   @Override
