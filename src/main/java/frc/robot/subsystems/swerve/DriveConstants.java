@@ -68,9 +68,9 @@ public class DriveConstants {
   public static final ModuleConstants MODULE_CONSTANTS =
       switch (getRobotType()) {
         case PROG, SIM -> new ModuleConstants(
-            new Gains(0, 0, 0, 50, 0, 0), // revisit kP
+            new Gains(0.25, 2.26, 0, 50, 0, 0), // revisit kP
             new MotionProfileGains(4, 64, 640), // revisit all
-            new Gains(0, 0, 0, 1.5, 0, 0), // FIXME placeholder, to do
+            new Gains(0.3, 0.63, 0, 1.5, 0, 0), // FIXME placeholder, to do
             12.8,
             6.75,
             3.125);
@@ -88,6 +88,9 @@ public class DriveConstants {
         case PROG, SIM -> new TrajectoryFollowerConstants(0, 0, 0, 0);
         case ALPHA -> new TrajectoryFollowerConstants(13, 0, 11, 0);
       };
+
+  public static final HeadingControllerConstants HEADING_CONTROLLER_CONSTANTS =
+      new HeadingControllerConstants(1.5, 0, 5, 200, 0.02);
 
   public record DrivebaseConfig(
       double wheelRadius,
@@ -119,6 +122,10 @@ public class DriveConstants {
   public record Gains(double kS, double kV, double kA, double kP, double kI, double kD) {}
 
   public record MotionProfileGains(double cruiseVelocity, double acceleration, double jerk) {}
+
+  /* tolerance in degrees */
+  public record HeadingControllerConstants(
+      double kP, double kD, double maxVelocity, double maxAcceleration, double tolerance) {}
 
   private enum Mk4iReductions {
     MK4I_L3((50 / 14) * (16 / 28) * (45 / 15)),

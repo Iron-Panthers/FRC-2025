@@ -7,6 +7,8 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.RobotConfig;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -38,6 +40,8 @@ public class RobotContainer {
 
   private final CommandXboxController driverA = new CommandXboxController(0);
   private final CommandXboxController driverB = new CommandXboxController(1);
+
+  private Rotation2d targetHeading = new Rotation2d();
 
   private Drive swerve; // FIXME make final, implement other robot types
 
@@ -104,6 +108,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+
     // -----Driver Controls-----
     swerve.setDefaultCommand(
         swerve
@@ -113,10 +118,30 @@ public class RobotContainer {
                       -driverA.getLeftY(),
                       -driverA.getLeftX(),
                       driverA.getLeftTriggerAxis() - driverA.getRightTriggerAxis());
+                  if (Math.abs(driverA.getRightY()) > 0.2 || Math.abs(driverA.getRightX()) > 0.2) {
+                    swerve.setTargetHeading(
+                        new Rotation2d(
+                            MathUtil.applyDeadband(-driverA.getRightY(), 0.1),
+                            MathUtil.applyDeadband(
+                                -driverA.getRightX(), 0.1))); // FIXME to circular deadband
+                  }
+                  if (Math.abs(driverA.getLeftTriggerAxis()) > 0.1
+                      || Math.abs(driverA.getRightTriggerAxis()) > 0.1) {
+                    swerve.clearHeadingControl();
+                  }
                 })
             .withName("Drive Teleop"));
 
     driverA.start().onTrue(swerve.zeroGyroCommand());
+
+    driverA
+        .x()
+        .onTrue(
+            new InstantCommand(() -> swerve.setTargetHeading(new Rotation2d(Math.toRadians(-52)))));
+    driverA
+        .b()
+        .onTrue(
+            new InstantCommand(() -> swerve.setTargetHeading(new Rotation2d(Math.toRadians(52)))));
 
     // -----Intake Controls-----
 
