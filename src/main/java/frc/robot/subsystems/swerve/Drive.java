@@ -1,12 +1,10 @@
 package frc.robot.subsystems.swerve;
 
-import static frc.robot.subsystems.swerve.DriveConstants.DRIVE_CONFIG;
 import static frc.robot.subsystems.swerve.DriveConstants.KINEMATICS;
 
 import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -96,8 +94,8 @@ public class Drive extends SubsystemBase {
         ChassisSpeeds.discretize(targetSpeeds, Constants.PERIODIC_LOOP_SEC);
 
     SwerveModuleState[] moduleTargetStates = KINEMATICS.toSwerveModuleStates(discretizedSpeeds);
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-        moduleTargetStates, DRIVE_CONFIG.maxLinearVelocity());
+    // SwerveDriveKinematics.desaturateWheelSpeeds(
+    //     moduleTargetStates, DRIVE_CONFIG.maxLinearVelocity()); //We assume module will limit
 
     for (int i = 0; i < modules.length; i++) {
       modules[i].runToSetpoint(moduleTargetStates[i]);
