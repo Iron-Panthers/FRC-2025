@@ -165,27 +165,19 @@ public class RobotContainer {
   private void registerCommands() {
     NamedCommands.registerCommand("L1", superstructure.goToStateCommand(SuperstructureState.L1));
     NamedCommands.registerCommand("L2", superstructure.goToStateCommand(SuperstructureState.L2));
-    NamedCommands.registerCommand("L3", superstructure.goToStateCommand(SuperstructureState.L3));
-    NamedCommands.registerCommand("L4", superstructure.goToStateCommand(SuperstructureState.L4));
+    NamedCommands.registerCommand("SETUP_L3", superstructure.goToStateCommand(SuperstructureState.SETUP_L3));
+    NamedCommands.registerCommand("SETUP_L4", superstructure.goToStateCommand(SuperstructureState.SETUP_L4));
     NamedCommands.registerCommand(
         "ZERO", superstructure.goToStateCommand(SuperstructureState.ZERO));
-    NamedCommands.registerCommand(
-        "STOP", superstructure.goToStateCommand(SuperstructureState.STOP));
+
 
     NamedCommands.registerCommand(
         "STOw", superstructure.goToStateCommand(SuperstructureState.STOW));
 
-    // FIXME: THIS INTAKE SOLUTION SHOULD BE FIXED
-    // INTAKE SHOULD EITHER BE GOING INTO SUPERSTRUCTURE
-    // OR WE HAVE TO FIX THE OTHER NAMED COMMANDS TO LET GO OF PIECE
-    // BECAUSE INTAKE IS NOT CURRENTLY CONTROLLED BY SUPERSTRUCTURE
-    NamedCommands.registerCommand(
-        "INTAKE",
+    NamedCommands.registerCommand("Intake", 
         new SequentialCommandGroup(
             superstructure.goToStateCommand(SuperstructureState.INTAKE),
-            rollers.setTargetCommand(RollerState.INTAKE),
-            new WaitCommand(5),
-            rollers.setTargetCommand(RollerState.HOLD)));
+            rollers.setTargetCommand(RollerState.INTAKE)));
   }
 
   private void configureBindings() {
