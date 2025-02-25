@@ -2,18 +2,19 @@ package frc.robot.subsystems.superstructure.tongue;
 
 import static frc.robot.subsystems.superstructure.tongue.TongueConstants.*;
 
-import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Servo;
-import org.littletonrobotics.junction.AutoLogOutput;
 
 public class TongueIOServo implements TongueIO {
 
-  Servo tongueIOServo;
-  AnalogEncoder tongueSensor;
+  private final Servo tongueIOServo;
+  private final DigitalInput topSensor1;
+  private final DigitalInput topSensor2;
 
   public TongueIOServo() {
     tongueIOServo = new Servo(TongueConstants.TONGUE_CONFIG.servoID());
-    tongueSensor = new AnalogEncoder(TongueConstants.TONGUE_CONFIG.servoSensorID());
+    topSensor1 = new DigitalInput(8);
+    topSensor2 = new DigitalInput(9);
     // tongueIOServo.setZeroLatch();
     // tongueIOServo.
 
@@ -33,10 +34,7 @@ public class TongueIOServo implements TongueIO {
   @Override
   public void updateInputs(TongueIOInputsAutoLogged inputs) {
     inputs.angle = tongueIOServo.get();
-  }
-
-  @AutoLogOutput(key = "Superstructure/Tongue/Position")
-  public double getPosition() {
-    return tongueSensor.get();
+    inputs.pole1Detected = !topSensor1.get();
+    inputs.pole2Detected = !topSensor2.get();
   }
 }

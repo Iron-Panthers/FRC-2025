@@ -4,12 +4,13 @@ import org.littletonrobotics.junction.Logger;
 
 public class Tongue {
   public enum TongueTarget {
-    TOP(0),
-    L1(90),
-    L2(90),
-    L3(0),
-    L4(0),
-    INTAKE(0);
+    TOP(90),
+    INTAKE(115),
+    STOW(115), // FIXME
+    L1(100),
+    L2(100),
+    L3(60),
+    L4(0);
 
     private double position;
 
@@ -29,14 +30,12 @@ public class Tongue {
 
   private ControlMode controlMode = ControlMode.STOP;
 
-  private final String name;
   private final TongueIO io;
 
   private TongueIOInputsAutoLogged inputs = new TongueIOInputsAutoLogged(); // FIXME
   private TongueTarget positionTarget;
 
   public Tongue(TongueIO io) {
-    this.name = "Tongue";
     this.io = io;
 
     setPositionTarget(TongueTarget.TOP);
@@ -46,7 +45,7 @@ public class Tongue {
   public void periodic() {
     // Process inputs
     io.updateInputs(inputs);
-    Logger.processInputs(name, inputs);
+    Logger.processInputs("Tongue", inputs);
 
     // Process control mode
     switch (controlMode) {
@@ -60,6 +59,10 @@ public class Tongue {
     Logger.recordOutput("Tongue/Target", positionTarget.toString());
     Logger.recordOutput("Tongue/Control Mode", controlMode.toString());
     Logger.recordOutput("Tongue/Reached target", reachedTarget());
+
+    Logger.recordOutput("Superstructure/" + "Tongue" + "/Target", positionTarget.toString());
+    Logger.recordOutput("Superstructure/" + "Tongue" + "/Control Mode", controlMode.toString());
+    Logger.recordOutput("Superstructure/" + "Tongue" + "/Reached target", reachedTarget());
   }
 
   public TongueTarget getPositionTarget() {
@@ -84,7 +87,10 @@ public class Tongue {
   }
 
   public boolean reachedTarget() {
-    return Math.abs(inputs.angle - positionTarget.getPosition())
-        <= TongueConstants.POSITION_TARGET_EPSILON;
+    return true;
+  }
+
+  public boolean poleDetected() {
+    return inputs.pole1Detected && inputs.pole2Detected;
   }
 }
