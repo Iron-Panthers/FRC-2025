@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.900625,
-        "y": 3.990874999999999
+        "x": 6.243733322708695,
+        "y": 3.856
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9288798464909687,
-        "y": 4.286285546888298
+        "x": 5.993733322708695,
+        "y": 3.856
       },
       "isLocked": false,
-      "linkedName": "April Tag 7"
+      "linkedName": "RF1/O"
     },
     {
       "anchor": {
-        "x": 1.1797500000000003,
-        "y": 0.9391249999999991
+        "x": 5.8,
+        "y": 3.856
       },
       "prevControl": {
-        "x": 0.9372326217846639,
-        "y": 0.9998318469248683
+        "x": 6.053820452012178,
+        "y": 3.8560000000000003
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral Station Right"
+      "linkedName": "RF1"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 0.6,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -126.94558555361827
+    "rotation": -179.55517527949317
   },
   "reversed": false,
-  "folder": "Testing",
+  "folder": "New Folder",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 179.7961012895332
+    "rotation": -179.55517527949317
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

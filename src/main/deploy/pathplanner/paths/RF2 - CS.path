@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.900625,
-        "y": 3.990874999999999
+        "x": 3.0945189389315515,
+        "y": 3.8633119409734547
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9288798464909687,
-        "y": 4.286285546888298
+        "x": 2.5758692134510386,
+        "y": 5.044090288335626
       },
       "isLocked": false,
-      "linkedName": "April Tag 7"
+      "linkedName": "RF2"
     },
     {
       "anchor": {
-        "x": 1.1797500000000003,
-        "y": 0.9391249999999991
+        "x": 1.3317307298833674,
+        "y": 7.041779535466974
       },
       "prevControl": {
-        "x": 0.9372326217846639,
-        "y": 0.9998318469248683
+        "x": 1.6982310874553983,
+        "y": 6.73138605467426
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Coral Station Right"
+      "linkedName": "CS0"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -126.94558555361827
+    "rotation": 125.80898965017138
   },
   "reversed": false,
-  "folder": "Testing",
+  "folder": "New Folder",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 179.7961012895332
+    "rotation": -0.7031910293956405
   },
   "useDefaultConstraints": true
 }
