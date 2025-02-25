@@ -3,7 +3,12 @@
   "robotLength": 0.864,
   "holonomicMode": true,
   "pathFolders": [
-    "Testing"
+    "April Tag 10",
+    "April Tag 7",
+    "April Tag 8",
+    "April Tag 9",
+    "New Folder",
+    "April Tag 11"
   ],
   "autoFolders": [
     "Testing"

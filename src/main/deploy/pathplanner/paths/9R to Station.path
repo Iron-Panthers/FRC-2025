@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.373564189189189,
-        "y": 0.8233108108108104
+        "x": 1.286335227272727,
+        "y": 0.8789630681818176
       },
       "prevControl": {
-        "x": 0.7362017624656624,
-        "y": 0.5939565454365391
+        "x": 0.6489728005492004,
+        "y": 0.6496088028075468
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": -126.09828396710803
   },
   "reversed": false,
-  "folder": "Testing",
+  "folder": "April Tag 9",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -58.67130713219579

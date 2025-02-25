@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.373564189189189,
-        "y": 0.8233108108108104
+        "x": 1.286335227272727,
+        "y": 0.8789630681818176
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4851900967950082,
-        "y": 1.0470062661763073
+        "x": 1.3979611348785463,
+        "y": 1.1026585235473152
       },
       "isLocked": false,
       "linkedName": "Coral Station Right"
     },
     {
       "anchor": {
-        "x": 2.900625,
-        "y": 3.990874999999999
+        "x": 2.542755681818182,
+        "y": 4.18953125
       },
       "prevControl": {
-        "x": 2.7558677363460227,
-        "y": 3.7319716996874415
+        "x": 2.397998418164205,
+        "y": 3.9306279496874423
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": 179.7961012895332
   },
   "reversed": false,
-  "folder": "Testing",
+  "folder": "April Tag 7",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -126.09828396710803

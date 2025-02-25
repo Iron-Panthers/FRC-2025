@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.241385135140074,
-        "y": 6.979645270265329
+        "x": 6.740795454545455,
+        "y": 6.562769886363636
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.2059203601368855,
-        "y": 6.979645270265329
+        "x": 7.618522052354268,
+        "y": 6.562769886363636
       },
       "isLocked": false,
       "linkedName": "Behind Robot"
     },
     {
       "anchor": {
-        "x": 6.225506756756756,
-        "y": 6.979645270265329
+        "x": 7.319147727272727,
+        "y": 6.562769886363636
       },
       "prevControl": {
-        "x": 7.2835932947184014,
-        "y": 6.979645270265329
+        "x": 6.43162011795797,
+        "y": 6.562769886363636
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 179.99999999933377
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Testing",
+  "folder": "New Folder",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 178.78112476486868
+    "rotation": -0.7440592028886277
   },
   "useDefaultConstraints": false
 }

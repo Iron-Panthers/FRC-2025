@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.373564189189189,
-        "y": 0.8233108108108104
+        "x": 1.286335227272727,
+        "y": 0.8789630681818176
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3415521140899185,
-        "y": 1.4863385479436344
+        "x": 2.2543231521734564,
+        "y": 1.5419908053146414
       },
       "isLocked": false,
       "linkedName": "Coral Station Right"
@@ -45,7 +45,7 @@
     "rotation": -119.74488129694218
   },
   "reversed": false,
-  "folder": "Testing",
+  "folder": "April Tag 8",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -126.09828396710803

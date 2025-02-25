@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.900625,
-        "y": 3.990874999999999
+        "x": 2.542755681818182,
+        "y": 4.18953125
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9288798464909687,
-        "y": 4.286285546888298
+        "x": 2.571010528309151,
+        "y": 4.4849417968882985
       },
       "isLocked": false,
       "linkedName": "April Tag 7"
     },
     {
       "anchor": {
-        "x": 1.373564189189189,
-        "y": 0.8233108108108104
+        "x": 1.286335227272727,
+        "y": 0.8789630681818176
       },
       "prevControl": {
-        "x": 1.1310468109738527,
-        "y": 0.8840176577356794
+        "x": 1.0438178490573906,
+        "y": 0.9396699151066871
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": -126.09828396710803
   },
   "reversed": false,
-  "folder": "Testing",
+  "folder": "April Tag 7",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 179.7961012895332
