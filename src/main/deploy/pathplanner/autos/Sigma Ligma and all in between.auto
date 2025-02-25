@@ -11,15 +11,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Start2"
+            "name": "SETUP_L4"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "L4"
+            "pathName": "Start2"
           }
         },
         {
@@ -47,15 +47,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "CS - RF3O"
+            "name": "SETUP_L4"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "L4"
+            "pathName": "CS - RF3O"
           }
         },
         {
@@ -83,15 +83,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "CS - RF3.2O"
+            "name": "SETUP_L4"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "L4"
+            "pathName": "CS - RF3.2O"
           }
         },
         {
@@ -119,15 +119,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "CS - RF2.2O"
+            "name": "SETUP_L4"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "L4"
+            "pathName": "CS - RF2.2O"
           }
         },
         {
