@@ -36,7 +36,7 @@ public abstract class GenericRollersIOTalonFX implements GenericRollersIO {
     TalonFXConfiguration config = new TalonFXConfiguration();
     config.MotorOutput.Inverted =
         inverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
-    config.MotorOutput.NeutralMode = brake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
+    config.MotorOutput.NeutralMode = brake ? NeutralModeValue.Brake : NeutralModeValue.Brake;
     config.CurrentLimits.SupplyCurrentLimit = currentLimitAmps;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
     talon.getConfigurator().apply(config);

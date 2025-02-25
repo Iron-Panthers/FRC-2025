@@ -31,7 +31,13 @@
         {
           "type": "named",
           "data": {
-            "name": "L3"
+            "name": "SETUP_L3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SETUP_L4"
           }
         },
         {
@@ -44,12 +50,6 @@
           "type": "named",
           "data": {
             "name": "ZERO"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L4"
           }
         }
       ]

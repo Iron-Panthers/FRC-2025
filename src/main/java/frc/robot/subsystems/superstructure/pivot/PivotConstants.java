@@ -7,14 +7,14 @@ import java.util.Optional;
 public class PivotConstants {
   public static final PivotConfig PIVOT_CONFIG =
       switch (Constants.getRobotType()) {
-        case COMP -> new PivotConfig(0, Optional.of(28), Optional.of(-0.255859375), 1);
+        case COMP -> new PivotConfig(8, Optional.of(28), Optional.of(-0.278), 1);
         case ALPHA -> new PivotConfig(15, Optional.empty(), Optional.empty(), 21.6 / 360);
         case PROG -> new PivotConfig(0, Optional.empty(), Optional.empty(), 1);
         case SIM -> new PivotConfig(0, Optional.empty(), Optional.empty(), 1);
       };
   public static final PIDGains GAINS =
       switch (Constants.getRobotType()) {
-        case COMP -> new PIDGains(20, 0, 0, 0, 3.97, 0.280, 0.59);
+        case COMP -> new PIDGains(40, 0, 0, 0, 3.6144, 0.1807, 0.53);
         case ALPHA -> new PIDGains(1.5, 0, 0.01, 0.03, 0.09, 0, 0.51);
         case PROG -> new PIDGains(0, 0, 0, 0, 0, 0, 0);
         case SIM -> new PIDGains(0, 0, 0, 0, 0, 0, 0);
@@ -22,7 +22,7 @@ public class PivotConstants {
 
   public static final MotionMagicConfig MOTION_MAGIC_CONFIG =
       switch (Constants.getRobotType()) {
-        case COMP -> new MotionMagicConfig(3, 3);
+        case COMP -> new MotionMagicConfig(2, 10);
         case PROG -> new MotionMagicConfig(0, 0);
         case ALPHA -> new MotionMagicConfig(0, 0);
         case SIM -> new MotionMagicConfig(0, 0);
@@ -46,10 +46,8 @@ public class PivotConstants {
   public static final double POSITION_TARGET_EPSILON = 0.01;
 
   // SOFT LIMITS
-  public static final Optional<Double> UPPER_EXTENSION_LIMIT =
-      Optional.of(0.45); // top limit is 121 rotations
-  public static final Optional<Double> LOWER_EXTENSION_LIMIT =
-      Optional.empty(); // top limit is 121 rotations
+  public static final Optional<Double> UPPER_EXTENSION_LIMIT = Optional.of(0.465);
+  public static final Optional<Double> LOWER_EXTENSION_LIMIT = Optional.empty();
 
   // top limit is 121 rotations
 
