@@ -11,20 +11,28 @@ public class Rollers extends SubsystemBase {
   public enum RollerState {
     IDLE,
     INTAKE,
+    FORCE_INTAKE,
     EJECT,
     HOLD
   }
 
   private final Intake intake;
+  private final RollerSensorsIO sensorsIO;
+  private double ejectTime = 0;
+  private double intakeTime = 0;
 
   private RollerState targetState = RollerState.IDLE;
+  private RollerSensorsIOInputsAutoLogged sensorsInputs = new RollerSensorsIOInputsAutoLogged();
 
-  public Rollers(Intake intake) {
+  public Rollers(Intake intake, RollerSensorsIO sensorsIO) {
     this.intake = intake;
+    this.sensorsIO = sensorsIO;
   }
 
   @Override
   public void periodic() {
+    sensorsIO.updateInputs(sensorsInputs);
+    Logger.processInputs("RollerSensors", sensorsInputs);
     intake.setVoltageTarget(Intake.Target.IDLE);
 
     switch (targetState) {
@@ -33,15 +41,28 @@ public class Rollers extends SubsystemBase {
       }
       case INTAKE -> {
         intake.setVoltageTarget(Intake.Target.INTAKE);
-        if (intake.getFilteredCurrent() < -0.5) {
+        if (intakeDetected()) {
           this.targetState = RollerState.HOLD;
+        }
+      }
+      case FORCE_INTAKE -> {
+        intakeTime += 0.02;
+        intake.setVoltageTarget(Intake.Target.INTAKE);
+        if (intakeTime > 0.5) {
+          this.targetState = RollerState.INTAKE;
+          intakeTime = 0;
         }
       }
       case HOLD -> {
         intake.setVoltageTarget(Intake.Target.HOLD);
       }
       case EJECT -> {
+        ejectTime += 0.02;
         intake.setVoltageTarget(Intake.Target.EJECT);
+        if (ejectTime > 0.5) {
+          this.targetState = RollerState.IDLE;
+          ejectTime = 0;
+        }
       }
     }
 
@@ -63,5 +84,9 @@ public class Rollers extends SubsystemBase {
         () -> {
           this.targetState = target;
         });
+  }
+
+  public boolean intakeDetected() {
+    return sensorsInputs.intakeDetected;
   }
 }

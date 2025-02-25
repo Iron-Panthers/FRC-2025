@@ -39,4 +39,9 @@ public class PivotIOTalonFX extends GenericSuperstructureIOTalonFX implements Pi
         0,
         GRAVITY_TYPE);
   }
+
+  @Override
+  public void runPosition(double position) {
+    super.runPosition(position / 360d); // convert degrees to rotations
+  }
 }
