@@ -7,19 +7,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of hello"
+            "pathName": "Bottom1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of hello2"
+            "pathName": "Bottom2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "INTAKE"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of hello1"
+            "pathName": "Bottom3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "INTAKE"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom5"
           }
         }
       ]
