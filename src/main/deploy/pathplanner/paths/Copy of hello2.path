@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.900625,
-        "y": 3.990874999999999
+        "x": 5.513,
+        "y": 2.426
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.9288798464909687,
-        "y": 4.286285546888298
+        "x": 6.363455670540224,
+        "y": 2.29697070900742
       },
       "isLocked": false,
-      "linkedName": "April Tag 7"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 0.9391249999999991
       },
       "prevControl": {
-        "x": 0.9372326217846645,
-        "y": 0.9998318469248682
+        "x": 1.7958875867991857,
+        "y": 0.920765335645682
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": "Testing",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 179.7961012895332
+    "rotation": 120.15897514213779
   },
   "useDefaultConstraints": true
 }

@@ -1,0 +1,116 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.259044777199074,
+        "y": 1.8280208333333325
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 8.25904477719908,
+        "y": 1.8280208333333325
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.206714048026038,
+        "y": 2.8911635561317928
+      },
+      "prevControl": {
+        "x": 4.38568606218481,
+        "y": 3.462051501761663
+      },
+      "nextControl": {
+        "x": 5.9129524739519645,
+        "y": 2.400092592590126
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.1797500000000003,
+        "y": 0.9391249999999991
+      },
+      "prevControl": {
+        "x": 1.7958875867991857,
+        "y": 0.920765335645682
+      },
+      "nextControl": {
+        "x": 0.5636124132008158,
+        "y": 0.9574846643543163
+      },
+      "isLocked": false,
+      "linkedName": "Coral Station Right"
+    },
+    {
+      "anchor": {
+        "x": 3.2851142939814806,
+        "y": 2.1038078703703693
+      },
+      "prevControl": {
+        "x": 2.00989040798611,
+        "y": 1.1234711371503112
+      },
+      "nextControl": {
+        "x": 4.560338179976851,
+        "y": 3.0841446035904276
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.795692997685184,
+        "y": 2.8399775752314813
+      },
+      "prevControl": {
+        "x": 4.178015588831018,
+        "y": 2.9620610894109545
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 2.99749795751634,
+      "maxWaypointRelativePos": 3.9452103758169934,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 57.28029896864042
+  },
+  "reversed": false,
+  "folder": "Testing",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}
