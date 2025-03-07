@@ -2,7 +2,6 @@ package frc.robot.subsystems.superstructure.climb;
 
 import static frc.robot.subsystems.superstructure.climb.ClimbConstants.*;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.subsystems.superstructure.GenericSuperstructureIOTalonFX;
 import java.util.Optional;
 

@@ -1,6 +1,5 @@
 package frc.robot.subsystems.superstructure;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -285,10 +284,6 @@ public class Superstructure extends SubsystemBase {
     Logger.recordOutput("Superstructure/Elevator reached target", elevator.reachedTarget());
     Logger.recordOutput("Superstructure/Pivot reached target", pivot.reachedTarget());
     Logger.recordOutput("Superstructure/Reached Target", superstructureReachedTarget());
-    SmartDashboard.putBoolean(
-        "Arm Starting Correct?",
-        Math.abs(pivot.getPosition() - PivotTarget.INTAKE.getPosition())
-            < PivotConstants.POSITION_TARGET_EPSILON);
   }
 
   // Target state getter and setter

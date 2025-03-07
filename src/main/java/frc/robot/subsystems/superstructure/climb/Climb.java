@@ -3,7 +3,6 @@ package frc.robot.subsystems.superstructure.climb;
 import static frc.robot.subsystems.superstructure.climb.ClimbConstants.INDUCTION_PORT_NUMBER;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.superstructure.GenericSuperstructure;
 import org.littletonrobotics.junction.Logger;
 
@@ -56,6 +55,5 @@ public class Climb extends GenericSuperstructure<Climb.ClimbTarget> {
     super.periodic();
     Logger.recordOutput("Superstructure/Climb/Hit Cage?", hitCage());
     Logger.recordOutput("Superstructure/Climb/Climb State", getPositionTarget());
-    SmartDashboard.putBoolean("Hit Cage?", inductionSensor.get());
   }
 }

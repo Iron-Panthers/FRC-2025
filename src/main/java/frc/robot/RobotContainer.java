@@ -9,6 +9,7 @@ import com.pathplanner.lib.events.EventTrigger;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -43,9 +44,11 @@ import frc.robot.subsystems.superstructure.climb.Climb;
 import frc.robot.subsystems.superstructure.climb.Climb.ClimbTarget;
 import frc.robot.subsystems.superstructure.climb.ClimbOTalonFX;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
+import frc.robot.subsystems.superstructure.elevator.Elevator.ElevatorTarget;
 import frc.robot.subsystems.superstructure.elevator.ElevatorIO;
 import frc.robot.subsystems.superstructure.elevator.ElevatorIOTalonFX;
 import frc.robot.subsystems.superstructure.pivot.Pivot;
+import frc.robot.subsystems.superstructure.pivot.Pivot.PivotTarget;
 import frc.robot.subsystems.superstructure.pivot.PivotIO;
 import frc.robot.subsystems.superstructure.pivot.PivotIOTalonFX;
 import frc.robot.subsystems.superstructure.tongue.Tongue;
@@ -71,6 +74,7 @@ public class RobotContainer {
   private final RobotState robotState = RobotState.getInstance();
 
   private SendableChooser<Command> autoChooser;
+  private final Field2d field = new Field2d();
 
   private final CommandXboxController driverA = new CommandXboxController(0);
   private final CommandXboxController driverB = new CommandXboxController(1);
@@ -197,6 +201,8 @@ public class RobotContainer {
 
     configureAutos();
     configureBindings();
+
+    SmartDashboard.putData("Field", field);
   }
 
   public void containerMatchStarting() {
@@ -527,6 +533,24 @@ public class RobotContainer {
 
     // Smart zero the robot
     CommandScheduler.getInstance().schedule(new InstantCommand(() -> swerve.smartZeroGyro()));
+  }
+
+  public void updateDashboardStatus() {
+    SmartDashboard.putBoolean(
+        "Elevator Initial",
+        elevator.getPositionTarget() == ElevatorTarget.BOTTOM && elevator.reachedTarget());
+    SmartDashboard.putBoolean(
+        "Arm Initial", (pivot.getPositionTarget() == PivotTarget.STOW) && pivot.reachedTarget());
+    SmartDashboard.putBoolean(
+        "Climb Initial", climb.getPositionTarget() == ClimbTarget.STOW && climb.reachedTarget());
+
+    SmartDashboard.putBoolean("Tongue 1", tongue.pole1Detected());
+    SmartDashboard.putBoolean("Tongue 2", tongue.pole2Detected());
+
+    SmartDashboard.putBoolean("Coral Intaked", rollers.intakeDetected());
+    SmartDashboard.putBoolean("Climb Cage", climb.hitCage());
+
+    field.setRobotPose(RobotState.getInstance().getEstimatedPose());
   }
 
   public static double relativeAngularDifference(double currentAngle, double newAngle) {
