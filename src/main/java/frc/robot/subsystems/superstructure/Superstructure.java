@@ -286,7 +286,7 @@ public class Superstructure extends SubsystemBase {
     Logger.recordOutput("Superstructure/Pivot reached target", pivot.reachedTarget());
     Logger.recordOutput("Superstructure/Reached Target", superstructureReachedTarget());
     SmartDashboard.putBoolean(
-        "Pivot Starting Correct?",
+        "Arm Starting Correct?",
         Math.abs(pivot.getPosition() - PivotTarget.INTAKE.getPosition())
             < PivotConstants.POSITION_TARGET_EPSILON);
   }

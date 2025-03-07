@@ -7,7 +7,6 @@ import frc.robot.subsystems.superstructure.GenericSuperstructureIOTalonFX;
 import java.util.Optional;
 
 public class ClimbOTalonFX extends GenericSuperstructureIOTalonFX implements ClimbIO {
-  private DigitalInput inductiveProximitySensor;
 
   public ClimbOTalonFX() {
     super(
@@ -41,6 +40,5 @@ public class ClimbOTalonFX extends GenericSuperstructureIOTalonFX implements Cli
         MOTION_MAGIC_CONFIG.cruiseVelocity(),
         0,
         GRAVITY_TYPE);
-    inductiveProximitySensor = new DigitalInput(INDUCTION_PORT_NUMBER);
   }
 }
