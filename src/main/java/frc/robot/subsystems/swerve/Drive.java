@@ -150,7 +150,7 @@ public class Drive extends SubsystemBase {
         gyroInputs
             .yawPosition
             .minus(RobotState.getInstance().getEstimatedPose().getRotation())
-            .minus(new Rotation2d(Math.PI));
+            .minus(Rotation2d.kPi);
   }
 
   @AutoLogOutput(key = "Swerve/ModuleStates")
