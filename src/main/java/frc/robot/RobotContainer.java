@@ -549,8 +549,6 @@ public class RobotContainer {
 
     SmartDashboard.putBoolean("Coral Intaked", rollers.intakeDetected());
     SmartDashboard.putBoolean("Climb Cage", climb.hitCage());
-
-    field.setRobotPose(RobotState.getInstance().getEstimatedPose());
   }
 
   public static double relativeAngularDifference(double currentAngle, double newAngle) {
