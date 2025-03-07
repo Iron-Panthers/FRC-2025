@@ -1,6 +1,5 @@
 package frc.robot.subsystems.rollers;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -36,7 +35,6 @@ public class Rollers extends SubsystemBase {
   @Override
   public void periodic() {
     sensorsIO.updateInputs(sensorsInputs);
-    SmartDashboard.putBoolean("Intook?", sensorsInputs.intakeDetected);
     Logger.processInputs("RollerSensors", sensorsInputs);
     intake.setVoltageTarget(Intake.Target.IDLE);
 
