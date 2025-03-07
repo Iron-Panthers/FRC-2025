@@ -24,7 +24,7 @@ public class PivotConstants {
 
   public static final MotionMagicConfig MOTION_MAGIC_CONFIG =
       switch (Constants.getRobotType()) {
-        case COMP -> new MotionMagicConfig(3, 1.5, 3, 10);
+        case COMP -> new MotionMagicConfig(3, 2, 3, 10);
         case PROG -> new MotionMagicConfig(0, 0, 0, 0);
         case ALPHA -> new MotionMagicConfig(0, 0, 0, 0);
         case SIM -> new MotionMagicConfig(0, 0, 0, 0);
