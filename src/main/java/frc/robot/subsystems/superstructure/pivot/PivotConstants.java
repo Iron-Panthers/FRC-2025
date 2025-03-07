@@ -24,10 +24,10 @@ public class PivotConstants {
 
   public static final MotionMagicConfig MOTION_MAGIC_CONFIG =
       switch (Constants.getRobotType()) {
-        case COMP -> new MotionMagicConfig(3, 10);
-        case PROG -> new MotionMagicConfig(0, 0);
-        case ALPHA -> new MotionMagicConfig(0, 0);
-        case SIM -> new MotionMagicConfig(0, 0);
+        case COMP -> new MotionMagicConfig(3, 1.5, 3, 10);
+        case PROG -> new MotionMagicConfig(0, 0, 0, 0);
+        case ALPHA -> new MotionMagicConfig(0, 0, 0, 0);
+        case SIM -> new MotionMagicConfig(0, 0, 0, 0);
       };
 
   public record PivotConfig(
@@ -39,7 +39,7 @@ public class PivotConstants {
   public record PIDGains(
       double kP, double kI, double kD, double kS, double kV, double kA, double kG) {}
 
-  public record MotionMagicConfig(double acceleration, double cruiseVelocity) {}
+  public record MotionMagicConfig(double acceleration, double autonomousForwardAcceleration, double autonomousBackwardAcceleration, double cruiseVelocity) {}
 
   public static final GravityTypeValue GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
 
