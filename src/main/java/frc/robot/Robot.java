@@ -107,6 +107,8 @@ public class Robot extends LoggedRobot {
 
     CommandScheduler.getInstance().run();
 
+    robotContainer.updateDashboardStatus();
+
     Threads.setCurrentThreadPriority(false, 10);
   }
 

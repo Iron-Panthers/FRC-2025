@@ -1,6 +1,5 @@
 package frc.robot.subsystems.superstructure.tongue;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.littletonrobotics.junction.Logger;
 
 public class Tongue {
@@ -48,7 +47,6 @@ public class Tongue {
     // Process inputs
     io.updateInputs(inputs);
     Logger.processInputs("Tongue", inputs);
-    SmartDashboard.putBoolean("Pole Detected?", poleDetected());
 
     // Process control mode
     switch (controlMode) {
@@ -95,5 +93,13 @@ public class Tongue {
 
   public boolean poleDetected() {
     return inputs.pole1Detected && inputs.pole2Detected;
+  }
+
+  public boolean pole1Detected() {
+    return inputs.pole1Detected;
+  }
+
+  public boolean pole2Detected() {
+    return inputs.pole2Detected;
   }
 }
