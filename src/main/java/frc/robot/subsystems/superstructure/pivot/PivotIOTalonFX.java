@@ -2,17 +2,21 @@ package frc.robot.subsystems.superstructure.pivot;
 
 import static frc.robot.subsystems.superstructure.pivot.PivotConstants.*;
 
+import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
+import edu.wpi.first.wpilibj.RobotState;
 import frc.robot.subsystems.superstructure.GenericSuperstructureIOTalonFX;
 import java.util.Optional;
 
-import com.ctre.phoenix6.controls.DynamicMotionMagicVoltage;
-
-import edu.wpi.first.wpilibj.RobotState;
-
 public class PivotIOTalonFX extends GenericSuperstructureIOTalonFX implements PivotIO {
 
-  // Dynamic motion magic control mode, only to be used in auto - Jacob didn't want it doing anything during teleop
-  private final DynamicMotionMagicVoltage dynamicPositionControl = new DynamicMotionMagicVoltage(0, MOTION_MAGIC_CONFIG.cruiseVelocity(), MOTION_MAGIC_CONFIG.autonomousForwardAcceleration(), 0);
+  // Dynamic motion magic control mode, only to be used in auto - Jacob didn't want it doing
+  // anything during teleop
+  private final DynamicMotionMagicVoltage dynamicPositionControl =
+      new DynamicMotionMagicVoltage(
+          0,
+          MOTION_MAGIC_CONFIG.cruiseVelocity(),
+          MOTION_MAGIC_CONFIG.autonomousForwardAcceleration(),
+          0);
 
   public PivotIOTalonFX() {
     super(
@@ -51,10 +55,14 @@ public class PivotIOTalonFX extends GenericSuperstructureIOTalonFX implements Pi
   @Override
   public void runPosition(double position) {
     double positionInRotations = position / 360d;
-    if(RobotState.isAutonomous()){ // if were in the autonomous state we can do this weird dynamic acceleration thing
-      dynamicPositionControl.Acceleration = talon.getPosition().getValueAsDouble() - positionInRotations < 0 ? MOTION_MAGIC_CONFIG.autonomousForwardAcceleration() : MOTION_MAGIC_CONFIG.autonomousBackwardAcceleration();
+    if (RobotState.isAutonomous()) { // if were in the autonomous state we can do this weird dynamic
+      // acceleration thing
+      dynamicPositionControl.Acceleration =
+          talon.getPosition().getValueAsDouble() - positionInRotations < 0
+              ? MOTION_MAGIC_CONFIG.autonomousForwardAcceleration()
+              : MOTION_MAGIC_CONFIG.autonomousBackwardAcceleration();
       talon.setControl(dynamicPositionControl.withPosition(position / 360d));
-    }else{
+    } else {
       super.runPosition(positionInRotations); // convert degrees to rotations
     }
   }

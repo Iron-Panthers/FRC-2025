@@ -106,7 +106,7 @@ public class Superstructure extends SubsystemBase {
                 setCurrentState(SuperstructureState.SCORE_L3);
               } else if (targetState == SuperstructureState.CLIMB) {
                 setCurrentState(SuperstructureState.CLIMB);
-              }else if (targetState == SuperstructureState.SETUP_L4){
+              } else if (targetState == SuperstructureState.SETUP_L4) {
                 setCurrentState(SuperstructureState.SETUP_L4);
               } else {
                 setCurrentState(SuperstructureState.TOP);

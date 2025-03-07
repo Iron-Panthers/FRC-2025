@@ -39,7 +39,11 @@ public class PivotConstants {
   public record PIDGains(
       double kP, double kI, double kD, double kS, double kV, double kA, double kG) {}
 
-  public record MotionMagicConfig(double acceleration, double autonomousForwardAcceleration, double autonomousBackwardAcceleration, double cruiseVelocity) {}
+  public record MotionMagicConfig(
+      double acceleration,
+      double autonomousForwardAcceleration,
+      double autonomousBackwardAcceleration,
+      double cruiseVelocity) {}
 
   public static final GravityTypeValue GRAVITY_TYPE = GravityTypeValue.Arm_Cosine;
 
