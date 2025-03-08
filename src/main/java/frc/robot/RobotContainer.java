@@ -424,12 +424,17 @@ public class RobotContainer {
                 (superstructure.getTargetState().equals(SuperstructureState.L2))
                     && driverB.rightTrigger().getAsBoolean())
         .onTrue(
-            rollers
-                .setTargetCommand(RollerState.EJECT_L2)
+            new ParallelCommandGroup(
+                    new WaitCommand(0.3),
+                    new FunctionalCommand(
+                        () -> rollers.setTargetState(RollerState.EJECT_L2),
+                        () -> {},
+                        (interrupted) -> {},
+                        () -> !driverB.rightTrigger().getAsBoolean()))
                 .andThen(
-                    new WaitCommand(0.5)
-                        .andThen(rollers.setTargetCommand(RollerState.INTAKE))
-                        .andThen(superstructure.goToStateCommand(SuperstructureState.INTAKE))));
+                    superstructure
+                        .goToStateCommand(SuperstructureState.INTAKE)
+                        .alongWith(rollers.setTargetCommand(RollerState.INTAKE))));
     // Eject if not at L1 or L2
     new Trigger(
             () ->
