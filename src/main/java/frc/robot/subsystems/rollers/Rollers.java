@@ -3,6 +3,7 @@ package frc.robot.subsystems.rollers;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.rgb.RGB.RGBMessages;
 import frc.robot.subsystems.rollers.intake.Intake;
 import org.littletonrobotics.junction.Logger;
 
@@ -36,6 +37,7 @@ public class Rollers extends SubsystemBase {
   public void periodic() {
     sensorsIO.updateInputs(sensorsInputs);
     Logger.processInputs("RollerSensors", sensorsInputs);
+    RGBMessages.CORAL_DETECTED.setIsExpired(!sensorsInputs.intakeDetected);
     intake.setVoltageTarget(Intake.Target.IDLE);
 
     switch (targetState) {

@@ -485,20 +485,6 @@ public class RobotContainer {
                 superstructure.goToStateCommand(SuperstructureState.INTAKE),
                 new WaitCommand(0.9),
                 rollers.setTargetCommand(RollerState.FORCE_INTAKE)));
-    // new SequentialCommandGroup(
-    //     new ParallelCommandGroup(
-    //         elevator.goToPositionCommand(ElevatorTarget.SETUP_INTAKE),
-    //         pivot.goToPositionCommand(PivotTarget.INTAKE)),
-    //     rollers.setTargetCommand(RollerState.INTAKE),
-    //     elevator.goToPositionCommand(ElevatorTarget.INTAKE),
-    //     new WaitUntilCommand(() -> rollers.getTargetState() == RollerState.HOLD),
-    //     elevator.goToPositionCommand(ElevatorTarget.SETUP_INTAKE),
-    //     pivot.goToPositionCommand(PivotTarget.TOP),
-    //     elevator
-    //         .goToPositionCommand(ElevatorTarget.BOTTOM)
-    //         .alongWith(rollers.setTargetCommand(RollerState.IDLE))));
-
-    // driverB.rightTrigger().onTrue(climbController.clearCoral());
   }
 
   private void configureAutos() {

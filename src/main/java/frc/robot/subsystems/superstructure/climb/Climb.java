@@ -4,6 +4,7 @@ import static frc.robot.subsystems.superstructure.climb.ClimbConstants.INDUCTION
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.rgb.RGB.RGBMessages;
 import frc.robot.subsystems.superstructure.GenericSuperstructure;
 import org.littletonrobotics.junction.Logger;
 
@@ -47,7 +48,7 @@ public class Climb extends GenericSuperstructure<Climb.ClimbTarget> {
 
   // checks if the sensor has hit the cage
   public boolean hitCage() {
-    return inductionSensor.get();
+    return !inductionSensor.get();
   }
 
   @Override
@@ -56,6 +57,7 @@ public class Climb extends GenericSuperstructure<Climb.ClimbTarget> {
     super.periodic();
     Logger.recordOutput("Superstructure/Climb/Hit Cage?", hitCage());
     Logger.recordOutput("Superstructure/Climb/Climb State", getPositionTarget());
-    SmartDashboard.putBoolean("Has Cage?", !hitCage());
+    SmartDashboard.putBoolean("Has Cage?", hitCage());
+    RGBMessages.CLIMB.setIsExpired(!hitCage());
   }
 }
