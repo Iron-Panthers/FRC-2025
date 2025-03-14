@@ -35,9 +35,9 @@ public class DriveConstants {
             Units.inchesToMeters(34),
             // 5.4764, // FIXME
             // 6.7759);
-            2.7,
             5,
-            3);
+            5,
+            4);
       };
 
   public static final Translation2d[] MODULE_TRANSLATIONS =

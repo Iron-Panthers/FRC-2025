@@ -149,7 +149,7 @@ public class Drive extends SubsystemBase {
   }
 
   private void zeroGyro() {
-    gyroYawOffset = gyroInputs.yawPosition;
+    gyroYawOffset = gyroInputs.yawPosition.minus(new Rotation2d(Math.PI));
     headingController = null;
   }
 

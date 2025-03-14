@@ -168,9 +168,9 @@ public class RobotContainer {
             .run(
                 () -> {
                   swerve.driveTeleopController(
-                      -driverA.getLeftY(),
-                      -driverA.getLeftX(),
-                      driverA.getLeftTriggerAxis() - driverA.getRightTriggerAxis());
+                      driverA.getLeftY(),
+                      driverA.getLeftX(),
+                      -driverA.getLeftTriggerAxis() + driverA.getRightTriggerAxis());
                   if (Math.abs(driverA.getLeftTriggerAxis()) > 0.1
                       || Math.abs(driverA.getRightTriggerAxis()) > 0.1) {
                     swerve.clearHeadingControl();
