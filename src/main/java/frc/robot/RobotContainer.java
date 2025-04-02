@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Mode;
 import frc.robot.commands.ApproachReef;
 import frc.robot.commands.ApproachReef.LevelOffsets;
+import frc.robot.commands.FollowPath;
 import frc.robot.commands.VibrateHIDCommand;
 import frc.robot.subsystems.canWatchdog.CANWatchdog;
 import frc.robot.subsystems.canWatchdog.CANWatchdogIO;
@@ -509,17 +510,12 @@ public class RobotContainer {
           return false;
         };
 
-    AutoBuilder.configure(
+    AutoBuilder.configureCustom(
+        (path) -> new FollowPath(path, swerve, flipAlliance, passRobotConfig),
         () -> RobotState.getInstance().getEstimatedPose(),
         (pose) -> RobotState.getInstance().resetPose(pose),
-        () -> swerve.getRobotSpeeds(),
-        (speeds) -> {
-          swerve.setTrajectorySpeeds(speeds);
-        },
-        DriveConstants.HOLONOMIC_DRIVE_CONTROLLER,
-        passRobotConfig,
         flipAlliance,
-        swerve);
+        true);
 
     autoChooser = AutoBuilder.buildAutoChooser();
     SmartDashboard.putData("Auto Chooser", autoChooser);

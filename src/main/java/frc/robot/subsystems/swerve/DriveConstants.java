@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -172,11 +173,15 @@ public class DriveConstants {
   public static final TrajectoryFollowerConstants TRAJECTORY_CONFIG =
       switch (getRobotType()) {
         case COMP -> new TrajectoryFollowerConstants(
-            new PIDConstants(8, 0), new PIDConstants(11, 0));
+            new PIDConstants(8, 0), new PIDConstants(11, 0), new Constraints(0, 0)); // FIXME tune
         case ALPHA -> new TrajectoryFollowerConstants(
-            new PIDConstants(13, 0), new PIDConstants(11, 0));
-        default -> new TrajectoryFollowerConstants(new PIDConstants(0, 0), new PIDConstants(0, 0));
+            new PIDConstants(13, 0), new PIDConstants(11, 0), new Constraints(0, 0));
+        default -> new TrajectoryFollowerConstants(
+            new PIDConstants(0, 0), new PIDConstants(0, 0), new Constraints(0, 0));
       };
+
+  public static final double TRAJECTORY_TOLERANCE = 0.05;
+  public static final double TRAJECTORY_SPEED_CUTOFF = 0.01;
 
   public static final HeadingControllerConstants HEADING_CONTROLLER_CONSTANTS =
       switch (getRobotType()) {
@@ -246,7 +251,8 @@ public class DriveConstants {
       double steerReduction,
       double couplingGearReduction) {}
 
-  public record TrajectoryFollowerConstants(PIDConstants linearPID, PIDConstants rotationPID) {}
+  public record TrajectoryFollowerConstants(
+      PIDConstants linearPID, PIDConstants rotationPID, Constraints motionProfileConstraints) {}
 
   public record Gains(double kS, double kV, double kA, double kP, double kI, double kD) {}
 

@@ -2,6 +2,7 @@ package frc.robot.subsystems.swerve;
 
 import static frc.robot.subsystems.swerve.DriveConstants.KINEMATICS;
 
+import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -15,6 +16,7 @@ import frc.robot.Constants;
 import frc.robot.RobotState;
 import frc.robot.subsystems.swerve.controllers.HeadingController;
 import frc.robot.subsystems.swerve.controllers.TeleopController;
+import frc.robot.subsystems.swerve.controllers.TrajectoryController;
 import java.util.Arrays;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -40,8 +42,8 @@ public class Drive extends SubsystemBase {
   private ChassisSpeeds targetSpeeds = new ChassisSpeeds();
 
   private final TeleopController teleopController;
-  private ChassisSpeeds trajectorySpeeds = new ChassisSpeeds();
   private HeadingController headingController = null;
+  private TrajectoryController trajectoryController = null;
 
   public Drive(GyroIO gyroIO, ModuleIO fl, ModuleIO fr, ModuleIO bl, ModuleIO br) {
     this.gyroIO = gyroIO;
@@ -88,8 +90,7 @@ public class Drive extends SubsystemBase {
         }
       }
       case TRAJECTORY -> {
-        targetSpeeds = trajectorySpeeds;
-        // add heading controll override
+        targetSpeeds = trajectoryController.update();
       }
     }
 
@@ -100,12 +101,11 @@ public class Drive extends SubsystemBase {
         ChassisSpeeds.discretize(targetSpeeds, Constants.PERIODIC_LOOP_SEC);
 
     SwerveModuleState[] moduleTargetStates = KINEMATICS.toSwerveModuleStates(discretizedSpeeds);
-    // SwerveDriveKinematics.desaturateWheelSpeeds(
-    //     moduleTargetStates, DRIVE_CONFIG.maxLinearVelocity()); //We assume module will limit
 
     for (int i = 0; i < modules.length; i++) {
       modules[i].runToSetpoint(moduleTargetStates[i]);
     }
+
     Logger.recordOutput("Swerve/ModuleStates", moduleTargetStates);
     Logger.recordOutput("Swerve/TargetSpeeds", targetSpeeds);
     Logger.recordOutput("Swerve/DriveMode", driveMode);
@@ -114,7 +114,6 @@ public class Drive extends SubsystemBase {
         MathUtil.clamp(
             Math.hypot(targetSpeeds.vxMetersPerSecond, targetSpeeds.vyMetersPerSecond), 0, 3));
     Logger.recordOutput("Swerve/ArbitraryYaw", arbitraryYaw);
-    Logger.recordOutput("Swerve/TrajectorySpeeds", trajectorySpeeds);
     if (headingController != null) {
       Logger.recordOutput(
           "Swerve/HeadingTarget", headingController.getTargetHeading().getRadians());
@@ -131,9 +130,18 @@ public class Drive extends SubsystemBase {
     }
   }
 
-  public void setTrajectorySpeeds(ChassisSpeeds speeds) {
+  public void setTrajectory(PathPlannerTrajectory trajectory) {
     driveMode = DriveModes.TRAJECTORY;
-    this.trajectorySpeeds = speeds;
+    trajectoryController = new TrajectoryController(trajectory, this);
+  }
+
+  public void clearTrajectory() {
+    driveMode = DriveModes.TELEOP;
+    trajectoryController = null;
+  }
+
+  public boolean isTrajectoryComplete() {
+    return trajectoryController != null && trajectoryController.isFinished();
   }
 
   private void zeroGyro() {
