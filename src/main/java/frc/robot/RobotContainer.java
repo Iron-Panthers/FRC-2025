@@ -90,7 +90,6 @@ public class RobotContainer {
   private Superstructure superstructure;
   private RGB rgb;
   private CANWatchdog canWatchdog;
-  private ApproachReef approachReef;
   private ClimbController climbController;
 
   public RobotContainer() {
@@ -296,17 +295,17 @@ public class RobotContainer {
     driverA
         .leftBumper()
         .whileTrue(
-            new ApproachReef(() -> levelOffsets.getLevelOffset(), false)
+            new ApproachReef(() -> levelOffsets.getLevelOffset(), false, swerve)
                 .withTimeout(0)
-                .andThen(new ApproachReef(() -> levelOffsets.getLevelOffset(), false))
+                .andThen(new ApproachReef(() -> levelOffsets.getLevelOffset(), false, swerve))
                 .alongWith(new InstantCommand(() -> swerve.clearHeadingControl())));
 
     driverA
         .rightBumper()
         .whileTrue(
-            new ApproachReef(() -> levelOffsets.getLevelOffset(), true)
+            new ApproachReef(() -> levelOffsets.getLevelOffset(), true, swerve)
                 .withTimeout(0)
-                .andThen(new ApproachReef(() -> levelOffsets.getLevelOffset(), true))
+                .andThen(new ApproachReef(() -> levelOffsets.getLevelOffset(), true, swerve))
                 .alongWith(new InstantCommand(() -> swerve.clearHeadingControl())));
 
     driverA

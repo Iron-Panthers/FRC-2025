@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -71,9 +72,6 @@ public class RobotState {
 
   @AutoLogOutput(key = "RobotState/Approach/LastBSide")
   private boolean lastApproachBSide = false;
-
-  private ApproachPose[] approachPoses =
-      generateApproachPoses(lastApproachOffset, lastApproachBSide);
 
   private static RobotState instance;
 
@@ -179,8 +177,8 @@ public class RobotState {
     return estimatedPose;
   }
 
-  // returns 6 approach poses, corresponding offset from reef wall & side, metres
-  private ApproachPose[] generateApproachPoses(double offset, boolean bSide) {
+  public ApproachPose findApproachPose(double offset, boolean bSide, ChassisSpeeds velocity) {
+    // generate approach poses
     Pose2d origin = new Pose2d(DriveConstants.BLUE_REEF_ORIGIN, Rotation2d.kZero);
     List<Pose2d> poses = new ArrayList<Pose2d>();
 
@@ -197,19 +195,24 @@ public class RobotState {
 
     Logger.recordOutput("RobotState/Approach/BluePoses", poseArray);
 
-    return ApproachPose.fromPose2ds(poseArray);
-  }
+    ApproachPose[] approachPoses = ApproachPose.fromPose2ds(poseArray);
 
-  public ApproachPose findApproachPose(double offset, boolean bSide) {
-    approachPoses = generateApproachPoses(offset, bSide);
+    // find closest to reference pose (predicted future position)
+    Pose2d referencePose =
+        getEstimatedPose()
+            .exp(
+                new Twist2d(
+                    velocity.vxMetersPerSecond * DriveConstants.ALIGNMENT_TIME_DELTA,
+                    velocity.vyMetersPerSecond * DriveConstants.ALIGNMENT_TIME_DELTA,
+                    0));
 
     int closestIndex = 0;
     // absolutely not
     for (int i = closestIndex; i < approachPoses.length; ++i) {
-      if (getEstimatedPose()
+      if (referencePose
               .getTranslation()
               .getDistance(approachPoses[i].getAlliancePose().getTranslation())
-          < getEstimatedPose()
+          < referencePose
               .getTranslation()
               .getDistance(approachPoses[closestIndex].getAlliancePose().getTranslation())) {
         closestIndex = i;
@@ -224,8 +227,8 @@ public class RobotState {
     return approachPose;
   }
 
-  public Command approachReefCommand(double offset, boolean bSide) {
-    ApproachPose approachPose = findApproachPose(offset, bSide);
+  public Command approachReefCommand(double offset, boolean bSide, ChassisSpeeds velocity) {
+    ApproachPose approachPose = findApproachPose(offset, bSide, velocity);
     List<Waypoint> waypoints =
         PathPlannerPath.waypointsFromPoses(
             approachPose.getPose().exp(new Twist2d(0.5, 0, 0)), approachPose.getPose());
@@ -235,7 +238,7 @@ public class RobotState {
             waypoints,
             DriveConstants.ALIGN_PATH_CONSTRAINTS,
             null,
-            new GoalEndState(0.0, findApproachPose(offset, bSide).getPose().getRotation()));
+            new GoalEndState(0.0, approachPose.getPose().getRotation()));
 
     return generateOTFPathCommand(path);
   }

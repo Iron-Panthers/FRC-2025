@@ -208,6 +208,8 @@ public class DriveConstants {
       new PathConstraints(
           1.5, 2, Units.degreesToRadians(540), Units.degreesToRadians(720), 12, false);
 
+  public static final double ALIGNMENT_TIME_DELTA = 0.0;
+
   public static final Translation2d BLUE_REEF_ORIGIN = new Translation2d(4.5, 4.025);
 
   // blue alliance, will automatically flip, clockwise from top right (vertical)
