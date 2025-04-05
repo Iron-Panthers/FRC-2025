@@ -34,7 +34,7 @@ public class DriveConstants {
             Units.inchesToMeters(34),
             4.5, // FIXME
             5,
-            3);
+            20);
         case PROG, SIM -> new DrivebaseConfig(
             Units.inchesToMeters(2),
             Units.inchesToMeters(22.5),
@@ -172,7 +172,7 @@ public class DriveConstants {
   public static final TrajectoryFollowerConstants TRAJECTORY_CONFIG =
       switch (getRobotType()) {
         case COMP -> new TrajectoryFollowerConstants(
-            new PIDConstants(8, 0), new PIDConstants(11, 0));
+            new PIDConstants(8, 0), new PIDConstants(4, 0));
         case ALPHA -> new TrajectoryFollowerConstants(
             new PIDConstants(13, 0), new PIDConstants(11, 0));
         default -> new TrajectoryFollowerConstants(new PIDConstants(0, 0), new PIDConstants(0, 0));
@@ -180,7 +180,7 @@ public class DriveConstants {
 
   public static final HeadingControllerConstants HEADING_CONTROLLER_CONSTANTS =
       switch (getRobotType()) {
-        case COMP -> new HeadingControllerConstants(3, 0, 5, 200, 0.002);
+        case COMP -> new HeadingControllerConstants(6, 0, 5, 200, 0.002);
         case ALPHA -> new HeadingControllerConstants(3, 0, 5, 200, 0.002);
         default -> new HeadingControllerConstants(0, 0, 0, 0, 0);
       };
@@ -197,17 +197,37 @@ public class DriveConstants {
 
   public static final PathConstraints PP_PATH_CONSTRAINTS =
       new PathConstraints(
-          3, 3, Units.degreesToRadians(540), Units.degreesToRadians(720), 12, false);
+          3, 3, Units.degreesToRadians(540), Units.degreesToRadians(5000), 12, false);
 
   public static final PathConstraints ALIGN_PATH_CONSTRAINTS =
       new PathConstraints(
-          1, 1, Units.degreesToRadians(540), Units.degreesToRadians(720), 12, false);
+          3, 2, Units.degreesToRadians(540), Units.degreesToRadians(720), 12, false);
 
   public static final PathConstraints APPROACH_PATH_CONSTRAINTS =
       new PathConstraints(
           1.5, 1.5, Units.degreesToRadians(540), Units.degreesToRadians(720), 12, false);
 
   public static final Translation2d BLUE_REEF_ORIGIN = new Translation2d(4.5, 4.025);
+
+  public static final Translation2d REEF_TRANSLATION2D =
+      DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue
+          ? new Translation2d(4.5, 4)
+          : new Translation2d(13, 4);
+
+  public static final Translation2d LEFT_CORNER =
+      DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue
+          ? new Translation2d(0, 8)
+          : new Translation2d(17.5, 0);
+
+  public static final Translation2d RIGHT_CORNER =
+      DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue
+          ? new Translation2d(0, 0)
+          : new Translation2d(17.5, 8);
+
+  public static final Translation2d CLIMB_ZONE_CENTER =
+      DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue
+          ? new Translation2d(8.765, 6)
+          : new Translation2d(8.765, 2);
 
   // blue alliance, will automatically flip, clockwise from top right (vertical)
   public static final ApproachPose[] REEF_APPROACH_POSES =

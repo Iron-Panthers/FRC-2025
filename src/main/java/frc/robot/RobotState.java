@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.IdealStartingState;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.Waypoint;
 import com.pathplanner.lib.util.FlippingUtil;
@@ -15,8 +16,10 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -72,8 +75,15 @@ public class RobotState {
   @AutoLogOutput(key = "RobotState/Approach/LastBSide")
   private boolean lastApproachBSide = false;
 
+  @AutoLogOutput(key = "RobotState/Approach/LastL1")
+  private boolean lastL1 = false;
+
+  private Pose2d lastApproachPose = new Pose2d();
+
+  private ChassisSpeeds robotSpeeds = new ChassisSpeeds();
+
   private ApproachPose[] approachPoses =
-      generateApproachPoses(lastApproachOffset, lastApproachBSide);
+      generateApproachPoses(lastApproachOffset, lastApproachBSide, lastL1);
 
   private static RobotState instance;
 
@@ -179,8 +189,27 @@ public class RobotState {
     return estimatedPose;
   }
 
+  @AutoLogOutput(key = "RobotState/Velocity")
+  /*meters per second*/
+  public Translation2d getVelocity() {
+    return new Translation2d(
+            ChassisSpeeds.fromRobotRelativeSpeeds(robotSpeeds, estimatedPose.getRotation())
+                .vxMetersPerSecond,
+            ChassisSpeeds.fromRobotRelativeSpeeds(robotSpeeds, estimatedPose.getRotation())
+                .vyMetersPerSecond)
+        .rotateBy(Rotation2d.kPi);
+  }
+
+  /*In inches because we are imperial... */
+  @AutoLogOutput(key = "RobotState/Error")
+  public double alignError() {
+    return lastApproachPose.getTranslation().getDistance(estimatedPose.getTranslation())
+        * 100
+        / 2.54;
+  }
+
   // returns 6 approach poses, corresponding offset from reef wall & side, metres
-  private ApproachPose[] generateApproachPoses(double offset, boolean bSide) {
+  private ApproachPose[] generateApproachPoses(double offset, boolean bSide, boolean l1) {
     lastApproachBSide = bSide;
     lastApproachOffset = offset;
     Pose2d origin = new Pose2d(DriveConstants.BLUE_REEF_ORIGIN, Rotation2d.kZero);
@@ -191,7 +220,7 @@ public class RobotState {
     for (int i = 0; i < 6; ++i) {
       Rotation2d initialTheta = new Rotation2d(i * -Math.PI / 3);
       Pose2d directPose = offsetByVector(origin, (offset + 1.285), initialTheta);
-      Pose2d pose = translateByVector(directPose, 0.165, horizontalOffset);
+      Pose2d pose = translateByVector(directPose, l1 ? 0.39 : 0.165, horizontalOffset);
 
       poses.add(pose);
     }
@@ -202,8 +231,8 @@ public class RobotState {
     return ApproachPose.fromPose2ds(poseArray);
   }
 
-  public ApproachPose findApproachPose(double offset, boolean bSide) {
-    approachPoses = generateApproachPoses(offset, bSide);
+  private ApproachPose findApproachPose(double offset, boolean bSide, boolean l1) {
+    approachPoses = generateApproachPoses(offset, bSide, l1);
 
     int closestIndex = 0;
     // absolutely not
@@ -223,34 +252,38 @@ public class RobotState {
     Logger.recordOutput("RobotState/ApproachPose", approachPose.getAlliancePose());
     Logger.recordOutput("RobotState/ApproachPoseIndex", closestIndex);
 
+    lastApproachPose = approachPose.getAlliancePose();
+
     return approachPose;
   }
 
-  public Command approachReefCommand(double offset, boolean bSide) {
-    ApproachPose approachPose = findApproachPose(offset, bSide);
+  public Command approachReefCommand(double offset, boolean bSide, boolean l1) {
+    Translation2d velocity = getVelocity();
+    ApproachPose approachPose = findApproachPose(offset, bSide, l1);
+    Pose2d estimatedPose =
+        DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red
+            ? FlippingUtil.flipFieldPose(getEstimatedPose())
+            : getEstimatedPose();
+    Rotation2d angle =
+        approachPose.getPose().getTranslation().minus(estimatedPose.getTranslation()).getAngle();
     List<Waypoint> waypoints =
         PathPlannerPath.waypointsFromPoses(
-            approachPose.getPose().exp(new Twist2d(0.5, 0, 0)), approachPose.getPose());
+            new Pose2d(
+                estimatedPose.getTranslation(),
+                // velocity.getNorm() > 0.4 ? velocity.getAngle() : angle),
+                angle),
+            new Pose2d(approachPose.getPose().getTranslation(), angle));
 
     PathPlannerPath path =
         new PathPlannerPath(
             waypoints,
             DriveConstants.ALIGN_PATH_CONSTRAINTS,
-            null,
-            new GoalEndState(0.0, findApproachPose(offset, bSide).getPose().getRotation()));
-
-    return generateOTFPathCommand(path);
+            new IdealStartingState(velocity.getNorm(), estimatedPose.getRotation()),
+            new GoalEndState(0.0, approachPose.getPose().getRotation()));
+    return AutoBuilder.followPath(path);
   }
 
-  public static Command generateOTFPoseCommand(Pose2d pose) {
-    return AutoBuilder.pathfindToPose(pose, DriveConstants.ALIGN_PATH_CONSTRAINTS);
-  }
-
-  public static Command generateOTFPathCommand(PathPlannerPath path) {
-    return AutoBuilder.pathfindThenFollowPath(path, DriveConstants.APPROACH_PATH_CONSTRAINTS);
-  }
-
-  public static Pose2d translateByVector(Pose2d pose, double mag, Rotation2d theta) {
+  private Pose2d translateByVector(Pose2d pose, double mag, Rotation2d theta) {
     double scalarX = theta.getCos() * mag;
     double scalarY = theta.getSin() * mag;
 
@@ -259,7 +292,15 @@ public class RobotState {
   }
 
   // translate + rotate
-  public static Pose2d offsetByVector(Pose2d pose, double mag, Rotation2d theta) {
+  private Pose2d offsetByVector(Pose2d pose, double mag, Rotation2d theta) {
     return translateByVector(pose, mag, theta).transformBy(new Transform2d(0, 0, theta));
+  }
+
+  public void addRobotSpeeds(ChassisSpeeds chassisSpeeds) {
+    this.robotSpeeds = chassisSpeeds;
+  }
+
+  public Pose2d getAlignPose() {
+    return lastApproachPose;
   }
 }

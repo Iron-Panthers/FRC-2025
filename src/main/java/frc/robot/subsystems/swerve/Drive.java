@@ -2,8 +2,10 @@ package frc.robot.subsystems.swerve;
 
 import static frc.robot.subsystems.swerve.DriveConstants.KINEMATICS;
 
+import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -90,10 +92,14 @@ public class Drive extends SubsystemBase {
       }
       case TRAJECTORY -> {
         targetSpeeds = trajectorySpeeds;
+        if (headingController != null && DriverStation.isTeleopEnabled()) {
+          setTargetHeading(RobotState.getInstance().getAlignPose().getRotation());
+          targetSpeeds.omegaRadiansPerSecond = headingController.update() + 0.0001;
+        }
         // add heading controll override
       }
     }
-
+    RobotState.getInstance().addRobotSpeeds(getRobotSpeeds());
     // run modules
 
     /* use kinematics to get desired module states */
@@ -123,12 +129,13 @@ public class Drive extends SubsystemBase {
     }
   }
 
-  public void driveTeleopController(double xAxis, double yAxis, double omega) {
+  public void driveTeleopController(double xAxis, double yAxis, double omega, double acceleration) {
     if (DriverStation.isTeleopEnabled()) {
       if (driveMode != DriveModes.TELEOP) {
         driveMode = DriveModes.TELEOP;
+        teleopController.setPastLinearVelocity(new Translation2d());
       }
-      teleopController.acceptJoystickInput(xAxis, yAxis, omega);
+      teleopController.acceptJoystickInput(xAxis, yAxis, omega, acceleration);
     }
   }
 
@@ -150,12 +157,13 @@ public class Drive extends SubsystemBase {
     gyroYawOffset =
         gyroInputs
             .yawPosition
-            .minus(RobotState.getInstance().getEstimatedPose().getRotation())
             .minus(
                 DriverStation.getAlliance().isPresent()
-                        && DriverStation.getAlliance().get() == Alliance.Red
-                    ? Rotation2d.kPi
-                    : Rotation2d.kZero);
+                        && DriverStation.getAlliance().get() == Alliance.Blue
+                    ? FlippingUtil.flipFieldRotation(
+                        RobotState.getInstance().getEstimatedPose().getRotation())
+                    : RobotState.getInstance().getEstimatedPose().getRotation())
+            .minus(Rotation2d.kPi);
   }
 
   @AutoLogOutput(key = "Swerve/ModuleStates")
@@ -182,5 +190,9 @@ public class Drive extends SubsystemBase {
 
   public void clearHeadingControl() {
     headingController = null;
+  }
+
+  public boolean isTeleop() {
+    return driveMode == DriveModes.TELEOP;
   }
 }

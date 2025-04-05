@@ -138,12 +138,12 @@ public class Superstructure extends SubsystemBase {
 
           // switch our pivot based on our next state
           switch (targetState) {
-            case SETUP_L4, SCORE_L4, CLIMB, PREVENT_TIPPING -> pivot.setPositionTarget(
+            case SETUP_L4, SCORE_L4, PREVENT_TIPPING -> pivot.setPositionTarget(
                 PivotTarget.SCORE_SIDE);
             default -> pivot.setPositionTarget(PivotTarget.INTAKE_SIDE);
           }
 
-          if (pivot.getPosition() > -60.0
+          if (pivot.getPosition() > -50.0
               && (pivot.getPositionTarget() == PivotTarget.INTAKE_SIDE
                   || (pivot.getPositionTarget() == PivotTarget.SCORE_SIDE
                       && pivot.getPosition() < 90.0))) { // not in constants

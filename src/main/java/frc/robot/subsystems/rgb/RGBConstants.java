@@ -41,12 +41,12 @@ public class RGBConstants {
       A_CRITICAL_NETWORK_FAILURE,
       B_MISSING_CAN_DEVICE,
       C_CLIMB,
-      D_CORAL_DETECTED,
-      E_READY_TO_INTAKE,
-      F_L2,
-      G_L3,
-      H_L4,
-      I_L1,
+      D_READY_TO_INTAKE,
+      E_L2,
+      F_L3,
+      G_L4,
+      H_L1,
+      I_CORAL_DETECTED,
       J_DEFAULT
     }
 
