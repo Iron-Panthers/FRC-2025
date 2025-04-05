@@ -2,6 +2,7 @@ package frc.robot.subsystems.swerve;
 
 import static frc.robot.subsystems.swerve.DriveConstants.KINEMATICS;
 
+import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -156,12 +157,13 @@ public class Drive extends SubsystemBase {
     gyroYawOffset =
         gyroInputs
             .yawPosition
-            .minus(RobotState.getInstance().getEstimatedPose().getRotation())
             .minus(
                 DriverStation.getAlliance().isPresent()
-                        && DriverStation.getAlliance().get() == Alliance.Red
-                    ? Rotation2d.kPi
-                    : Rotation2d.kZero);
+                        && DriverStation.getAlliance().get() == Alliance.Blue
+                    ? FlippingUtil.flipFieldRotation(
+                        RobotState.getInstance().getEstimatedPose().getRotation())
+                    : RobotState.getInstance().getEstimatedPose().getRotation())
+            .minus(Rotation2d.kPi);
   }
 
   @AutoLogOutput(key = "Swerve/ModuleStates")
