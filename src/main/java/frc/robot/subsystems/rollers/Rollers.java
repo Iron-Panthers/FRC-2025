@@ -90,6 +90,7 @@ public class Rollers extends SubsystemBase {
     }
 
     intake.periodic();
+    funnel.periodic();
 
     Logger.recordOutput("Rollers/TargetState", targetState);
   }

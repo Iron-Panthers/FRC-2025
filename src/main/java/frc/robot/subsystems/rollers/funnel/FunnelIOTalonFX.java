@@ -6,7 +6,7 @@ import frc.robot.subsystems.rollers.GenericRollersIOTalonFX;
 public class FunnelIOTalonFX extends GenericRollersIOTalonFX implements FunnelIO {
   private static final int id =
       switch (Constants.getRobotType()) {
-        case COMP -> 30;
+        case COMP -> 25;
         case ALPHA -> 14;
         default -> 0;
       };
@@ -18,7 +18,7 @@ public class FunnelIOTalonFX extends GenericRollersIOTalonFX implements FunnelIO
       };
   private static final boolean inverted =
       switch (Constants.getRobotType()) {
-        case COMP -> false;
+        case COMP -> true;
         case ALPHA -> true;
         default -> false;
       };

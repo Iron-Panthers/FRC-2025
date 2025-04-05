@@ -662,9 +662,7 @@ public class RobotContainer {
                         || superstructure.getTargetState().equals(SuperstructureState.INTAKE))
                     && (driverB.rightTrigger().getAsBoolean()
                         || (eject
-                            && superstructure
-                                    .getTargetState()
-                                    .equals(SuperstructureState.SETUP_L4)
+                            && superstructure.getTargetState().equals(SuperstructureState.SETUP_L4)
                             && superstructure.superstructureReachedTarget())))
         .onTrue(
             new InstantCommand(() -> eject = false)
@@ -676,18 +674,18 @@ public class RobotContainer {
     new Trigger(() -> (superstructure.getCurrentState() == SuperstructureState.SCORE_L4))
         .onTrue(
             new SequentialCommandGroup(
-                    // new WaitCommand(0.1),
-                    rollers.setTargetCommand(RollerState.EJECT_TOP),
-                    new WaitCommand(0.2),
-                    superstructure.goToStateCommand(SuperstructureState.INTAKE),
+                // new WaitCommand(0.1),
+                rollers.setTargetCommand(RollerState.EJECT_TOP),
+                new WaitCommand(0.2),
+                superstructure.goToStateCommand(SuperstructureState.INTAKE),
                 new InstantCommand(() -> eject = false)
-                .alongWith(
-                    new InstantCommand(
-                        () ->
-                            levelOffsets =
-                                levelOffsets == LevelOffsets.L4_OFFSET
-                                    ? LevelOffsets.PREP_L4_OFFSET
-                                    : levelOffsets))));
+                    .alongWith(
+                        new InstantCommand(
+                            () ->
+                                levelOffsets =
+                                    levelOffsets == LevelOffsets.L4_OFFSET
+                                        ? LevelOffsets.PREP_L4_OFFSET
+                                        : levelOffsets))));
   }
 
   private void configureAutos() {

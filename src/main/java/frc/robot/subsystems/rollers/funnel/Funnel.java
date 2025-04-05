@@ -5,7 +5,7 @@ import frc.robot.subsystems.rollers.GenericRollers;
 public class Funnel extends GenericRollers<Funnel.Target> {
   public enum Target implements GenericRollers.VoltageTarget {
     IDLE(0),
-    INTAKE(4),
+    INTAKE(6),
     HOLD(0),
     EJECT(-4);
 
