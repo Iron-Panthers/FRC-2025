@@ -3,6 +3,7 @@ package frc.robot.subsystems.rollers;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.rollers.funnel.Funnel;
 import frc.robot.subsystems.rollers.intake.Intake;
 import org.littletonrobotics.junction.Logger;
 
@@ -16,10 +17,12 @@ public class Rollers extends SubsystemBase {
     EJECT_L1,
     EJECT_L2,
     EJECT_L3,
+    EJECT_BOTTOM,
     HOLD
   }
 
   private final Intake intake;
+  private final Funnel funnel;
   private final RollerSensorsIO sensorsIO;
   // private double ejectTime = 0;
   private double intakeTime = 0;
@@ -28,9 +31,10 @@ public class Rollers extends SubsystemBase {
   private RollerState targetState = RollerState.IDLE;
   private RollerSensorsIOInputsAutoLogged sensorsInputs = new RollerSensorsIOInputsAutoLogged();
 
-  public Rollers(Intake intake, RollerSensorsIO sensorsIO) {
+  public Rollers(Intake intake, Funnel funnel, RollerSensorsIO sensorsIO) {
     this.intake = intake;
     this.sensorsIO = sensorsIO;
+    this.funnel = funnel;
   }
 
   @Override
@@ -38,6 +42,7 @@ public class Rollers extends SubsystemBase {
     sensorsIO.updateInputs(sensorsInputs);
     Logger.processInputs("RollerSensors", sensorsInputs);
     intake.setVoltageTarget(Intake.Target.IDLE);
+    funnel.setVoltageTarget(Funnel.Target.IDLE);
 
     switch (targetState) {
       case IDLE -> {
@@ -45,6 +50,7 @@ public class Rollers extends SubsystemBase {
       }
       case INTAKE -> {
         intake.setVoltageTarget(Intake.Target.INTAKE);
+        funnel.setVoltageTarget(Funnel.Target.INTAKE);
         if (intakeDetected()) {
           this.targetState = RollerState.HOLD;
         }
@@ -71,6 +77,10 @@ public class Rollers extends SubsystemBase {
       }
       case EJECT_L3 -> {
         intake.setVoltageTarget(Intake.Target.EJECT_L3);
+      }
+      case EJECT_BOTTOM -> {
+        intake.setVoltageTarget(Intake.Target.EJECT_TOP);
+        funnel.setVoltageTarget(Funnel.Target.EJECT);
       }
     }
     if (intakeDetected()) {

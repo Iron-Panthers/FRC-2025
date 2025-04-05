@@ -35,6 +35,8 @@ import frc.robot.subsystems.rgb.RGBIOCANdle;
 import frc.robot.subsystems.rollers.RollerSensorsIOComp;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.Rollers.RollerState;
+import frc.robot.subsystems.rollers.funnel.Funnel;
+import frc.robot.subsystems.rollers.funnel.FunnelIOTalonFX;
 import frc.robot.subsystems.rollers.intake.Intake;
 import frc.robot.subsystems.rollers.intake.IntakeIOTalonFX;
 import frc.robot.subsystems.superstructure.ClimbController;
@@ -89,6 +91,7 @@ public class RobotContainer {
   private Drive swerve;
   private Vision vision;
   private Intake intake;
+  private Funnel funnel;
   private Rollers rollers;
   private Elevator elevator;
   private Pivot pivot;
@@ -102,6 +105,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     intake = null;
+    funnel = null;
 
     if (Constants.getRobotMode() != Mode.REPLAY) {
       switch (Constants.getRobotType()) {
@@ -121,6 +125,7 @@ public class RobotContainer {
                   new VisionIOPhotonvision(4),
                   new VisionIOPhotonvision(5));
           intake = new Intake(new IntakeIOTalonFX());
+          funnel = new Funnel(new FunnelIOTalonFX());
           elevator = new Elevator(new ElevatorIOTalonFX());
           pivot = new Pivot(new PivotIOTalonFX());
           tongue = new Tongue(new TongueIOServo());
@@ -178,7 +183,7 @@ public class RobotContainer {
       vision = new Vision();
     }
 
-    rollers = new Rollers(intake, new RollerSensorsIOComp());
+    rollers = new Rollers(intake, funnel, new RollerSensorsIOComp());
 
     if (elevator == null) {
       elevator = new Elevator(new ElevatorIO() {});
@@ -588,6 +593,17 @@ public class RobotContainer {
     new Trigger(() -> rollers.getTargetState().equals(RollerState.INTAKE))
         .onTrue(rgb.endMessageCommand(RGBMessages.CORAL_DETECTED));
 
+    new Trigger(
+            () ->
+                superstructure.getTargetState() == SuperstructureState.INTAKE
+                    && superstructure.superstructureReachedTarget())
+        .onTrue(rollers.setTargetCommand(RollerState.INTAKE));
+    new Trigger(
+            () ->
+                superstructure.getTargetState() != SuperstructureState.INTAKE
+                    && rollers.getTargetState() == RollerState.INTAKE)
+        .onTrue(rollers.setTargetCommand(RollerState.IDLE));
+
     // Eject on L1
     new Trigger(
             () ->
@@ -609,9 +625,7 @@ public class RobotContainer {
                 .andThen(rollers.setTargetCommand(RollerState.EJECT_L2))
                 .andThen(
                     new WaitCommand(0.5)
-                        .andThen(rollers.setTargetCommand(RollerState.EJECT_TOP))
-                        .andThen(new WaitCommand(0.1))
-                        .andThen(superstructure.goToStateCommand(SuperstructureState.INTAKE)) ));
+                        .andThen(superstructure.goToStateCommand(SuperstructureState.INTAKE))));
 
     // Eject L3
     new Trigger(
@@ -635,7 +649,7 @@ public class RobotContainer {
                     && driverB.rightTrigger().getAsBoolean())
         .onTrue(
             rollers
-                .setTargetCommand(RollerState.EJECT_TOP)
+                .setTargetCommand(RollerState.EJECT_BOTTOM)
                 .andThen(
                     new WaitCommand(0.5)
                         .andThen(superstructure.goToStateCommand(SuperstructureState.INTAKE))));
