@@ -2,6 +2,7 @@ package frc.robot.subsystems.swerve;
 
 import static frc.robot.subsystems.swerve.DriveConstants.KINEMATICS;
 
+import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -20,8 +21,6 @@ import frc.robot.subsystems.swerve.controllers.TeleopController;
 import java.util.Arrays;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
-
-import com.pathplanner.lib.util.FlippingUtil;
 
 public class Drive extends SubsystemBase {
   public enum DriveModes {
@@ -159,9 +158,11 @@ public class Drive extends SubsystemBase {
         gyroInputs
             .yawPosition
             .minus(
-              DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue
-              ? FlippingUtil.flipFieldRotation(RobotState.getInstance().getEstimatedPose().getRotation())
-              : RobotState.getInstance().getEstimatedPose().getRotation())
+                DriverStation.getAlliance().isPresent()
+                        && DriverStation.getAlliance().get() == Alliance.Blue
+                    ? FlippingUtil.flipFieldRotation(
+                        RobotState.getInstance().getEstimatedPose().getRotation())
+                    : RobotState.getInstance().getEstimatedPose().getRotation())
             .minus(Rotation2d.kPi);
   }
 
