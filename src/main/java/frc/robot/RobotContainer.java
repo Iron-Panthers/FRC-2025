@@ -580,7 +580,7 @@ public class RobotContainer {
         .onTrue(
             new SequentialCommandGroup(
                 superstructure.goToStateCommand(SuperstructureState.INTAKE),
-                rollers.setTargetCommand(RollerState.INTAKE)));
+                rollers.setTargetCommand(RollerState.FORCE_INTAKE)));
 
     // RGB for intaking
     new Trigger(() -> rollers.intakeDetected())
@@ -598,7 +598,6 @@ public class RobotContainer {
                 .andThen(rollers.setTargetCommand(RollerState.EJECT_L1))
                 .andThen(
                     new WaitCommand(0.5)
-                        .andThen(rollers.setTargetCommand(RollerState.INTAKE))
                         .andThen(superstructure.goToStateCommand(SuperstructureState.INTAKE))));
     // Eject L2
     new Trigger(
@@ -612,8 +611,7 @@ public class RobotContainer {
                     new WaitCommand(0.5)
                         .andThen(rollers.setTargetCommand(RollerState.EJECT_TOP))
                         .andThen(new WaitCommand(0.1))
-                        .andThen(superstructure.goToStateCommand(SuperstructureState.INTAKE)))
-                .andThen(rollers.setTargetCommand(RollerState.INTAKE)));
+                        .andThen(superstructure.goToStateCommand(SuperstructureState.INTAKE)) ));
 
     // Eject L3
     new Trigger(
@@ -626,7 +624,6 @@ public class RobotContainer {
                 .setTargetCommand(RollerState.EJECT_L3)
                 .andThen(
                     new WaitCommand(0.5)
-                        .andThen(rollers.setTargetCommand(RollerState.INTAKE))
                         .andThen(superstructure.goToStateCommand(SuperstructureState.INTAKE))));
 
     // Eject Intake - ONLY IF ITS EXACTLY AT INTAKE
@@ -641,7 +638,6 @@ public class RobotContainer {
                 .setTargetCommand(RollerState.EJECT_TOP)
                 .andThen(
                     new WaitCommand(0.5)
-                        .andThen(rollers.setTargetCommand(RollerState.INTAKE))
                         .andThen(superstructure.goToStateCommand(SuperstructureState.INTAKE))));
     // Eject if not at L1 or L2 or L3 or Intake
     new Trigger(
@@ -652,17 +648,15 @@ public class RobotContainer {
                         || superstructure.getTargetState().equals(SuperstructureState.INTAKE))
                     && (driverB.rightTrigger().getAsBoolean()
                         || (eject
-                            && (superstructure.getTargetState().equals(SuperstructureState.SCORE_L3)
-                                || superstructure
+                            && superstructure
                                     .getTargetState()
-                                    .equals(SuperstructureState.SETUP_L4))
+                                    .equals(SuperstructureState.SETUP_L4)
                             && superstructure.superstructureReachedTarget())))
         .onTrue(
             new InstantCommand(() -> eject = false)
                 .andThen(rollers.setTargetCommand(RollerState.EJECT_TOP))
                 .andThen(
                     new WaitCommand(0.5)
-                        .andThen(rollers.setTargetCommand(RollerState.INTAKE))
                         .andThen(superstructure.goToStateCommand(SuperstructureState.INTAKE))));
     // Eject on L4 with sensors
     new Trigger(() -> (superstructure.getCurrentState() == SuperstructureState.SCORE_L4))
@@ -672,16 +666,14 @@ public class RobotContainer {
                     rollers.setTargetCommand(RollerState.EJECT_TOP),
                     new WaitCommand(0.2),
                     superstructure.goToStateCommand(SuperstructureState.INTAKE),
-                    new WaitCommand(0.9),
-                    rollers.setTargetCommand(RollerState.FORCE_INTAKE))
-                .andThen(new InstantCommand(() -> eject = false))
+                new InstantCommand(() -> eject = false)
                 .alongWith(
                     new InstantCommand(
                         () ->
                             levelOffsets =
                                 levelOffsets == LevelOffsets.L4_OFFSET
                                     ? LevelOffsets.PREP_L4_OFFSET
-                                    : levelOffsets)));
+                                    : levelOffsets))));
   }
 
   private void configureAutos() {
