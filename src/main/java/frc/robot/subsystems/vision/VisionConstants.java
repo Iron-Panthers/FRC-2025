@@ -43,8 +43,8 @@ public class VisionConstants {
         default -> List.of(
             // 1 tag
             new TagCountDeviation(
-                new UnitDeviationParams(0.25, 0.4, 0.9),
-                new UnitDeviationParams(0.35, 0.5, 1.2),
+                new UnitDeviationParams(0.2, 0.1, 0.6),
+                new UnitDeviationParams(0.3, 0.1, 0.9),
                 new UnitDeviationParams(0.5, 0.7, 1.5)),
             // 2 tag
             new TagCountDeviation(
