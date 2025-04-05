@@ -21,6 +21,8 @@ import java.util.Arrays;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
+import com.pathplanner.lib.util.FlippingUtil;
+
 public class Drive extends SubsystemBase {
   public enum DriveModes {
     TELEOP,
@@ -156,12 +158,11 @@ public class Drive extends SubsystemBase {
     gyroYawOffset =
         gyroInputs
             .yawPosition
-            .minus(RobotState.getInstance().getEstimatedPose().getRotation())
             .minus(
-                DriverStation.getAlliance().isPresent()
-                        && DriverStation.getAlliance().get() == Alliance.Red
-                    ? Rotation2d.kPi
-                    : Rotation2d.kZero);
+              DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue
+              ? FlippingUtil.flipFieldRotation(RobotState.getInstance().getEstimatedPose().getRotation())
+              : RobotState.getInstance().getEstimatedPose().getRotation())
+            .minus(Rotation2d.kPi);
   }
 
   @AutoLogOutput(key = "Swerve/ModuleStates")
