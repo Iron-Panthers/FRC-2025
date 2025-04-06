@@ -143,14 +143,15 @@ public class Superstructure extends SubsystemBase {
             default -> pivot.setPositionTarget(PivotTarget.INTAKE_SIDE);
           }
 
-          if (pivot.getPosition() > -50.0
+          if (pivot.getPosition() > -60.0
               && (pivot.getPositionTarget() == PivotTarget.INTAKE_SIDE
                   || (pivot.getPositionTarget() == PivotTarget.SCORE_SIDE
                       && pivot.getPosition() < 90.0))) { // not in constants
             elevator.setPositionTarget(ElevatorTarget.INTAKE_SIDE);
           } else {
             switch (targetState) { // set elevator pos based on target state
-              case PREVENT_TIPPING -> elevator.setPositionTarget(ElevatorTarget.INTAKE_SIDE);
+              case PREVENT_TIPPING -> elevator.setPositionTarget(
+                  pivot.getPosition() > -60.0 ? ElevatorTarget.INTAKE_SIDE : ElevatorTarget.TOP);
               case SETUP_L4, SCORE_L4 -> elevator.setPositionTarget(ElevatorTarget.SETUP_L4);
               case SETUP_L3, SCORE_L3 -> elevator.setPositionTarget(ElevatorTarget.L3);
               default -> elevator.setPositionTarget(ElevatorTarget.TOP);

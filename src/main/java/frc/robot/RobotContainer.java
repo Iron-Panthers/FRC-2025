@@ -84,7 +84,7 @@ public class RobotContainer {
   private final CommandXboxController driverB = new CommandXboxController(1);
 
   @AutoLogOutput(key = "CommandedOffset")
-  private LevelOffsets levelOffsets = LevelOffsets.PREP_L4_OFFSET;
+  private LevelOffsets levelOffsets = LevelOffsets.L3_OFFSET;
 
   private boolean eject = false;
 
@@ -504,10 +504,10 @@ public class RobotContainer {
     new Trigger(
             () ->
                 !swerve.isTeleop()
-                    && DriverStation.isTeleop()
-                    && levelOffsets == LevelOffsets.PREP_L4_OFFSET
-                    && (rollers.readyToRaise()
-                        || superstructure.getTargetState() != SuperstructureState.INTAKE))
+                        && DriverStation.isTeleop()
+                        && levelOffsets == LevelOffsets.PREP_L4_OFFSET
+                        && (rollers.readyToRaise()
+                            || superstructure.getTargetState() != SuperstructureState.INTAKE))
         .onTrue(superstructure.goToStateCommand(SuperstructureState.SCORE_L4));
     // auto go half to L4 after intaking
     new Trigger(() -> levelOffsets == LevelOffsets.PREP_L4_OFFSET && rollers.readyToRaise())
@@ -677,7 +677,9 @@ public class RobotContainer {
                         || superstructure.getTargetState().equals(SuperstructureState.INTAKE))
                     && (driverB.rightTrigger().getAsBoolean()
                         || (eject
-                            && superstructure.getTargetState().equals(SuperstructureState.SETUP_L4)
+                            && superstructure
+                                    .getTargetState()
+                                    .equals(SuperstructureState.SETUP_L4)
                             && superstructure.superstructureReachedTarget())))
         .onTrue(
             new InstantCommand(() -> eject = false)
@@ -751,6 +753,8 @@ public class RobotContainer {
   public void autoInit() {
     // Smart zero the robot
     CommandScheduler.getInstance().schedule(new InstantCommand(() -> swerve.smartZeroGyro()));
+    CommandScheduler.getInstance()
+        .schedule(new InstantCommand(() -> levelOffsets = LevelOffsets.PREP_L4_OFFSET));
   }
 
   // runs when teleop starts
