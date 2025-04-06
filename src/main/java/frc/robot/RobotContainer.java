@@ -6,9 +6,11 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.events.EventTrigger;
+import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -301,12 +303,21 @@ public class RobotContainer {
                             .getDistance(DriveConstants.REEF_TRANSLATION2D)
                         < 2) {
                       swerve.setTargetHeading(
-                          calculateSnapTargetHeading(
-                              RobotState.getInstance()
-                                  .getEstimatedPose()
-                                  .getTranslation()
-                                  .minus(DriveConstants.REEF_TRANSLATION2D)
-                                  .getAngle()));
+                          DriverStation.getAlliance().isPresent()
+                                  && DriverStation.getAlliance().get() == Alliance.Red
+                              ? calculateSnapTargetHeading(
+                                  RobotState.getInstance()
+                                      .getEstimatedPose()
+                                      .getTranslation()
+                                      .minus(DriveConstants.REEF_TRANSLATION2D)
+                                      .getAngle())
+                              : FlippingUtil.flipFieldRotation(
+                                  calculateSnapTargetHeading(
+                                      RobotState.getInstance()
+                                          .getEstimatedPose()
+                                          .getTranslation()
+                                          .minus(DriveConstants.REEF_TRANSLATION2D)
+                                          .getAngle())));
                       // climb snaps
                     } else if (MathUtil.isNear(
                             DriveConstants.CLIMB_ZONE_CENTER.getX(),
@@ -325,7 +336,11 @@ public class RobotContainer {
                               .getTranslation()
                               .minus(DriveConstants.REEF_TRANSLATION2D)
                               .getAngle()
-                              .minus(Rotation2d.kPi));
+                              .minus(
+                                  DriverStation.getAlliance().isPresent()
+                                          && DriverStation.getAlliance().get() == Alliance.Red
+                                      ? Rotation2d.kPi
+                                      : Rotation2d.kZero));
                     }
                   }
                 })
