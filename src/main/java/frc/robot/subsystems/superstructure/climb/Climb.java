@@ -15,7 +15,7 @@ public class Climb extends GenericSuperstructure<Climb.ClimbTarget> {
     BOTTOM(0.07),
 
     // "Top" is apex of climb
-    TOP(0.293),
+    TOP(0.307),
 
     // To get coral out
     CLEAR(-0.15),
