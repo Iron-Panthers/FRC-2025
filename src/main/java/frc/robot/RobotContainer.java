@@ -82,7 +82,7 @@ public class RobotContainer {
   private final CommandXboxController driverB = new CommandXboxController(1);
 
   @AutoLogOutput(key = "CommandedOffset")
-  private LevelOffsets levelOffsets = LevelOffsets.PREP_L4_OFFSET;
+  private LevelOffsets levelOffsets = LevelOffsets.L3_OFFSET;
 
   private boolean eject = false;
 
@@ -746,6 +746,8 @@ public class RobotContainer {
   public void autoInit() {
     // Smart zero the robot
     CommandScheduler.getInstance().schedule(new InstantCommand(() -> swerve.smartZeroGyro()));
+    CommandScheduler.getInstance()
+        .schedule(new InstantCommand(() -> levelOffsets = LevelOffsets.PREP_L4_OFFSET));
   }
 
   // runs when teleop starts
