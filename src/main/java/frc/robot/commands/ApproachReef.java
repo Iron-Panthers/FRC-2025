@@ -14,10 +14,10 @@ public class ApproachReef extends SequentialCommandGroup {
   public enum LevelOffsets {
     // metres
     L4_OFFSET(0.14),
-    L3_OFFSET(0.07),
+    L3_OFFSET(0.1),
     PREP_L4_OFFSET(0.5),
-    L2_OFFSET(0),
-    L1_OFFSET(0);
+    L2_OFFSET(0.1),
+    L1_OFFSET(0.1);
     public double levelOffset;
 
     private LevelOffsets(double levelOffset) {
