@@ -16,5 +16,7 @@ public interface GenericRollersIO {
 
   default void runVolts(double volts) {}
 
+  default void runVelocity(double velocity) {}
+
   default void stop() {}
 }
