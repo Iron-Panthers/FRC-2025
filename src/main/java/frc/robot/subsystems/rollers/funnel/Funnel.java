@@ -1,16 +1,13 @@
-package frc.robot.subsystems.rollers.intake;
+package frc.robot.subsystems.rollers.funnel;
 
 import frc.robot.subsystems.rollers.GenericRollers;
 
-public class Intake extends GenericRollers<Intake.Target> {
+public class Funnel extends GenericRollers<Funnel.Target> {
   public enum Target implements GenericRollers.VoltageTarget {
     IDLE(0),
-    INTAKE(4),
+    INTAKE(3),
     HOLD(0),
-    EJECT_TOP(-8),
-    EJECT_L3(3),
-    EJECT_L1(2.5),
-    EJECT_L2(3);
+    EJECT(-4);
 
     private double volts;
 
@@ -23,7 +20,7 @@ public class Intake extends GenericRollers<Intake.Target> {
     }
   }
 
-  public Intake(IntakeIO intakeIO) {
-    super("Intake", intakeIO);
+  public Funnel(FunnelIO funnelIO) {
+    super("Funnel", funnelIO);
   }
 }
