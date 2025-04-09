@@ -35,7 +35,7 @@ public class Climb extends GenericSuperstructure<Climb.ClimbTarget> {
   // induction sensor
   private DigitalInput inductionSensor;
 
-  // run tino the cage - sensor triggers - flash leds to tell driver - button presses : reels it in
+  // run into the cage - sensor triggers - flash leds to tell driver - button presses : reels it in
   // or out
   // CAN'T BACKOUT
   // set position for intake in a cage, a button to climb up or down

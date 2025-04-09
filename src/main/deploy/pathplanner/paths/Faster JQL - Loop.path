@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.767307481704135,
-        "y": 6.371667908586935
+        "x": 4.215129371969388,
+        "y": 6.714866436616549
       },
       "isLocked": false,
       "linkedName": "J"
@@ -20,41 +20,45 @@
         "y": 6.974844307809425
       },
       "prevControl": {
-        "x": 2.5742889234244717,
-        "y": 7.509125463370526
+        "x": 2.678095045809471,
+        "y": 7.821846479733573
       },
       "nextControl": {
-        "x": 1.701879920461011,
-        "y": 6.445522779041808
+        "x": 1.6089524213550992,
+        "y": 6.151197945392714
       },
       "isLocked": false,
       "linkedName": "Q angled"
     },
     {
       "anchor": {
-        "x": 2.8842129346645065,
-        "y": 4.95196090253229
+        "x": 3.549886363636363,
+        "y": 5.336264204545455
       },
       "prevControl": {
-        "x": 1.838133125963827,
-        "y": 5.607321277882181
+        "x": 3.0983791292119665,
+        "y": 5.1249923459526165
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "L Approach"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 1.0,
       "rotationDegrees": 148.0
+    },
+    {
+      "waypointRelativePos": 1.8185404339250515,
+      "rotationDegrees": 73.24052306381033
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.5903426791277282,
-      "maxWaypointRelativePos": 1.2,
+      "minWaypointRelativePos": 0.7149532710280307,
+      "maxWaypointRelativePos": 1.250778816199367,
       "constraints": {
         "maxVelocity": 3.0,
         "maxAcceleration": 3.0,
@@ -81,8 +85,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.5,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
