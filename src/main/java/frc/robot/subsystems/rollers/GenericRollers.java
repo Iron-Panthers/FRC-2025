@@ -1,21 +1,29 @@
 package frc.robot.subsystems.rollers;
 
 import edu.wpi.first.math.filter.LinearFilter;
+
 import org.littletonrobotics.junction.Logger;
 
-public abstract class GenericRollers<G extends GenericRollers.VoltageTarget> {
-  public interface VoltageTarget {
-    double getVolts();
+public abstract class GenericRollers<G extends GenericRollers.RollerTarget> {
+  public interface RollerTarget {
+    boolean isVoltage = true;
+    double getValue();
+  }
+  public interface VoltageTarget extends RollerTarget {
+    boolean isVoltage = true;
+  }
+  public interface VelocityTarget extends RollerTarget {
+    boolean isVoltage = false;
   }
 
   private LinearFilter filter;
   private double filteredCurrent;
 
-  private final String name;
-  private final GenericRollersIO rollerIO;
+  protected final String name;
+  protected final GenericRollersIO rollerIO;
   private GenericRollersIOInputsAutoLogged inputs = new GenericRollersIOInputsAutoLogged();
 
-  private G voltageTarget;
+  protected G rollerTarget;
 
   public GenericRollers(String name, GenericRollersIO rollerIO) {
     this.name = name;
@@ -27,15 +35,19 @@ public abstract class GenericRollers<G extends GenericRollers.VoltageTarget> {
     rollerIO.updateInputs(inputs);
     Logger.processInputs(name, inputs);
 
-    rollerIO.runVolts(voltageTarget.getVolts());
-    Logger.recordOutput("Rollers/" + name + "/Target", voltageTarget.toString());
+    if (G.isVoltage){
+      rollerIO.runVolts(rollerTarget.getValue());
+    }else{
+      rollerIO.runVelocity(rollerTarget.getValue());
+    } 
+    Logger.recordOutput("Rollers/" + name + "/Target", rollerTarget.toString());
 
     filteredCurrent = this.filter.calculate(inputs.supplyCurrentAmps);
     Logger.recordOutput("Rollers/" + name + "/FilteredCurrent", filteredCurrent);
   }
 
-  public G getVoltageTarget() {
-    return voltageTarget;
+  public G getRollerTarget() {
+    return rollerTarget;
   }
 
   public double getSupplyCurrentAmps() {
@@ -46,7 +58,7 @@ public abstract class GenericRollers<G extends GenericRollers.VoltageTarget> {
     return filteredCurrent;
   }
 
-  public void setVoltageTarget(G voltageTarget) {
-    this.voltageTarget = voltageTarget;
+  public void setRollerTarget(G rollerTarget) {
+    this.rollerTarget = rollerTarget;
   }
 }
