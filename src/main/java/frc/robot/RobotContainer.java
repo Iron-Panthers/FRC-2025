@@ -605,11 +605,13 @@ public class RobotContainer {
     new Trigger(
             () ->
                 superstructure.getTargetState() == SuperstructureState.INTAKE
+                    && superstructure.getCurrentState() == SuperstructureState.INTAKE
                     && superstructure.superstructureReachedTarget())
         .onTrue(rollers.setTargetCommand(RollerState.INTAKE));
     new Trigger(
             () ->
-                superstructure.getTargetState() != SuperstructureState.INTAKE
+                !(superstructure.getTargetState() == SuperstructureState.INTAKE 
+                    && superstructure.getCurrentState() == SuperstructureState.INTAKE)
                     && rollers.getTargetState() == RollerState.INTAKE)
         .onTrue(rollers.setTargetCommand(RollerState.IDLE));
 
