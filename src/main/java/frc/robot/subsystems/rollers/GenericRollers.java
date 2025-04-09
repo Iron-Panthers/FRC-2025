@@ -1,17 +1,19 @@
 package frc.robot.subsystems.rollers;
 
 import edu.wpi.first.math.filter.LinearFilter;
-
 import org.littletonrobotics.junction.Logger;
 
 public abstract class GenericRollers<G extends GenericRollers.RollerTarget> {
   public interface RollerTarget {
     boolean isVoltage = true;
+
     double getValue();
   }
+
   public interface VoltageTarget extends RollerTarget {
     boolean isVoltage = true;
   }
+
   public interface VelocityTarget extends RollerTarget {
     boolean isVoltage = false;
   }
@@ -35,11 +37,11 @@ public abstract class GenericRollers<G extends GenericRollers.RollerTarget> {
     rollerIO.updateInputs(inputs);
     Logger.processInputs(name, inputs);
 
-    if (G.isVoltage){
+    if (G.isVoltage) {
       rollerIO.runVolts(rollerTarget.getValue());
-    }else{
+    } else {
       rollerIO.runVelocity(rollerTarget.getValue());
-    } 
+    }
     Logger.recordOutput("Rollers/" + name + "/Target", rollerTarget.toString());
 
     filteredCurrent = this.filter.calculate(inputs.supplyCurrentAmps);

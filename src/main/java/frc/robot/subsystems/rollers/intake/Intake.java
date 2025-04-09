@@ -26,5 +26,4 @@ public class Intake extends GenericRollers<Intake.Target> {
   public Intake(IntakeIO intakeIO) {
     super("Intake", intakeIO);
   }
-
 }

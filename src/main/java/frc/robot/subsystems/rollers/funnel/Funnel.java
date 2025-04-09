@@ -1,7 +1,5 @@
 package frc.robot.subsystems.rollers.funnel;
 
-import org.littletonrobotics.junction.Logger;
-
 import frc.robot.subsystems.rollers.GenericRollers;
 
 public class Funnel extends GenericRollers<Funnel.Target> {
