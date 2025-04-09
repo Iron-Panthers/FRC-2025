@@ -44,13 +44,14 @@ public class ClimbOTalonFX extends GenericSuperstructureIOTalonFX implements Cli
 
   @Override
   public void runPosition(double rotations) {
+    double newRotations = rotations - 0.8;
     VoltageConfigs voltageConfigs = new VoltageConfigs();
     voltageConfigs.withPeakForwardVoltage(
-        talon.getPosition().getValueAsDouble() > 0.2
+        talon.getPosition().getValueAsDouble() % 0.4 > 0.2
             ? UPPER_VOLT_LIMIT_CLIMBING
             : UPPER_VOLT_LIMIT);
     voltageConfigs.withPeakReverseVoltage(LOWER_VOLT_LIMIT);
     talon.getConfigurator().apply(voltageConfigs);
-    super.runPosition(rotations);
+    super.runPosition(newRotations);
   }
 }

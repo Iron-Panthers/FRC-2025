@@ -41,46 +41,47 @@ public class Rollers extends SubsystemBase {
   public void periodic() {
     sensorsIO.updateInputs(sensorsInputs);
     Logger.processInputs("RollerSensors", sensorsInputs);
-    intake.setVoltageTarget(Intake.Target.IDLE);
-    funnel.setVoltageTarget(Funnel.Target.IDLE);
+    intake.setRollerTarget(Intake.Target.IDLE);
+    funnel.setRollerTarget(Funnel.Target.IDLE);
 
     switch (targetState) {
       case IDLE -> {
-        intake.setVoltageTarget(Intake.Target.IDLE);
+        intake.setRollerTarget(Intake.Target.IDLE);
       }
       case INTAKE -> {
-        intake.setVoltageTarget(Intake.Target.INTAKE);
-        funnel.setVoltageTarget(Funnel.Target.INTAKE);
+        intake.setRollerTarget(Intake.Target.INTAKE);
+        funnel.setRollerTarget(Funnel.Target.INTAKE);
         if (intakeDetected()) {
           this.targetState = RollerState.HOLD;
         }
       }
       case FORCE_INTAKE -> {
         intakeTime += 0.02;
-        intake.setVoltageTarget(Intake.Target.INTAKE);
+        intake.setRollerTarget(Intake.Target.INTAKE);
+        funnel.setRollerTarget(Funnel.Target.INTAKE);
         if (intakeTime > 0.5) {
           this.targetState = RollerState.INTAKE;
           intakeTime = 0;
         }
       }
       case HOLD -> {
-        intake.setVoltageTarget(Intake.Target.HOLD);
+        intake.setRollerTarget(Intake.Target.HOLD);
       }
       case EJECT_TOP -> {
-        intake.setVoltageTarget(Intake.Target.EJECT_TOP);
+        intake.setRollerTarget(Intake.Target.EJECT_TOP);
       }
       case EJECT_L1 -> {
-        intake.setVoltageTarget(Intake.Target.EJECT_L1);
+        intake.setRollerTarget(Intake.Target.EJECT_L1);
       }
       case EJECT_L2 -> {
-        intake.setVoltageTarget(Intake.Target.EJECT_L2);
+        intake.setRollerTarget(Intake.Target.EJECT_L2);
       }
       case EJECT_L3 -> {
-        intake.setVoltageTarget(Intake.Target.EJECT_L3);
+        intake.setRollerTarget(Intake.Target.EJECT_L3);
       }
       case EJECT_BOTTOM -> {
-        intake.setVoltageTarget(Intake.Target.EJECT_TOP);
-        funnel.setVoltageTarget(Funnel.Target.EJECT);
+        intake.setRollerTarget(Intake.Target.EJECT_TOP);
+        funnel.setRollerTarget(Funnel.Target.EJECT);
       }
     }
     if (intakeDetected()) {
