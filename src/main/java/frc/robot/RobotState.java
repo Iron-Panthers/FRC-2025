@@ -222,7 +222,7 @@ public class RobotState {
       Pose2d directPose = offsetByVector(origin, (offset + 1.285), initialTheta);
       Pose2d pose =
           translateByVector(
-              directPose, (l1 ? 0.39 : 0.165) + (bSide ? -0.02 : 0.02), horizontalOffset);
+              directPose, (l1 ? 0.41 : 0.165) + (bSide ? -0.02 : 0.02), horizontalOffset);
 
       poses.add(pose);
     }
