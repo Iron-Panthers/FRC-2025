@@ -81,9 +81,7 @@ public abstract class GenericRollersIOTalonFX implements GenericRollersIO {
   }
 
   @Override
-  public void setSlot0(
-      double kP,
-      double kV) {
+  public void setSlot0(double kP, double kV) {
     Slot0Configs gainsConfig = new Slot0Configs();
     gainsConfig.kP = kP;
     gainsConfig.kV = kV;

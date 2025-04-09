@@ -58,6 +58,7 @@ public class Rollers extends SubsystemBase {
       case FORCE_INTAKE -> {
         intakeTime += 0.02;
         intake.setRollerTarget(Intake.Target.INTAKE);
+        funnel.setRollerTarget(Funnel.Target.INTAKE);
         if (intakeTime > 0.5) {
           this.targetState = RollerState.INTAKE;
           intakeTime = 0;
