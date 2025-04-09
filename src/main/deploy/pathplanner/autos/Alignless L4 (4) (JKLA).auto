@@ -11,7 +11,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "New LeftJ"
+                  "pathName": "LeftJAlignless"
                 }
               },
               {
@@ -72,7 +72,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "New JQL - Loop"
+                        "pathName": "JQLScore - Loop"
                       }
                     }
                   ]
@@ -149,7 +149,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.75
+                        "waitTime": 1.7
                       }
                     },
                     {
@@ -174,7 +174,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "New Loop JKA"
+                        "pathName": "JKAScore - Loop"
                       }
                     }
                   ]

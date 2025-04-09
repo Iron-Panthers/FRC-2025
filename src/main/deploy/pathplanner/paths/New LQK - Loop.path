@@ -60,7 +60,12 @@
       "linkedName": "K"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.9813829787234065,
+      "rotationDegrees": 150.0
+    }
+  ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
