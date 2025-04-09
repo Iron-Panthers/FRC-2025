@@ -54,7 +54,7 @@ public class ClimbConstants {
 
   public static final double POSITION_TARGET_EPSILON = 0.03;
 
-  public static final Optional<Double> SENSOR_DISCONTINUITY_POINT = Optional.of(0.6);
+  public static final Optional<Double> SENSOR_DISCONTINUITY_POINT = Optional.of(0.07);
 
   public record MotionMagicConfig(double acceleration, double cruiseVelocity, double jerk) {}
 
