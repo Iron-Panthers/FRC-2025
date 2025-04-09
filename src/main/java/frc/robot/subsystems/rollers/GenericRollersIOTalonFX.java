@@ -2,6 +2,7 @@ package frc.robot.subsystems.rollers;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -77,5 +78,16 @@ public abstract class GenericRollersIOTalonFX implements GenericRollersIO {
   @Override
   public void stop() {
     talon.setControl(neutralOutput);
+  }
+
+  @Override
+  public void setSlot0(
+      double kP,
+      double kV) {
+    Slot0Configs gainsConfig = new Slot0Configs();
+    gainsConfig.kP = kP;
+    gainsConfig.kV = kV;
+
+    talon.getConfigurator().apply(gainsConfig);
   }
 }
