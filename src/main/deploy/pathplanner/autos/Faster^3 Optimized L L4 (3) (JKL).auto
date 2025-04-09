@@ -41,9 +41,28 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Eject_L4"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Eject_L4"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Score_L4"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -57,41 +76,9 @@
                       }
                     },
                     {
-                      "type": "parallel",
+                      "type": "path",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "path",
-                            "data": {
-                              "pathName": "Faster^2 JQL - Loop"
-                            }
-                          },
-                          {
-                            "type": "sequential",
-                            "data": {
-                              "commands": [
-                                {
-                                  "type": "wait",
-                                  "data": {
-                                    "waitTime": 1.9
-                                  }
-                                },
-                                {
-                                  "type": "named",
-                                  "data": {
-                                    "name": "Score_L4"
-                                  }
-                                },
-                                {
-                                  "type": "wait",
-                                  "data": {
-                                    "waitTime": 0.05
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        ]
+                        "pathName": "Faster^2 JQL - Loop"
                       }
                     }
                   ]
@@ -105,9 +92,28 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Eject_L4"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Eject_L4"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Score_L4"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -121,41 +127,9 @@
                       }
                     },
                     {
-                      "type": "parallel",
+                      "type": "path",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "path",
-                            "data": {
-                              "pathName": "Faster^2 LQK - Loop"
-                            }
-                          },
-                          {
-                            "type": "sequential",
-                            "data": {
-                              "commands": [
-                                {
-                                  "type": "wait",
-                                  "data": {
-                                    "waitTime": 2.2
-                                  }
-                                },
-                                {
-                                  "type": "named",
-                                  "data": {
-                                    "name": "Score_L4"
-                                  }
-                                },
-                                {
-                                  "type": "wait",
-                                  "data": {
-                                    "waitTime": 0.05
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        ]
+                        "pathName": "Faster^2 LQK - Loop"
                       }
                     }
                   ]
