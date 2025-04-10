@@ -35,28 +35,9 @@
           "data": {
             "commands": [
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Eject_L4"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 1.7
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Score_L4"
-                      }
-                    }
-                  ]
+                  "name": "Eject_L4"
                 }
               },
               {
@@ -72,7 +53,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "JQLScore - Loop"
+                        "pathName": "JQLScore - first half loop"
                       }
                     }
                   ]
@@ -86,28 +67,9 @@
           "data": {
             "commands": [
               {
-                "type": "sequential",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Eject_L4"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 1.2
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Score_L4"
-                      }
-                    }
-                  ]
+                  "pathName": "JQLScore - second half Loop"
                 }
               },
               {
@@ -117,13 +79,13 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.2
+                        "waitTime": 0.5
                       }
                     },
                     {
-                      "type": "path",
+                      "type": "named",
                       "data": {
-                        "pathName": "New LQK - Loop"
+                        "name": "Score_L4"
                       }
                     }
                   ]
@@ -137,28 +99,9 @@
           "data": {
             "commands": [
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Eject_L4"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 1.7
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Score_L4"
-                      }
-                    }
-                  ]
+                  "name": "Eject_L4"
                 }
               },
               {
@@ -174,7 +117,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "JKAScore - Loop"
+                        "pathName": "LQK Score - first half Loop"
                       }
                     }
                   ]
@@ -184,9 +127,99 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Eject_L4"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LQK Score - second half Loop"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.65
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Score_L4"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Eject_L4"
+                }
+              },
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.2
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "JKAScore - First Half Loop"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "JKAScore - Second Half Loop"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.65
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Score_L4"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         }
       ]
