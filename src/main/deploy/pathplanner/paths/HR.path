@@ -4,31 +4,52 @@
     {
       "anchor": {
         "x": 5.863126066132591,
-        "y": 3.858292992030733
+        "y": 4.17459816261574
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.15522864765433,
-        "y": 2.5945022311611665
+        "x": 5.59330702908649,
+        "y": 4.184481848543294
       },
       "isLocked": false,
-      "linkedName": "G Score"
+      "linkedName": "H"
     },
     {
       "anchor": {
-        "x": 1.6453125000000002,
-        "y": 0.9698454483695639
+        "x": 6.287788769302189,
+        "y": 0.8421114518178274
       },
       "prevControl": {
-        "x": 3.052173913043479,
-        "y": 0.9877292798913038
+        "x": 6.625218196421061,
+        "y": 0.9390182373200893
+      },
+      "nextControl": {
+        "x": 6.047501753496733,
+        "y": 0.7731031187318256
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.239470991741595,
+        "y": 0.64614903000391
+      },
+      "prevControl": {
+        "x": 2.7469579200058662,
+        "y": 0.6334993769546521
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "2"
+      "linkedName": "R Angled"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": -161.76
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,7 +63,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -125.48
+    "rotation": -161.76
   },
   "reversed": false,
   "folder": "Autos",
