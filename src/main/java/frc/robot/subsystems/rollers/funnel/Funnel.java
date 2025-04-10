@@ -3,20 +3,20 @@ package frc.robot.subsystems.rollers.funnel;
 import frc.robot.subsystems.rollers.GenericRollers;
 
 public class Funnel extends GenericRollers<Funnel.Target> {
-  public enum Target implements GenericRollers.VoltageTarget {
+  public enum Target implements GenericRollers.VelocityTarget {
     IDLE(0),
     INTAKE(3),
     HOLD(0),
     EJECT(-4);
 
-    private double volts;
+    private double velocity;
 
-    private Target(double volts) {
-      this.volts = volts;
+    private Target(double velocity) {
+      this.velocity = velocity;
     }
 
-    public double getVolts() {
-      return volts;
+    public double getValue() {
+      return velocity;
     }
   }
 
