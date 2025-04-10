@@ -67,6 +67,12 @@
                       "data": {
                         "pathName": "HR"
                       }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.2
+                      }
                     }
                   ]
                 }
