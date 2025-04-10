@@ -33,7 +33,7 @@ public class DriveConstants {
             Units.inchesToMeters(34),
             Units.inchesToMeters(34),
             4.5, // FIXME
-            5,
+            10,
             20);
         case PROG, SIM -> new DrivebaseConfig(
             Units.inchesToMeters(2),
