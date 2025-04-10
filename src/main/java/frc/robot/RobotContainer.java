@@ -500,8 +500,7 @@ public class RobotContainer {
                 !swerve.isTeleop()
                     && DriverStation.isTeleop()
                     && levelOffsets == LevelOffsets.PREP_L4_OFFSET
-                    && (rollers.readyToRaise()
-                        || superstructure.getTargetState() != SuperstructureState.INTAKE))
+                    && (superstructure.getTargetState() != SuperstructureState.INTAKE))
         .onTrue(superstructure.goToStateCommand(SuperstructureState.SCORE_L4));
     // auto go half to L4 after intaking
     new Trigger(() -> levelOffsets == LevelOffsets.PREP_L4_OFFSET && rollers.readyToRaise())
