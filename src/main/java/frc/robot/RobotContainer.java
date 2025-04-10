@@ -119,13 +119,7 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[1]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[2]),
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
-          vision =
-              new Vision(
-                  new VisionIOPhotonvision(1),
-                  new VisionIOPhotonvision(2),
-                  new VisionIOPhotonvision(3),
-                  new VisionIOPhotonvision(4),
-                  new VisionIOPhotonvision(5));
+          vision = new Vision(new VisionIOPhotonvision(4), new VisionIOPhotonvision(5));
           intake = new Intake(new IntakeIOTalonFX());
           funnel = new Funnel(new FunnelIOTalonFX());
           elevator = new Elevator(new ElevatorIOTalonFX());
@@ -611,11 +605,13 @@ public class RobotContainer {
     new Trigger(
             () ->
                 superstructure.getTargetState() == SuperstructureState.INTAKE
+                    && superstructure.getCurrentState() == SuperstructureState.INTAKE
                     && superstructure.superstructureReachedTarget())
         .onTrue(rollers.setTargetCommand(RollerState.INTAKE));
     new Trigger(
             () ->
-                superstructure.getTargetState() != SuperstructureState.INTAKE
+                !(superstructure.getTargetState() == SuperstructureState.INTAKE 
+                    && superstructure.getCurrentState() == SuperstructureState.INTAKE)
                     && rollers.getTargetState() == RollerState.INTAKE)
         .onTrue(rollers.setTargetCommand(RollerState.IDLE));
 
