@@ -500,8 +500,7 @@ public class RobotContainer {
                 !swerve.isTeleop()
                     && DriverStation.isTeleop()
                     && levelOffsets == LevelOffsets.PREP_L4_OFFSET
-                    && (rollers.readyToRaise()
-                        || superstructure.getTargetState() != SuperstructureState.INTAKE))
+                    && (superstructure.getTargetState() != SuperstructureState.INTAKE))
         .onTrue(superstructure.goToStateCommand(SuperstructureState.SCORE_L4));
     // auto go half to L4 after intaking
     new Trigger(() -> levelOffsets == LevelOffsets.PREP_L4_OFFSET && rollers.readyToRaise())
@@ -594,7 +593,7 @@ public class RobotContainer {
         .onTrue(
             new SequentialCommandGroup(
                 superstructure.goToStateCommand(SuperstructureState.INTAKE),
-                rollers.setTargetCommand(RollerState.FORCE_INTAKE)));
+                rollers.setTargetCommand(RollerState.INTAKE)));
 
     // RGB for intaking
     new Trigger(() -> rollers.intakeDetected())
@@ -610,8 +609,9 @@ public class RobotContainer {
         .onTrue(rollers.setTargetCommand(RollerState.INTAKE));
     new Trigger(
             () ->
-                !(superstructure.getTargetState() == SuperstructureState.INTAKE 
-                    && superstructure.getCurrentState() == SuperstructureState.INTAKE)
+                !(superstructure.getTargetState() == SuperstructureState.INTAKE
+                        && superstructure.getCurrentState() == SuperstructureState.INTAKE
+                        && superstructure.superstructureReachedTarget())
                     && rollers.getTargetState() == RollerState.INTAKE)
         .onTrue(rollers.setTargetCommand(RollerState.IDLE));
 
@@ -645,8 +645,8 @@ public class RobotContainer {
                     && (driverB.rightTrigger().getAsBoolean()
                         || (eject && superstructure.superstructureReachedTarget())))
         .onTrue(
-            rollers
-                .setTargetCommand(RollerState.EJECT_L3)
+            new InstantCommand(() -> eject = false)
+                .andThen(rollers.setTargetCommand(RollerState.EJECT_L3))
                 .andThen(
                     new WaitCommand(0.5)
                         .andThen(superstructure.goToStateCommand(SuperstructureState.INTAKE))));
