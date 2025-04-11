@@ -14,7 +14,7 @@ public class Elevator extends GenericSuperstructure<Elevator.ElevatorTarget> {
     SCORE_L4(30),
     TOP(31),
     INTAKE(0),
-    CLIMB(8),
+    CLIMB(13),
     DESCORE_HIGH(19.5),
     DESCORE_LOW(9.2),
     INTAKE_SIDE(13),

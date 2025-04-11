@@ -219,15 +219,14 @@ public class RobotState {
     Rotation2d horizontalOffset = bSide ? Rotation2d.kCW_Pi_2 : Rotation2d.kCCW_Pi_2;
 
     for (int i = 0; i < 6; ++i) {
-      Rotation2d initialTheta = new Rotation2d(i * -Math.PI / 3);
-      Pose2d directPose = offsetByVector(origin, (lastApproachOffset + 1.285), initialTheta);
+      Rotation2d initialTheta = new Rotation2d((i * -Math.PI / 3));
+      Pose2d directPose = offsetByVector(origin, lastApproachOffset + 1.285, initialTheta);
       Pose2d pose =
           translateByVector(
               directPose,
-              (offset == LevelOffsets.L1_OFFSET ? 0.44 : 0.165)
+              (offset == LevelOffsets.L1_OFFSET ? 0.23 : 0.165)
                   + (offset != LevelOffsets.L4_OFFSET ? (bSide ? -0.04 : 0.04) : 0),
               horizontalOffset);
-
       poses.add(pose);
     }
     var poseArray = poses.toArray(new Pose2d[poses.size()]);
@@ -254,6 +253,15 @@ public class RobotState {
     }
 
     ApproachPose approachPose = approachPoses[closestIndex];
+    approachPose =
+        offset == LevelOffsets.L1_OFFSET
+            ? new ApproachPose(
+                new Pose2d(
+                    approachPose.getPose().getTranslation(),
+                    new Rotation2d(
+                        approachPose.getPose().getRotation().getRadians()
+                            + (bSide ? 0.24 : -0.24))))
+            : approachPose;
 
     Logger.recordOutput("RobotState/ApproachPose", approachPose.getAlliancePose());
     Logger.recordOutput("RobotState/ApproachPoseIndex", closestIndex);

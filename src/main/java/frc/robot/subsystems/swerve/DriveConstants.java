@@ -172,7 +172,7 @@ public class DriveConstants {
   public static final TrajectoryFollowerConstants TRAJECTORY_CONFIG =
       switch (getRobotType()) {
         case COMP -> new TrajectoryFollowerConstants(
-            new PIDConstants(8, 0), new PIDConstants(4, 0));
+            new PIDConstants(3, 0), new PIDConstants(4, 0));
         case ALPHA -> new TrajectoryFollowerConstants(
             new PIDConstants(13, 0), new PIDConstants(11, 0));
         default -> new TrajectoryFollowerConstants(new PIDConstants(0, 0), new PIDConstants(0, 0));
