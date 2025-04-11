@@ -225,7 +225,7 @@ public class RobotState {
           translateByVector(
               directPose,
               (offset == LevelOffsets.L1_OFFSET ? 0.44 : 0.165)
-                  + (offset != LevelOffsets.L4_OFFSET ? (bSide ? -0.02 : 0.02) : 0),
+                  + (offset != LevelOffsets.L4_OFFSET ? (bSide ? -0.04 : 0.04) : 0),
               horizontalOffset);
 
       poses.add(pose);
