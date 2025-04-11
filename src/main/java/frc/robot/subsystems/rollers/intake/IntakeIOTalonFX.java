@@ -6,7 +6,7 @@ import frc.robot.subsystems.rollers.GenericRollersIOTalonFX;
 public class IntakeIOTalonFX extends GenericRollersIOTalonFX implements IntakeIO {
   private static final int id =
       switch (Constants.getRobotType()) {
-        case COMP -> 30;
+        case COMP -> 26;
         case ALPHA -> 14;
         default -> 0;
       };
