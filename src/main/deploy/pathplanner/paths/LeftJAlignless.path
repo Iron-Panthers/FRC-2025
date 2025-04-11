@@ -11,7 +11,7 @@
         "x": 6.666157834809783,
         "y": 5.861941496710677
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "Left"
     },
     {
@@ -27,7 +27,7 @@
         "x": 4.936268861619903,
         "y": 5.225610553679763
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "J Approach"
     },
     {
@@ -40,7 +40,7 @@
         "y": 5.388521286084053
       },
       "nextControl": null,
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "J"
     }
   ],
