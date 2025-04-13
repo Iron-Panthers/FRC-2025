@@ -77,10 +77,6 @@ public class Rollers extends SubsystemBase {
       case CLIMB -> {
         intake.setVoltageTarget(Intake.Target.IDLE);
         activeClimb.setVoltageTarget(ActiveClimb.Target.CLIMB);
-
-        if(intakeDetected()){
-          this.targetState = RollerState.IDLE;
-        }
       }
     }
 
