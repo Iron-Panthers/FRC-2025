@@ -14,10 +14,10 @@ public class ApproachReef extends SequentialCommandGroup {
   public enum LevelOffsets {
     // metres
     L4_OFFSET(0.14),
-    L3_OFFSET(0.07),
+    L3_OFFSET(0.105),
     PREP_L4_OFFSET(0.5),
-    L2_OFFSET(0),
-    L1_OFFSET(0);
+    L2_OFFSET(0.105),
+    L1_OFFSET(0.11);
     public double levelOffset;
 
     private LevelOffsets(double levelOffset) {
@@ -83,12 +83,7 @@ public class ApproachReef extends SequentialCommandGroup {
 
     public void calculatePath() {
       try {
-        reefAlign =
-            RobotState.getInstance()
-                .approachReefCommand(
-                    levelOffsetSupplier.get().getLevelOffset(),
-                    bSide,
-                    levelOffsetSupplier.get() == LevelOffsets.L1_OFFSET ? true : false);
+        reefAlign = RobotState.getInstance().approachReefCommand(levelOffsetSupplier.get(), bSide);
         reefAlign.initialize();
       } catch (Exception e) {
         e.printStackTrace();

@@ -37,6 +37,8 @@ import frc.robot.subsystems.rgb.RGBIOCANdle;
 import frc.robot.subsystems.rollers.RollerSensorsIOComp;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.Rollers.RollerState;
+import frc.robot.subsystems.rollers.funnel.Funnel;
+import frc.robot.subsystems.rollers.funnel.FunnelIOTalonFX;
 import frc.robot.subsystems.rollers.intake.Intake;
 import frc.robot.subsystems.rollers.intake.IntakeIOTalonFX;
 import frc.robot.subsystems.superstructure.ClimbController;
@@ -82,7 +84,7 @@ public class RobotContainer {
   private final CommandXboxController driverB = new CommandXboxController(1);
 
   @AutoLogOutput(key = "CommandedOffset")
-  private LevelOffsets levelOffsets = LevelOffsets.PREP_L4_OFFSET;
+  private LevelOffsets levelOffsets = LevelOffsets.L3_OFFSET;
 
   private boolean eject = false;
 
@@ -91,6 +93,7 @@ public class RobotContainer {
   private Drive swerve;
   private Vision vision;
   private Intake intake;
+  private Funnel funnel;
   private Rollers rollers;
   private Elevator elevator;
   private Pivot pivot;
@@ -104,6 +107,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     intake = null;
+    funnel = null;
 
     if (Constants.getRobotMode() != Mode.REPLAY) {
       switch (Constants.getRobotType()) {
@@ -117,6 +121,7 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
           vision = new Vision(new VisionIOPhotonvision(4), new VisionIOPhotonvision(5));
           intake = new Intake(new IntakeIOTalonFX());
+          funnel = new Funnel(new FunnelIOTalonFX());
           elevator = new Elevator(new ElevatorIOTalonFX());
           pivot = new Pivot(new PivotIOTalonFX());
           tongue = new Tongue(new TongueIOServo());
@@ -174,7 +179,7 @@ public class RobotContainer {
       vision = new Vision();
     }
 
-    rollers = new Rollers(intake, new RollerSensorsIOComp());
+    rollers = new Rollers(intake, funnel, new RollerSensorsIOComp());
 
     if (elevator == null) {
       elevator = new Elevator(new ElevatorIO() {});
@@ -600,6 +605,20 @@ public class RobotContainer {
     new Trigger(() -> rollers.getTargetState().equals(RollerState.INTAKE))
         .onTrue(rgb.endMessageCommand(RGBMessages.CORAL_DETECTED));
 
+    new Trigger(
+            () ->
+                superstructure.getTargetState() == SuperstructureState.INTAKE
+                    && superstructure.getCurrentState() == SuperstructureState.INTAKE
+                    && superstructure.superstructureReachedTarget())
+        .onTrue(rollers.setTargetCommand(RollerState.INTAKE));
+    new Trigger(
+            () ->
+                !(superstructure.getTargetState() == SuperstructureState.INTAKE
+                        && superstructure.getCurrentState() == SuperstructureState.INTAKE
+                        && superstructure.superstructureReachedTarget())
+                    && rollers.getTargetState() == RollerState.INTAKE)
+        .onTrue(rollers.setTargetCommand(RollerState.IDLE));
+
     // Eject on L1
     new Trigger(
             () ->
@@ -610,7 +629,6 @@ public class RobotContainer {
                 .andThen(rollers.setTargetCommand(RollerState.EJECT_L1))
                 .andThen(
                     new WaitCommand(0.5)
-                        .andThen(rollers.setTargetCommand(RollerState.INTAKE))
                         .andThen(superstructure.goToStateCommand(SuperstructureState.INTAKE))));
     // Eject L2
     new Trigger(
@@ -640,7 +658,6 @@ public class RobotContainer {
                 .andThen(rollers.setTargetCommand(RollerState.EJECT_L3))
                 .andThen(
                     new WaitCommand(0.5)
-                        .andThen(rollers.setTargetCommand(RollerState.INTAKE))
                         .andThen(superstructure.goToStateCommand(SuperstructureState.INTAKE))));
 
     // Eject Intake - ONLY IF ITS EXACTLY AT INTAKE
@@ -652,10 +669,9 @@ public class RobotContainer {
                     && driverB.rightTrigger().getAsBoolean())
         .onTrue(
             rollers
-                .setTargetCommand(RollerState.EJECT_TOP)
+                .setTargetCommand(RollerState.EJECT_BOTTOM)
                 .andThen(
                     new WaitCommand(0.5)
-                        .andThen(rollers.setTargetCommand(RollerState.INTAKE))
                         .andThen(superstructure.goToStateCommand(SuperstructureState.INTAKE))));
     // Eject if not at L1 or L2 or L3 or Intake
     new Trigger(
@@ -673,26 +689,23 @@ public class RobotContainer {
                 .andThen(rollers.setTargetCommand(RollerState.EJECT_TOP))
                 .andThen(
                     new WaitCommand(0.5)
-                        .andThen(rollers.setTargetCommand(RollerState.INTAKE))
                         .andThen(superstructure.goToStateCommand(SuperstructureState.INTAKE))));
     // Eject on L4 with sensors
     new Trigger(() -> (superstructure.getCurrentState() == SuperstructureState.SCORE_L4))
         .onTrue(
             new SequentialCommandGroup(
-                    // new WaitCommand(0.1),
-                    rollers.setTargetCommand(RollerState.EJECT_TOP),
-                    new WaitCommand(0.2),
-                    superstructure.goToStateCommand(SuperstructureState.INTAKE),
-                    new WaitCommand(0.9),
-                    rollers.setTargetCommand(RollerState.FORCE_INTAKE))
-                .andThen(new InstantCommand(() -> eject = false))
-                .alongWith(
-                    new InstantCommand(
-                        () ->
-                            levelOffsets =
-                                levelOffsets == LevelOffsets.L4_OFFSET
-                                    ? LevelOffsets.PREP_L4_OFFSET
-                                    : levelOffsets)));
+                // new WaitCommand(0.1),
+                rollers.setTargetCommand(RollerState.EJECT_TOP),
+                new WaitCommand(0.2),
+                superstructure.goToStateCommand(SuperstructureState.INTAKE),
+                new InstantCommand(() -> eject = false)
+                    .alongWith(
+                        new InstantCommand(
+                            () ->
+                                levelOffsets =
+                                    levelOffsets == LevelOffsets.L4_OFFSET
+                                        ? LevelOffsets.PREP_L4_OFFSET
+                                        : levelOffsets))));
   }
 
   private void configureAutos() {

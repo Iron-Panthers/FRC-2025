@@ -3,6 +3,7 @@ package frc.robot.subsystems.rollers;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.rollers.funnel.Funnel;
 import frc.robot.subsystems.rollers.intake.Intake;
 import org.littletonrobotics.junction.Logger;
 
@@ -16,10 +17,12 @@ public class Rollers extends SubsystemBase {
     EJECT_L1,
     EJECT_L2,
     EJECT_L3,
+    EJECT_BOTTOM,
     HOLD
   }
 
   private final Intake intake;
+  private final Funnel funnel;
   private final RollerSensorsIO sensorsIO;
   // private double ejectTime = 0;
   private double intakeTime = 0;
@@ -28,49 +31,57 @@ public class Rollers extends SubsystemBase {
   private RollerState targetState = RollerState.IDLE;
   private RollerSensorsIOInputsAutoLogged sensorsInputs = new RollerSensorsIOInputsAutoLogged();
 
-  public Rollers(Intake intake, RollerSensorsIO sensorsIO) {
+  public Rollers(Intake intake, Funnel funnel, RollerSensorsIO sensorsIO) {
     this.intake = intake;
     this.sensorsIO = sensorsIO;
+    this.funnel = funnel;
   }
 
   @Override
   public void periodic() {
     sensorsIO.updateInputs(sensorsInputs);
     Logger.processInputs("RollerSensors", sensorsInputs);
-    intake.setVoltageTarget(Intake.Target.IDLE);
+    intake.setRollerTarget(Intake.Target.IDLE);
+    funnel.setRollerTarget(Funnel.Target.IDLE);
 
     switch (targetState) {
       case IDLE -> {
-        intake.setVoltageTarget(Intake.Target.IDLE);
+        intake.setRollerTarget(Intake.Target.IDLE);
       }
       case INTAKE -> {
-        intake.setVoltageTarget(Intake.Target.INTAKE);
+        intake.setRollerTarget(Intake.Target.INTAKE);
+        funnel.setRollerTarget(Funnel.Target.INTAKE);
         if (intakeDetected()) {
           this.targetState = RollerState.HOLD;
         }
       }
       case FORCE_INTAKE -> {
         intakeTime += 0.02;
-        intake.setVoltageTarget(Intake.Target.INTAKE);
+        intake.setRollerTarget(Intake.Target.INTAKE);
+        funnel.setRollerTarget(Funnel.Target.INTAKE);
         if (intakeTime > 0.5) {
           this.targetState = RollerState.INTAKE;
           intakeTime = 0;
         }
       }
       case HOLD -> {
-        intake.setVoltageTarget(Intake.Target.HOLD);
+        intake.setRollerTarget(Intake.Target.HOLD);
       }
       case EJECT_TOP -> {
-        intake.setVoltageTarget(Intake.Target.EJECT_TOP);
+        intake.setRollerTarget(Intake.Target.EJECT_TOP);
       }
       case EJECT_L1 -> {
-        intake.setVoltageTarget(Intake.Target.EJECT_L1);
+        intake.setRollerTarget(Intake.Target.EJECT_L1);
       }
       case EJECT_L2 -> {
-        intake.setVoltageTarget(Intake.Target.EJECT_L2);
+        intake.setRollerTarget(Intake.Target.EJECT_L2);
       }
       case EJECT_L3 -> {
-        intake.setVoltageTarget(Intake.Target.EJECT_L3);
+        intake.setRollerTarget(Intake.Target.EJECT_L3);
+      }
+      case EJECT_BOTTOM -> {
+        intake.setRollerTarget(Intake.Target.EJECT_TOP);
+        funnel.setRollerTarget(Funnel.Target.EJECT);
       }
     }
     if (intakeDetected()) {
@@ -80,6 +91,7 @@ public class Rollers extends SubsystemBase {
     }
 
     intake.periodic();
+    funnel.periodic();
 
     Logger.recordOutput("Rollers/TargetState", targetState);
   }

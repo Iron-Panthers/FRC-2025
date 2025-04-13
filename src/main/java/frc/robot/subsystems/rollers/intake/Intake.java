@@ -18,7 +18,7 @@ public class Intake extends GenericRollers<Intake.Target> {
       this.volts = volts;
     }
 
-    public double getVolts() {
+    public double getValue() {
       return volts;
     }
   }
