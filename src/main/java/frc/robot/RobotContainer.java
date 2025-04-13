@@ -21,6 +21,9 @@ import frc.robot.autonomous.PathCommand;
 import frc.robot.subsystems.rollers.RollerSensorsIOComp;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.Rollers.RollerState;
+import frc.robot.subsystems.rollers.activeclimb.ActiveClimb;
+import frc.robot.subsystems.rollers.activeclimb.ActiveClimbIO;
+import frc.robot.subsystems.rollers.activeclimb.ActiveClimbIOTalonFX;
 import frc.robot.subsystems.rollers.intake.Intake;
 import frc.robot.subsystems.rollers.intake.IntakeIOTalonFX;
 import frc.robot.subsystems.superstructure.Superstructure;
@@ -43,6 +46,7 @@ import frc.robot.subsystems.swerve.ModuleIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIOPhotonvision;
 import java.util.function.BooleanSupplier;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -66,6 +70,9 @@ public class RobotContainer {
   private Pivot pivot;
   private Tongue tongue;
   private Superstructure superstructure;
+  private ActiveClimb activeClimb;
+
+  private boolean climbToggle = false;
 
   public RobotContainer() {
     intake = null;
@@ -116,6 +123,7 @@ public class RobotContainer {
           intake = new Intake(new IntakeIOTalonFX());
           pivot = new Pivot(new PivotIOTalonFX());
           elevator = new Elevator(new ElevatorIOTalonFX());
+          activeClimb = new ActiveClimb(new ActiveClimbIOTalonFX());
         }
         case SIM -> {
           swerve =
@@ -142,8 +150,11 @@ public class RobotContainer {
     if (vision == null) {
       vision = new Vision();
     }
+    if (activeClimb == null) {
+      activeClimb = new ActiveClimb(new ActiveClimbIO() {});
+    }
 
-    rollers = new Rollers(intake, new RollerSensorsIOComp());
+    rollers = new Rollers(intake, activeClimb, new RollerSensorsIOComp());
 
     if (elevator == null) {
       elevator = new Elevator(new ElevatorIO() {});
@@ -154,7 +165,10 @@ public class RobotContainer {
     if (tongue == null) {
       tongue = new Tongue(new TongueIO() {});
     }
+
     superstructure = new Superstructure(elevator, pivot, tongue);
+
+    Logger.recordOutput("skibidi zaddy climbtoggle", climbToggle);
 
     configureBindings();
     configureAutos();
@@ -203,6 +217,14 @@ public class RobotContainer {
         .b()
         .onTrue(
             new InstantCommand(() -> swerve.setTargetHeading(new Rotation2d(Math.toRadians(232)))));
+
+    // driverA.back().(
+    //         activeClimb.setVoltageTarget(ActiveClimb.Target.INTAKE);
+    // );
+
+    driverA.povUp().onTrue(rollers.setTargetCommand(RollerState.CLIMB));
+
+    driverA.povDown().onTrue(rollers.setTargetCommand(RollerState.IDLE));
 
     // driverA
     //     .y()
