@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 5.827800649624166,
-        "y": 0.5273374986079983
+        "y": 0.5273374986079982
       },
       "nextControl": {
         "x": 7.097098563330727,
@@ -51,7 +51,7 @@
     },
     {
       "waypointRelativePos": 1.487150493421054,
-      "rotationDegrees": -84.23635428755374
+      "rotationDegrees": -84.23635428755375
     }
   ],
   "constraintZones": [
@@ -87,7 +87,7 @@
   "folder": "Autos",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -153.66978042986042
+    "rotation": -145.0
   },
   "useDefaultConstraints": false
 }
