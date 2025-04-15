@@ -13,6 +13,8 @@ public interface GenericSuperstructureIO {
     public double supplyCurrentAmps = 0;
     public double tempCelsius = 0;
     public boolean zeroing = false;
+    public boolean connected2;
+    public boolean connected1;
   }
 
   default void updateInputs(GenericSuperstructureIOInputs inputs) {}
