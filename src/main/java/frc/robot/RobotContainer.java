@@ -26,8 +26,12 @@ import frc.robot.subsystems.rollers.activeclimb.ActiveClimbIO;
 import frc.robot.subsystems.rollers.activeclimb.ActiveClimbIOTalonFX;
 import frc.robot.subsystems.rollers.intake.Intake;
 import frc.robot.subsystems.rollers.intake.IntakeIOTalonFX;
+import frc.robot.subsystems.superstructure.ClimbController;
 import frc.robot.subsystems.superstructure.Superstructure;
 import frc.robot.subsystems.superstructure.Superstructure.SuperstructureState;
+import frc.robot.subsystems.superstructure.climb.Climb;
+import frc.robot.subsystems.superstructure.climb.ClimbIO;
+import frc.robot.subsystems.superstructure.climb.ClimbIOTalonFX;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
 import frc.robot.subsystems.superstructure.elevator.ElevatorIO;
 import frc.robot.subsystems.superstructure.elevator.ElevatorIOTalonFX;
@@ -70,7 +74,9 @@ public class RobotContainer {
   private Pivot pivot;
   private Tongue tongue;
   private Superstructure superstructure;
+  private Climb climb;
   private ActiveClimb activeClimb;
+  private ClimbController climbController;
 
   private boolean climbToggle = false;
 
@@ -122,7 +128,8 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
           intake = new Intake(new IntakeIOTalonFX());
           pivot = new Pivot(new PivotIOTalonFX());
-          elevator = new Elevator(new ElevatorIOTalonFX());
+          elevator = new Elevator(new ElevatorIOTalonFX());          
+          climb = new Climb(new ClimbIOTalonFX());
           activeClimb = new ActiveClimb(new ActiveClimbIOTalonFX());
         }
         case SIM -> {
@@ -165,6 +172,12 @@ public class RobotContainer {
     if (tongue == null) {
       tongue = new Tongue(new TongueIO() {});
     }
+
+    if(climb == null){
+      climb = new Climb(new ClimbIO() {});
+    }
+    
+    climbController = new ClimbController(climb);
 
     superstructure = new Superstructure(elevator, pivot, tongue);
 
@@ -225,6 +238,9 @@ public class RobotContainer {
     driverA.povUp().onTrue(rollers.setTargetCommand(RollerState.CLIMB));
 
     driverA.povDown().onTrue(rollers.setTargetCommand(RollerState.IDLE));
+
+    new Trigger(() -> climbController.climbHitCage())
+        .onTrue(rollers.setTargetCommand(RollerState.IDLE));
 
     // driverA
     //     .y()
