@@ -500,11 +500,15 @@ public class RobotContainer {
                 !swerve.isTeleop()
                     && DriverStation.isTeleop()
                     && levelOffsets == LevelOffsets.PREP_L4_OFFSET
-                    && (superstructure.getTargetState() != SuperstructureState.INTAKE))
+                    && (superstructure.getTargetState() == SuperstructureState.PREVENT_TIPPING))
         .onTrue(superstructure.goToStateCommand(SuperstructureState.SCORE_L4));
     // auto go half to L4 after intaking
-    new Trigger(() -> levelOffsets == LevelOffsets.PREP_L4_OFFSET && rollers.readyToRaise())
-        .onTrue(superstructure.goToStateCommand(SuperstructureState.PREVENT_TIPPING));
+    new Trigger(
+            () ->
+                levelOffsets == LevelOffsets.PREP_L4_OFFSET
+                    && rollers.readyToRaise()
+                    && DriverStation.isTeleop())
+        .whileTrue(superstructure.goToStateCommand(SuperstructureState.PREVENT_TIPPING));
     // L1
     driverB
         .povDown()
@@ -636,7 +640,12 @@ public class RobotContainer {
                 .andThen(rollers.setTargetCommand(RollerState.EJECT_L2))
                 .andThen(
                     new WaitCommand(0.5)
-                        .andThen(superstructure.goToStateCommand(SuperstructureState.INTAKE))));
+                        .andThen(rollers.setTargetCommand(RollerState.EJECT_TOP))
+                        .andThen(new WaitCommand(0.03))
+                        .andThen(rollers.setTargetCommand(RollerState.IDLE))
+                        .andThen(superstructure.goToStateCommand(SuperstructureState.INTAKE)))
+                .andThen(new WaitCommand(0.5))
+                .andThen(rollers.setTargetCommand(RollerState.INTAKE)));
 
     // Eject L3
     new Trigger(

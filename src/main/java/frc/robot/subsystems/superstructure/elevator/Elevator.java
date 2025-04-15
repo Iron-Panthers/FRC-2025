@@ -8,13 +8,13 @@ public class Elevator extends GenericSuperstructure<Elevator.ElevatorTarget> {
   public enum ElevatorTarget implements GenericSuperstructure.PositionTarget {
     BOTTOM(0.6), // 25 and 7.25, made it a bit bigger
     L1(12), // FIXME: 26 and 21.5
-    L2(20.6), // 24 and 53.75
-    L3(32.4), // 0 and 53.75
-    SETUP_L4(31.67),
+    L2(20), // 24 and 53.75
+    L3(32.2), // 0 and 53.75
+    SETUP_L4(31.6),
     SCORE_L4(30),
     TOP(31),
     INTAKE(0),
-    CLIMB(8),
+    CLIMB(13),
     DESCORE_HIGH(19.5),
     DESCORE_LOW(9.2),
     INTAKE_SIDE(13),
