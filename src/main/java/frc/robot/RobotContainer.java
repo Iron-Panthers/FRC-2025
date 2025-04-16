@@ -576,7 +576,12 @@ public class RobotContainer {
                 }));
 
     // kinda manual commands
-    driverB.leftBumper().onTrue(climbController.setPositionTargetCommand(ClimbTarget.STOW));
+    driverB
+        .leftBumper()
+        .onTrue(
+            climbController
+                .setPositionTargetCommand(ClimbTarget.STOW)
+                .alongWith(rollers.setTargetCommand(RollerState.IDLE)));
     driverB
         .rightBumper()
         .onTrue(
@@ -590,13 +595,13 @@ public class RobotContainer {
             climbController
                 .setPositionTargetCommand(
                     ClimbTarget.TOP) // FIXME: We need to add elevator position up
-                .alongWith(rollers.setTargetCommand(RollerState.CLIMB)));
+                .alongWith(rollers.setTargetCommand(RollerState.IDLE)));
 
     new Trigger(() -> driverB.b().getAsBoolean() && driverB.start().getAsBoolean())
         .onTrue(
             climbController
                 .setPositionTargetCommand(ClimbTarget.BOTTOM)
-                .alongWith(rollers.setTargetCommand(RollerState.IDLE))
+                .alongWith(rollers.setTargetCommand(RollerState.CLIMB))
                 .alongWith(superstructure.goToStateCommand(SuperstructureState.CLIMB)));
 
     new Trigger(() -> climbController.climbHitCage())
