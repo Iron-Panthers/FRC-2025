@@ -105,6 +105,7 @@ public class RobotContainer {
   private ApproachReef approachReef;
   private ClimbController climbController;
   private ActiveClimb activeClimb;
+  private ClimbController climbController;
 
   private boolean climbToggle = false;
 
@@ -152,7 +153,8 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
           intake = new Intake(new IntakeIOTalonFX());
           pivot = new Pivot(new PivotIOTalonFX());
-          elevator = new Elevator(new ElevatorIOTalonFX());
+          elevator = new Elevator(new ElevatorIOTalonFX());          
+          climb = new Climb(new ClimbIOTalonFX());
           activeClimb = new ActiveClimb(new ActiveClimbIOTalonFX());
         }
         case SIM -> {
@@ -204,6 +206,12 @@ public class RobotContainer {
     if (tongue == null) {
       tongue = new Tongue(new TongueIO() {});
     }
+
+    if(climb == null){
+      climb = new Climb(new ClimbIO() {});
+    }
+    
+    climbController = new ClimbController(climb);
 
     superstructure = new Superstructure(elevator, pivot, tongue);
 
@@ -464,6 +472,9 @@ public class RobotContainer {
     driverA.povUp().onTrue(rollers.setTargetCommand(RollerState.CLIMB));
 
     driverA.povDown().onTrue(rollers.setTargetCommand(RollerState.IDLE));
+
+    new Trigger(() -> climbController.climbHitCage())
+        .onTrue(rollers.setTargetCommand(RollerState.IDLE));
 
     // driverA
     //     .y()
