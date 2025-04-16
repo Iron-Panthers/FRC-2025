@@ -37,6 +37,9 @@ import frc.robot.subsystems.rgb.RGBIOCANdle;
 import frc.robot.subsystems.rollers.RollerSensorsIOComp;
 import frc.robot.subsystems.rollers.Rollers;
 import frc.robot.subsystems.rollers.Rollers.RollerState;
+import frc.robot.subsystems.rollers.activeclimb.ActiveClimb;
+import frc.robot.subsystems.rollers.activeclimb.ActiveClimbIO;
+import frc.robot.subsystems.rollers.activeclimb.ActiveClimbIOTalonFX;
 import frc.robot.subsystems.rollers.intake.Intake;
 import frc.robot.subsystems.rollers.intake.IntakeIOTalonFX;
 import frc.robot.subsystems.superstructure.ClimbController;
@@ -101,6 +104,9 @@ public class RobotContainer {
   private CANWatchdog canWatchdog;
   private ApproachReef approachReef;
   private ClimbController climbController;
+  private ActiveClimb activeClimb;
+
+  private boolean climbToggle = false;
 
   public RobotContainer() {
     intake = null;
@@ -147,6 +153,7 @@ public class RobotContainer {
           intake = new Intake(new IntakeIOTalonFX());
           pivot = new Pivot(new PivotIOTalonFX());
           elevator = new Elevator(new ElevatorIOTalonFX());
+          activeClimb = new ActiveClimb(new ActiveClimbIOTalonFX());
         }
         case SIM -> {
           swerve =
@@ -173,8 +180,11 @@ public class RobotContainer {
     if (vision == null) {
       vision = new Vision();
     }
+    if (activeClimb == null) {
+      activeClimb = new ActiveClimb(new ActiveClimbIO() {});
+    }
 
-    rollers = new Rollers(intake, new RollerSensorsIOComp());
+    rollers = new Rollers(intake, activeClimb, new RollerSensorsIOComp());
 
     if (elevator == null) {
       elevator = new Elevator(new ElevatorIO() {});
@@ -194,6 +204,7 @@ public class RobotContainer {
     if (tongue == null) {
       tongue = new Tongue(new TongueIO() {});
     }
+
     superstructure = new Superstructure(elevator, pivot, tongue);
 
     nameCommands();
@@ -446,6 +457,18 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(() -> swerve.setTargetHeading(new Rotation2d(Math.toRadians(232)))));
 
+    // driverA.back().(
+    //         activeClimb.setVoltageTarget(ActiveClimb.Target.INTAKE);
+    // );
+
+    driverA.povUp().onTrue(rollers.setTargetCommand(RollerState.CLIMB));
+
+    driverA.povDown().onTrue(rollers.setTargetCommand(RollerState.IDLE));
+
+    // driverA
+    //     .y()
+    //     .onTrue(
+    //         new InstantCommand(() -> tongue.setPositionTarget()));
     // -----Superstructure Controls-----
     // auto go to L1
     new Trigger(

@@ -3,6 +3,7 @@ package frc.robot.subsystems.rollers;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.rollers.activeclimb.ActiveClimb;
 import frc.robot.subsystems.rollers.intake.Intake;
 import org.littletonrobotics.junction.Logger;
 
@@ -17,9 +18,11 @@ public class Rollers extends SubsystemBase {
     EJECT_L2,
     EJECT_L3,
     HOLD
+    CLIMB,
   }
 
   private final Intake intake;
+  private final ActiveClimb activeClimb;
   private final RollerSensorsIO sensorsIO;
   // private double ejectTime = 0;
   private double intakeTime = 0;
@@ -28,8 +31,9 @@ public class Rollers extends SubsystemBase {
   private RollerState targetState = RollerState.IDLE;
   private RollerSensorsIOInputsAutoLogged sensorsInputs = new RollerSensorsIOInputsAutoLogged();
 
-  public Rollers(Intake intake, RollerSensorsIO sensorsIO) {
+  public Rollers(Intake intake, ActiveClimb activeClimb, RollerSensorsIO sensorsIO) {
     this.intake = intake;
+    this.activeClimb = activeClimb;
     this.sensorsIO = sensorsIO;
   }
 
@@ -37,17 +41,19 @@ public class Rollers extends SubsystemBase {
   public void periodic() {
     sensorsIO.updateInputs(sensorsInputs);
     Logger.processInputs("RollerSensors", sensorsInputs);
-    intake.setVoltageTarget(Intake.Target.IDLE);
+    // intake.setVoltageTarget(Intake.Target.IDLE);
 
     switch (targetState) {
       case IDLE -> {
         intake.setVoltageTarget(Intake.Target.IDLE);
+        activeClimb.setVoltageTarget(ActiveClimb.Target.IDLE);
       }
       case INTAKE -> {
         intake.setVoltageTarget(Intake.Target.INTAKE);
         if (intakeDetected()) {
           this.targetState = RollerState.HOLD;
         }
+        activeClimb.setVoltageTarget(ActiveClimb.Target.IDLE);
       }
       case FORCE_INTAKE -> {
         intakeTime += 0.02;
@@ -56,9 +62,11 @@ public class Rollers extends SubsystemBase {
           this.targetState = RollerState.INTAKE;
           intakeTime = 0;
         }
+        activeClimb.setVoltageTarget(ActiveClimb.Target.IDLE);
       }
       case HOLD -> {
         intake.setVoltageTarget(Intake.Target.HOLD);
+        activeClimb.setVoltageTarget(ActiveClimb.Target.IDLE);
       }
       case EJECT_TOP -> {
         intake.setVoltageTarget(Intake.Target.EJECT_TOP);
@@ -72,6 +80,10 @@ public class Rollers extends SubsystemBase {
       case EJECT_L3 -> {
         intake.setVoltageTarget(Intake.Target.EJECT_L3);
       }
+      case CLIMB -> {
+        intake.setVoltageTarget(Intake.Target.IDLE);
+        activeClimb.setVoltageTarget(ActiveClimb.Target.CLIMB);
+      }
     }
     if (intakeDetected()) {
       timeSinceStopped += 0.02;
@@ -80,6 +92,7 @@ public class Rollers extends SubsystemBase {
     }
 
     intake.periodic();
+    activeClimb.periodic();
 
     Logger.recordOutput("Rollers/TargetState", targetState);
   }
