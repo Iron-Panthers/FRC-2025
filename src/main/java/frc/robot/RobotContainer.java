@@ -47,7 +47,7 @@ import frc.robot.subsystems.superstructure.Superstructure;
 import frc.robot.subsystems.superstructure.Superstructure.SuperstructureState;
 import frc.robot.subsystems.superstructure.climb.Climb;
 import frc.robot.subsystems.superstructure.climb.Climb.ClimbTarget;
-import frc.robot.subsystems.superstructure.climb.ClimbOTalonFX;
+import frc.robot.subsystems.superstructure.climb.ClimbIOTalonFX;
 import frc.robot.subsystems.superstructure.elevator.Elevator;
 import frc.robot.subsystems.superstructure.elevator.Elevator.ElevatorTarget;
 import frc.robot.subsystems.superstructure.elevator.ElevatorIO;
@@ -105,7 +105,6 @@ public class RobotContainer {
   private ApproachReef approachReef;
   private ClimbController climbController;
   private ActiveClimb activeClimb;
-  private ClimbController climbController;
 
   private boolean climbToggle = false;
 
@@ -129,7 +128,7 @@ public class RobotContainer {
           tongue = new Tongue(new TongueIOServo());
           rgb = new RGB(new RGBIOCANdle());
           canWatchdog = new CANWatchdog(new CANWatchdogIOComp(), rgb);
-          climb = new Climb(new ClimbOTalonFX());
+          climb = new Climb(new ClimbIOTalonFX());
         }
         case PROG -> {
           swerve =
@@ -153,7 +152,7 @@ public class RobotContainer {
                   new ModuleIOTalonFX(DriveConstants.MODULE_CONFIGS[3]));
           intake = new Intake(new IntakeIOTalonFX());
           pivot = new Pivot(new PivotIOTalonFX());
-          elevator = new Elevator(new ElevatorIOTalonFX());          
+          elevator = new Elevator(new ElevatorIOTalonFX());
           climb = new Climb(new ClimbIOTalonFX());
           activeClimb = new ActiveClimb(new ActiveClimbIOTalonFX());
         }
@@ -207,19 +206,14 @@ public class RobotContainer {
       tongue = new Tongue(new TongueIO() {});
     }
 
-    if(climb == null){
-      climb = new Climb(new ClimbIO() {});
+    if (climb == null) {
+      climb = new Climb(new ClimbIOTalonFX());
     }
-    
     climbController = new ClimbController(climb);
 
     superstructure = new Superstructure(elevator, pivot, tongue);
 
     nameCommands();
-    if (climb == null) {
-      climb = new Climb(new ClimbOTalonFX());
-    }
-    climbController = new ClimbController(climb);
 
     configureAutos();
     configureBindings();
@@ -465,21 +459,6 @@ public class RobotContainer {
         .onTrue(
             new InstantCommand(() -> swerve.setTargetHeading(new Rotation2d(Math.toRadians(232)))));
 
-    // driverA.back().(
-    //         activeClimb.setVoltageTarget(ActiveClimb.Target.INTAKE);
-    // );
-
-    driverA.povUp().onTrue(rollers.setTargetCommand(RollerState.CLIMB));
-
-    driverA.povDown().onTrue(rollers.setTargetCommand(RollerState.IDLE));
-
-    new Trigger(() -> climbController.climbHitCage())
-        .onTrue(rollers.setTargetCommand(RollerState.IDLE));
-
-    // driverA
-    //     .y()
-    //     .onTrue(
-    //         new InstantCommand(() -> tongue.setPositionTarget()));
     // -----Superstructure Controls-----
     // auto go to L1
     new Trigger(
@@ -608,15 +587,21 @@ public class RobotContainer {
     driverB
         .y()
         .onTrue(
-            climbController.setPositionTargetCommand(
-                ClimbTarget.TOP) // FIXME: We need to add elevator position up
-            );
+            climbController
+                .setPositionTargetCommand(
+                    ClimbTarget.TOP) // FIXME: We need to add elevator position up
+                .alongWith(rollers.setTargetCommand(RollerState.CLIMB)));
 
     new Trigger(() -> driverB.b().getAsBoolean() && driverB.start().getAsBoolean())
         .onTrue(
             climbController
                 .setPositionTargetCommand(ClimbTarget.BOTTOM)
+                .alongWith(rollers.setTargetCommand(RollerState.IDLE))
                 .alongWith(superstructure.goToStateCommand(SuperstructureState.CLIMB)));
+
+    new Trigger(() -> climbController.climbHitCage())
+        .onTrue(rollers.setTargetCommand(RollerState.IDLE));
+
     // Descore
     driverB.rightStick().onTrue(superstructure.goToStateCommand(SuperstructureState.DESCORE_LOW));
     driverB.leftStick().onTrue(superstructure.goToStateCommand(SuperstructureState.DESCORE_HIGH));
