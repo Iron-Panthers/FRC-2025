@@ -17,8 +17,8 @@ public class Rollers extends SubsystemBase {
     EJECT_L1,
     EJECT_L2,
     EJECT_L3,
-    HOLD
-    CLIMB,
+    HOLD,
+    CLIMB;
   }
 
   private final Intake intake;
@@ -70,15 +70,19 @@ public class Rollers extends SubsystemBase {
       }
       case EJECT_TOP -> {
         intake.setVoltageTarget(Intake.Target.EJECT_TOP);
+        activeClimb.setVoltageTarget(ActiveClimb.Target.IDLE);
       }
       case EJECT_L1 -> {
         intake.setVoltageTarget(Intake.Target.EJECT_L1);
+        activeClimb.setVoltageTarget(ActiveClimb.Target.IDLE);
       }
       case EJECT_L2 -> {
         intake.setVoltageTarget(Intake.Target.EJECT_L2);
+        activeClimb.setVoltageTarget(ActiveClimb.Target.IDLE);
       }
       case EJECT_L3 -> {
         intake.setVoltageTarget(Intake.Target.EJECT_L3);
+        activeClimb.setVoltageTarget(ActiveClimb.Target.IDLE);
       }
       case CLIMB -> {
         intake.setVoltageTarget(Intake.Target.IDLE);
