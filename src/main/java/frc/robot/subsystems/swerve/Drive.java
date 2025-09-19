@@ -4,6 +4,7 @@ import static frc.robot.subsystems.swerve.DriveConstants.KINEMATICS;
 
 import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -13,10 +14,12 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotState;
 import frc.robot.subsystems.swerve.controllers.HeadingController;
+import frc.robot.subsystems.swerve.controllers.PIDAutoAlignController;
 import frc.robot.subsystems.swerve.controllers.TeleopController;
 import java.util.Arrays;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -25,7 +28,8 @@ import org.littletonrobotics.junction.Logger;
 public class Drive extends SubsystemBase {
   public enum DriveModes {
     TELEOP,
-    TRAJECTORY;
+    TRAJECTORY,
+    AUTO_ALIGN;
   }
 
   private DriveModes driveMode = DriveModes.TELEOP;
@@ -45,6 +49,7 @@ public class Drive extends SubsystemBase {
   private final TeleopController teleopController;
   private ChassisSpeeds trajectorySpeeds = new ChassisSpeeds();
   private HeadingController headingController = null;
+  private PIDAutoAlignController pidAutoAlignController = null;
 
   public Drive(GyroIO gyroIO, ModuleIO fl, ModuleIO fr, ModuleIO bl, ModuleIO br) {
     this.gyroIO = gyroIO;
@@ -97,6 +102,12 @@ public class Drive extends SubsystemBase {
           targetSpeeds.omegaRadiansPerSecond = headingController.update() + 0.0001;
         }
         // add heading controll override
+      }
+      case AUTO_ALIGN -> {
+        if (pidAutoAlignController != null) {
+          targetSpeeds = pidAutoAlignController.update();
+          targetSpeeds.omegaRadiansPerSecond = headingController.update();
+        }
       }
     }
     RobotState.getInstance().addRobotSpeeds(getRobotSpeeds());
@@ -190,6 +201,36 @@ public class Drive extends SubsystemBase {
 
   public void clearHeadingControl() {
     headingController = null;
+  }
+
+  public Pose2d setTargetPosition(Pose2d targetPosition) {
+    driveMode = DriveModes.AUTO_ALIGN;
+    if (pidAutoAlignController == null) {
+      pidAutoAlignController =
+          new PIDAutoAlignController(
+              () -> RobotState.getInstance().getEstimatedPose(),
+              () -> arbitraryYaw,
+              targetPosition);
+    } else {
+      pidAutoAlignController.setTargetPosition(targetPosition);
+    }
+
+    setTargetHeading(targetPosition.getRotation().plus(new Rotation2d(Math.PI)));
+
+    return targetPosition;
+  }
+
+  public void clearTargetPositionController() {
+    pidAutoAlignController = null;
+  }
+
+  public Command setTargetApproachReef(double offset, boolean bside, boolean l1) {
+    return new FunctionalCommand(
+        () -> setTargetPosition(RobotState.getInstance().getApproachPose(offset, bside, l1)),
+        () -> {},
+        (t) -> clearTargetPositionController(),
+        () -> false,
+        this);
   }
 
   public boolean isTeleop() {
