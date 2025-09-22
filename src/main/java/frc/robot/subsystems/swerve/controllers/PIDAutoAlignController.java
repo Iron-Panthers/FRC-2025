@@ -58,6 +58,8 @@ public class PIDAutoAlignController {
   // update the values
   public ChassisSpeeds update() {
     calculateLinearMovement();
+    xVel = Math.abs(xVel) > 0.02 ? xVel : 0;
+    yVel = Math.abs(yVel) > 0.02 ? yVel : 0;
     return ChassisSpeeds.fromFieldRelativeSpeeds(
         new ChassisSpeeds(-xVel, -yVel, 0), yawSupplier.get());
   }
