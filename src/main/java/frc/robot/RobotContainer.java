@@ -366,7 +366,7 @@ public class RobotContainer {
     driverA
         .leftBumper()
         .whileTrue(
-            (new ApproachReef(() -> levelOffsets, false, swerve)
+            (new ApproachReef(() -> levelOffsets, true, swerve)
                     .alongWith(new InstantCommand(() -> swerve.clearHeadingControl()))
                     .andThen(
                         new InstantCommand(
@@ -381,7 +381,7 @@ public class RobotContainer {
     driverA
         .rightBumper()
         .whileTrue(
-            (new ApproachReef(() -> levelOffsets, true, swerve)
+            (new ApproachReef(() -> levelOffsets, false, swerve)
                     .alongWith(new InstantCommand(() -> swerve.clearHeadingControl()))
                     .andThen(
                         new InstantCommand(

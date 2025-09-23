@@ -48,8 +48,7 @@ public class ApproachReef extends SequentialCommandGroup {
     public boolean isFinished() {
       return reefAlign == null
           ? false
-          : reefAlign.isFinished()
-              && (RobotState.getInstance().alignError() < 0.5
+          : (RobotState.getInstance().alignError() < 0.5
                   || (RobotState.getInstance().alignError() < 2
                       && levelOffsetSupplier.get() == LevelOffsets.PREP_L4_OFFSET))
               && Math.abs(RobotState.getInstance().getVelocity().getNorm()) < 0.1;
