@@ -2,12 +2,15 @@ package frc.robot.subsystems.swerve.controllers;
 
 import static frc.robot.subsystems.swerve.DriveConstants.PID_AUTOALIGN_CONSTANTS;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.robot.Constants;
+import frc.robot.RobotState;
 import java.util.function.Supplier;
 
 public class PIDAutoAlignController {
@@ -15,6 +18,9 @@ public class PIDAutoAlignController {
   // supplies the position values
   private ProfiledPIDController controller;
   private Supplier<Pose2d> positionSupplier;
+  private Translation2d pastLinearVelocity;
+
+  private double clampedVelocityDiff = 0;
 
   // target position
   private Pose2d targetPosition;
@@ -27,14 +33,15 @@ public class PIDAutoAlignController {
     this.positionSupplier = positionSupplier;
     this.targetPosition = targetPosition;
     this.yawSupplier = yawSupplier;
+    pastLinearVelocity = RobotState.getInstance().getVelocity();
+
     // setting up the ProfiledPIDCawontroller
     controller =
         new ProfiledPIDController(
             PID_AUTOALIGN_CONSTANTS.kP(),
             0,
             PID_AUTOALIGN_CONSTANTS.kD(),
-            new Constraints(
-                PID_AUTOALIGN_CONSTANTS.maxVelocity(), PID_AUTOALIGN_CONSTANTS.maxAcceleration()),
+            new Constraints(0, 0),
             Constants.PERIODIC_LOOP_SEC);
   }
   // calculate how to get to the desired position
@@ -60,8 +67,33 @@ public class PIDAutoAlignController {
     calculateLinearMovement();
     xVel = Math.abs(xVel) > 0.02 ? xVel : 0;
     yVel = Math.abs(yVel) > 0.02 ? yVel : 0;
+
+    Translation2d linearVelocity =
+        new Translation2d(
+            xVel / (PID_AUTOALIGN_CONSTANTS.maxVelocity()),
+            yVel / (PID_AUTOALIGN_CONSTANTS.maxVelocity()));
+    // acceleration limiting
+    Translation2d linearVelocityDiff = linearVelocity.minus(pastLinearVelocity);
+    clampedVelocityDiff =
+        MathUtil.clamp(
+            Math.abs(linearVelocity.getDistance(pastLinearVelocity)),
+            0,
+            PID_AUTOALIGN_CONSTANTS.maxAcceleration() * (Constants.PERIODIC_LOOP_SEC));
+    Rotation2d velocityTheta;
+    if (linearVelocityDiff.getX() != 0 || linearVelocityDiff.getY() != 0) {
+      velocityTheta = linearVelocityDiff.getAngle();
+    } else {
+      velocityTheta = new Rotation2d();
+    }
+    Translation2d newVelocity =
+        pastLinearVelocity.plus(new Translation2d(clampedVelocityDiff, velocityTheta));
+    pastLinearVelocity = newVelocity;
+
     return ChassisSpeeds.fromFieldRelativeSpeeds(
-        new ChassisSpeeds(-xVel, -yVel, 0), yawSupplier.get());
+        -newVelocity.getX() * PID_AUTOALIGN_CONSTANTS.maxVelocity(),
+        -newVelocity.getY() * PID_AUTOALIGN_CONSTANTS.maxVelocity(),
+        0,
+        yawSupplier.get());
   }
   // log your data in advantage kit
   public Pose2d getTargetPosition() {
