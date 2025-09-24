@@ -373,7 +373,7 @@ public class RobotContainer {
                             () -> eject = levelOffsets != LevelOffsets.PREP_L4_OFFSET))
                     .andThen(
                         (new WaitUntilCommand(() -> RobotState.getInstance().alignError() > 0.5)
-                                .andThen(new ApproachReef(() -> levelOffsets, false, swerve)))
+                                .andThen(new ApproachReef(() -> levelOffsets, true, swerve)))
                             .repeatedly()
                             .until(() -> levelOffsets == LevelOffsets.L4_OFFSET)))
                 .repeatedly()); // so if it aligns to L4 prep, it will then try to align to L4
@@ -392,7 +392,7 @@ public class RobotContainer {
                                         RobotState.getInstance().alignError() > 0.5
                                             || (RobotState.getInstance().alignError() < 2
                                                 && levelOffsets == LevelOffsets.PREP_L4_OFFSET))
-                                .andThen(new ApproachReef(() -> levelOffsets, true, swerve)))
+                                .andThen(new ApproachReef(() -> levelOffsets, false, swerve)))
                             .repeatedly()
                             .until(() -> levelOffsets == LevelOffsets.L4_OFFSET)))
                 .repeatedly()); // so if it aligns to L4 prep, it will then try to align to L4
